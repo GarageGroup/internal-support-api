@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RootNamespace>GGroupp.Internal.Support</RootNamespace>
+    <AssemblyName>GGroupp.Internal.Support.Incident.Create.Api</AssemblyName>
+    <Version>1.0.0-build.1</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GGroupp.Internal.Support.Incident.Create.InOut" Version="1.0.0-build.1" />
+  </ItemGroup>
+
+</Project>
