@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RootNamespace>GGroupp.Internal.Support</RootNamespace>
+    <AssemblyName>GGroupp.Internal.Support.Incident.Create.InOut</AssemblyName>
+    <Version>1.0.0-build.1</Version>
+  </PropertyGroup>
+
+</Project>
