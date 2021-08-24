@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-namespace GGroupp.Internal.Support
+﻿namespace GGroupp.Internal.Support
 {
     public enum IncidentCreateFailureCode
     {
