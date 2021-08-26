@@ -1,7 +1,6 @@
-﻿namespace GGroupp.Internal.Support
+﻿namespace GGroupp.Internal.Support;
+
+public enum IncidentCreateFailureCode
 {
-    public enum IncidentCreateFailureCode
-    {
-        Unknown
-    }
+    Unknown
 }

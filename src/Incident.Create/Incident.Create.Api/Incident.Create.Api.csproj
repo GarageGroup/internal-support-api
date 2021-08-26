@@ -13,7 +13,7 @@
     <PackageReference Include="GGroupp.Core.Functional.AsyncPipeline" Version="1.1.0" />
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityCreate" Version="1.2.0" />
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityGet" Version="1.1.4" />
-    <PackageReference Include="GGroupp.Internal.Support.Incident.Create.InOut" Version="1.0.0-build.2" />
+    <PackageReference Include="GGroupp.Internal.Support.Incident.Create.InOut" Version="1.0.0-build.3" />
     <PackageReference Include="PrimeFuncPack.Core" Version="1.1.1" />
     <PackageReference Include="PrimeFuncPack.Dependency" Version="1.1.0" />
   </ItemGroup>

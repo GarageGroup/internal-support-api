@@ -1,9 +1,8 @@
-namespace GGroupp.Internal.Support
-{
-    public enum UserGetFailureCode
-    {
-        Unknown,
+namespace GGroupp.Internal.Support;
 
-        NotFound
-    }
+public enum UserGetFailureCode
+{
+    Unknown,
+
+    NotFound
 }
