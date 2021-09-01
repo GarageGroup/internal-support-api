@@ -33,53 +33,53 @@ jobs:
       run: dotnet restore ./src/*/*/CustomerSet.Find.InOut.csproj
 
     - name: Build CustomerSet.Find.InOut.csproj
-      run: dotnet build ./src/*/CustomerSet.Find.InOut.csproj --no-restore  -c Release
+      run: dotnet build ./src/*/*/CustomerSet.Find.InOut.csproj --no-restore  -c Release
 
     - name: Pack CustomerSet.Find.InOut.csproj
-      run: dotnet pack ./src/*/CustomerSet.Find.InOut.csproj --no-restore -o ~/nuget  -c Release
+      run: dotnet pack ./src/*/*/CustomerSet.Find.InOut.csproj --no-restore -o ~/nuget  -c Release
 
     # CustomerSet.Find.Api.csproj
     
     - name: Restore CustomerSet.Find.Api.csproj
-      run: dotnet restore ./src/*/CustomerSet.Find.Api.csproj
+      run: dotnet restore ./src/*/*/CustomerSet.Find.Api.csproj
 
     - name: Build CustomerSet.Find.Api.csproj
-      run: dotnet build ./src/*/CustomerSet.Find.Api.csproj --no-restore  -c Release
+      run: dotnet build ./src/*/*/CustomerSet.Find.Api.csproj --no-restore  -c Release
 
     - name: Pack CustomerSet.Find.Api.csproj
-      run: dotnet pack ./src/*/CustomerSet.Find.Api.csproj --no-restore -o ~/nuget  -c Release
+      run: dotnet pack ./src/*/*/CustomerSet.Find.Api.csproj --no-restore -o ~/nuget  -c Release
 
     # Incident.Create.InOut.csproj
     
     - name: Restore Incident.Create.InOut.csproj
-      run: dotnet restore ./src/*/Incident.Create.InOut.csproj
+      run: dotnet restore ./src/*/*/Incident.Create.InOut.csproj
 
     - name: Build Incident.Create.InOut.csproj
-      run: dotnet build ./src/*/Incident.Create.InOut.csproj --no-restore  -c Release
+      run: dotnet build ./src/*/*/Incident.Create.InOut.csproj --no-restore  -c Release
 
     - name: Pack Incident.Create.InOut.csproj
-      run: dotnet pack ./src/*/Incident.Create.InOut.csproj --no-restore -o ~/nuget  -c Release
+      run: dotnet pack ./src/*/*/Incident.Create.InOut.csproj --no-restore -o ~/nuget  -c Release
 
     # Incident.Create.Api.csproj
     
     - name: Restore Incident.Create.Api.csproj
-      run: dotnet restore ./src/*/Incident.Create.Api.csproj
+      run: dotnet restore ./src/*/*/Incident.Create.Api.csproj
 
     - name: Build Incident.Create.Api.csproj
-      run: dotnet build ./src/*/Incident.Create.Api.csproj --no-restore  -c Release
+      run: dotnet build ./src/*/*/Incident.Create.Api.csproj --no-restore  -c Release
 
     - name: Pack Incident.Create.Api.csproj
-      run: dotnet pack ./src/*/Incident.Create.Api.csproj --no-restore -o ~/nuget  -c Release
+      run: dotnet pack ./src/*/*/Incident.Create.Api.csproj --no-restore -o ~/nuget  -c Release
 
     # User.Get.InOut.csproj
     
     - name: Restore User.Get.InOut.csproj
-      run: dotnet restore ./src/*/User.Get.InOut.csproj
+      run: dotnet restore ./src/*/*/User.Get.InOut.csproj
 
     - name: Build User.Get.InOut.csproj
-      run: dotnet build ./src/*/User.Get.InOut.csproj --no-restore  -c Release
+      run: dotnet build ./src/*/*/User.Get.InOut.csproj --no-restore  -c Release
 
     - name: Pack User.Get.InOut.csproj
-      run: dotnet pack ./src/*/User.Get.InOut.csproj --no-restore -o ~/nuget  -c Release
+      run: dotnet pack ./src/*/*/User.Get.InOut.csproj --no-restore -o ~/nuget  -c Release
       
   
