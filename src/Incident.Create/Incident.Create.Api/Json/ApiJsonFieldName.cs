@@ -2,17 +2,17 @@
 
 internal static class ApiJsonFieldName
 {
-    public const string customerIdOdataBind = "customerid_account@odata.bind";
+    public const string CustomerIdOdataBind = "customerid_account@odata.bind";
     
-    public const string customerId = "_";
+    public const string CustomerId = "_customerid_value";
 
-    public const string description = "description";
+    public const string Description = "description";
 
-    public const string ownerIdOdataBind = "ownerid@odata.bind";
+    public const string OwnerIdOdataBind = "ownerid@odata.bind";
 
-    public const string ownerId = "_ownerid_value";
+    public const string OwnerId = "_ownerid_value";
 
-    public const string title = "title";
+    public const string Title = "title";
 
-    public const string incidentId = "incidentid";
+    public const string IncidentId = "incidentid";
 }

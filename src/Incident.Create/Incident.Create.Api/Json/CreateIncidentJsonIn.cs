@@ -16,15 +16,15 @@ public record CreateIncidentJsonIn
         Description = description ?? string.Empty;
     }
 
-    [JsonPropertyName(ApiJsonFieldName.ownerIdOdataBind)]
+    [JsonPropertyName(ApiJsonFieldName.OwnerIdOdataBind)]
     public string OwnerId { get; init; }
 
-    [JsonPropertyName(ApiJsonFieldName.customerIdOdataBind)]
+    [JsonPropertyName(ApiJsonFieldName.CustomerIdOdataBind)]
     public string CustomerId { get; init;}
 
-    [JsonPropertyName(ApiJsonFieldName.title)]
+    [JsonPropertyName(ApiJsonFieldName.Title)]
     public string Title { get; init; }
 
-    [JsonPropertyName(ApiJsonFieldName.description)]
+    [JsonPropertyName(ApiJsonFieldName.Description)]
     public string Description { get; init;}
 }
