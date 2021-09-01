@@ -1,4 +1,4 @@
-name: Dotnet6ProjectBuilder
+name: DotnetSixProjectBuilder
 on:
   push:
   pull_request:
