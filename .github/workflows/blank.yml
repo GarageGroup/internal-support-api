@@ -30,7 +30,7 @@ jobs:
     # CustomerSet.Find.InOut.csproj
     
     - name: Restore CustomerSet.Find.InOut.csproj
-      run: dotnet restore ./src/*/CustomerSet.Find.InOut.csproj
+      run: dotnet restore ./src/*/*/CustomerSet.Find.InOut.csproj
 
     - name: Build CustomerSet.Find.InOut.csproj
       run: dotnet build ./src/*/CustomerSet.Find.InOut.csproj --no-restore  -c Release
