@@ -2,7 +2,7 @@ name: .NET
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, 'features/**' ]
     
   pull_request:
     branches: [ main ]
@@ -17,7 +17,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 6.0.x
         
      # Add NuGet Sources
 
@@ -85,8 +85,4 @@ jobs:
     - name: Pack User.Get.InOut.csproj
       run: dotnet pack ./src/*/User.Get.InOut.csproj --no-restore -o ~/nuget  -c Release
       
-    # Push
-      
-    - name: Push Packages
-      if: ${{ github.event_name == 'push' }}
-      run: dotnet nuget push "../../../nuget/*.nupkg" -s ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -k ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --skip-duplicate
+  
