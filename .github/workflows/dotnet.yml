@@ -1,7 +1,7 @@
 name: DotnetSixProjectBuilder
 on:
   push:
-    branches: [ feature/get-user ]
+    branches: [ feature/* ]
   pull_request:
     branches: [ main ]
 
@@ -82,13 +82,17 @@ jobs:
 
     - name: Pack User.Get.InOut.csproj
       run: dotnet pack ./src/*/*/User.Get.InOut.csproj --no-restore -o ~/nuget  -c Release
-    
-    # Shows github vars
 
-    - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJSON(github) }}
-      run: echo "$GITHUB_CONTEXT"
+    # User.Get.Api.csproj
+    
+    - name: Restore User.Get.Api.csproj
+      run: dotnet restore ./src/*/*/User.Get.Api.csproj
+
+    - name: Build User.Get.Api.csproj
+      run: dotnet build ./src/*/*/User.Get.Api.csproj --no-restore  -c Release
+
+    - name: Pack User.Get.Api.csproj
+      run: dotnet pack ./src/*/*/User.Get.Api.csproj --no-restore -o ~/nuget  -c Release
     
     # Push
       
