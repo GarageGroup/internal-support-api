@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RootNamespace>GGroupp.Internal.Support</RootNamespace>
+    <AssemblyName>GGroupp.Internal.Support.CustomerSet.Find.Api</AssemblyName>
+    <Version>1.0.1</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GGroupp.Core.Functional.AsyncPipeline" Version="1.1.0" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntitySetGet" Version="1.1.2" />
+    <PackageReference Include="GGroupp.Internal.Support.CustomerSet.Find.InOut" Version="1.0.0" />
+    <PackageReference Include="PrimeFuncPack.Core" Version="1.1.1" />
+    <PackageReference Include="PrimeFuncPack.Dependency.Core" Version="1.1.0" />
+  </ItemGroup>
+
+</Project>

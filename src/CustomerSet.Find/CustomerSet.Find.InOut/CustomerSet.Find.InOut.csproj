@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>GGroupp.Internal.Support</RootNamespace>
-    <AssemblyName>GGroupp.Internal.Support.Incident.Create.InOut</AssemblyName>
+    <AssemblyName>GGroupp.Internal.Support.CustomerSet.Find.InOut</AssemblyName>
     <Version>1.0.0</Version>
   </PropertyGroup>
 
