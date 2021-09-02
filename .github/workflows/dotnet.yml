@@ -84,11 +84,11 @@ jobs:
       run: dotnet pack ./src/*/*/User.Get.InOut.csproj --no-restore -o ~/nuget  -c Release
     
     # Shows github vars
-    
+
     - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
-        run: echo "$GITHUB_CONTEXT"
+      env:
+        GITHUB_CONTEXT: ${{ toJSON(github) }}
+      run: echo "$GITHUB_CONTEXT"
     
     # Push
       
