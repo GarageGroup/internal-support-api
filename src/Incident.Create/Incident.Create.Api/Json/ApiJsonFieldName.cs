@@ -10,8 +10,6 @@ internal static class ApiJsonFieldName
 
     public const string OwnerIdOdataBind = "ownerid@odata.bind";
 
-    public const string OwnerId = "_ownerid_value";
-
     public const string Title = "title";
 
     public const string IncidentId = "incidentid";

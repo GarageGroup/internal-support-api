@@ -1,4 +1,5 @@
 ﻿using GGroupp.Infra;
+using System.Collections.ObjectModel;
 
 namespace GGroupp.Internal.Support;
 
@@ -8,6 +9,12 @@ internal sealed partial class CustomerSetFindFunc : IAsyncValueFunc<CustomerSetF
         =>
         new(
             dataverseEntitySetGetSupplier ?? throw new ArgumentNullException(nameof(dataverseEntitySetGetSupplier)));
+
+    private static readonly ReadOnlyCollection<string> selectedFields;
+
+    static CustomerSetFindFunc()
+        =>
+        selectedFields = new(new[] { ApiJsonFieldName.Name, ApiJsonFieldName.AccountId });
 
     private readonly IDataverseEntitySetGetSupplier dataverseEntitySetGetSupplier;
 

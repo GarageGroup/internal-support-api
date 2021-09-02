@@ -26,6 +26,4 @@ partial class CustomerSetFindFunc
     private static CustomerItemFindOut MapJsonOut(CustomerSetFindJsonOut jsonOut)
         =>
         new(id: jsonOut.Id, title: jsonOut.Title);
-
-    private static readonly string[] selectedFields = new[] { ApiJsonFieldName.Name, ApiJsonFieldName.AccountId };
 }

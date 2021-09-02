@@ -1,6 +1,7 @@
 name: DotnetSixProjectBuilder
 on:
   push:
+    branches: [ feature/get-user ]
   pull_request:
     branches: [ main ]
 
@@ -81,5 +82,16 @@ jobs:
 
     - name: Pack User.Get.InOut.csproj
       run: dotnet pack ./src/*/*/User.Get.InOut.csproj --no-restore -o ~/nuget  -c Release
+    
+    # Shows github vars
+    
+    - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
+    
+    # Push
       
-  
+    - name: Push Packages
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: dotnet nuget push "../../../nuget/*.nupkg" -s ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -k ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --skip-duplicate
