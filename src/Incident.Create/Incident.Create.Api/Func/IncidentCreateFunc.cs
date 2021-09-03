@@ -1,24 +1,26 @@
 ﻿using GGroupp.Infra;
+using System.Collections.ObjectModel;
 
 namespace GGroupp.Internal.Support;
 
 internal sealed partial class IncidentCreateFunc : IAsyncValueFunc<IncidentCreateIn, Result<IncidentCreateOut, Failure<IncidentCreateFailureCode>>>
 {
-    public static IncidentCreateFunc Create(IDataverseEntityCreateSupplier entityCreateSupplier, IDataverseEntityGetSupplier entityGetSupplier)
+    private static readonly ReadOnlyCollection<string> selectedFields;
+
+    static IncidentCreateFunc()
         =>
-        new(
-            entityCreateSupplier ?? throw new ArgumentNullException(nameof(entityCreateSupplier)),
-            entityGetSupplier ?? throw new ArgumentNullException(nameof(entityGetSupplier)));
+        selectedFields = new(new[] { ApiJsonFieldName.IncidentId, ApiJsonFieldName.Title });
 
     private readonly IDataverseEntityCreateSupplier entityCreateSupplier;
 
-    private readonly IDataverseEntityGetSupplier entityGetSupplier;
-
-    private IncidentCreateFunc(IDataverseEntityCreateSupplier entityCreateSupplier, IDataverseEntityGetSupplier entityGetSupplier)
-    {
+    private IncidentCreateFunc(IDataverseEntityCreateSupplier entityCreateSupplier)
+        =>
         this.entityCreateSupplier = entityCreateSupplier;
-        this.entityGetSupplier = entityGetSupplier;
-    }
+
+    public static IncidentCreateFunc Create(IDataverseEntityCreateSupplier entityCreateSupplier)
+        =>
+        new(
+            entityCreateSupplier ?? throw new ArgumentNullException(nameof(entityCreateSupplier)));
 
     public partial ValueTask<Result<IncidentCreateOut, Failure<IncidentCreateFailureCode>>> InvokeAsync(
         IncidentCreateIn input, CancellationToken cancellationToken = default);

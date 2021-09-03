@@ -1,6 +1,7 @@
 name: DotnetSixProjectBuilder
 on:
   push:
+    branches: [ feature/* ]
   pull_request:
     branches: [ main ]
 
@@ -70,6 +71,14 @@ jobs:
 
     - name: Pack Incident.Create.Api.csproj
       run: dotnet pack ./src/*/*/Incident.Create.Api.csproj --no-restore -o ~/nuget  -c Release
+    
+      # Incident.Create.Api.Tests.csproj
+    
+    - name: Restore Dataverse.Api.Core.EntityKey.csproj
+      run: dotnet restore ./src/*/*/Incident.Create.Api.Tests.csproj
+
+    - name: Test Incident.Create.Api.Tests.csproj
+      run: dotnet test ./src/*/*/Incident.Create.Api.Tests.csproj --no-restore  -c Release
 
     # User.Get.InOut.csproj
     
@@ -81,5 +90,20 @@ jobs:
 
     - name: Pack User.Get.InOut.csproj
       run: dotnet pack ./src/*/*/User.Get.InOut.csproj --no-restore -o ~/nuget  -c Release
+
+    # User.Get.Api.csproj
+    
+    - name: Restore User.Get.Api.csproj
+      run: dotnet restore ./src/*/*/User.Get.Api.csproj
+
+    - name: Build User.Get.Api.csproj
+      run: dotnet build ./src/*/*/User.Get.Api.csproj --no-restore  -c Release
+
+    - name: Pack User.Get.Api.csproj
+      run: dotnet pack ./src/*/*/User.Get.Api.csproj --no-restore -o ~/nuget  -c Release
+    
+    # Push
       
-  
+    - name: Push Packages
+      if: ${{ github.ref == 'refs/heads/main' }}
+      run: dotnet nuget push "../../../nuget/*.nupkg" -s ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -k ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --skip-duplicate

@@ -9,7 +9,7 @@ public static class IncidentCreateFuncDependencyExtensions
 {
     public static Dependency<IIncidentCreateFunc> UseIncidentCreateApi<TDataverseApiClient>(
         this Dependency<TDataverseApiClient> dependency)
-        where TDataverseApiClient : IDataverseEntityGetSupplier, IDataverseEntityCreateSupplier
+        where TDataverseApiClient : IDataverseEntityCreateSupplier
         =>
-        dependency.Map<IIncidentCreateFunc>(apiClient => IncidentCreateFunc.Create(apiClient, apiClient));
+        dependency.Map<IIncidentCreateFunc>(apiClient => IncidentCreateFunc.Create(apiClient));
 }

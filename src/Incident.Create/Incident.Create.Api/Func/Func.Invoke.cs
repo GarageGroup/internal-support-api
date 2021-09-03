@@ -29,6 +29,4 @@ partial class IncidentCreateFunc
                 new IncidentCreateOut(
                     id: entityCreateOut?.Value?.IncidentId ?? default,
                     title: entityCreateOut?.Value?.Title));
-    
-    private static readonly string[] selectedFields = new[] { ApiJsonFieldName.IncidentId, ApiJsonFieldName.Title };
 }
