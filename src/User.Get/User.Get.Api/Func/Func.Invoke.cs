@@ -13,8 +13,8 @@ partial class UserGetFunc
             cancellationToken)
         .Pipe(
             @in => new DataverseEntityGetIn(
-                entityPluralName: "systemusers",
-                entityKey: MakeAlternateKey(input.ActiveDirectoryUserId),
+                entityPluralName: ApiConstants.SystemUserEntity,
+                entityKey: BuildAlternateKey(input.ActiveDirectoryUserId),
                 selectFields: selectedFields))
         .PipeValue(
                 entityGetSupplier.GetEntityAsync<UserGetJsonOut>)
@@ -23,10 +23,11 @@ partial class UserGetFunc
         .MapSuccess(
             entityGetOut => new UserGetOut(entityGetOut?.Value?.SystemUserId ?? default));
 
-    private static DataverseAlternateKey MakeAlternateKey(Guid activeDirectoryId)
-        => new DataverseAlternateKey(
-            new List<KeyValuePair<string, string>>()
+    private static DataverseAlternateKey BuildAlternateKey(Guid activeDirectoryId)
+        => 
+        new(
+            new KeyValuePair<string, string>[]
             {
-                new(ApiJsonFieldName.ActiveDirectoryObjectId, activeDirectoryId.ToString("D", CultureInfo.InvariantCulture))
+                new(ApiConstants.ActiveDirectoryObjectId, activeDirectoryId.ToString("D", CultureInfo.InvariantCulture))
             });
 }

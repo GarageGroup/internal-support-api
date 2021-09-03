@@ -5,11 +5,6 @@ namespace GGroupp.Internal.Support;
 
 internal sealed partial class IncidentCreateFunc : IAsyncValueFunc<IncidentCreateIn, Result<IncidentCreateOut, Failure<IncidentCreateFailureCode>>>
 {
-    public static IncidentCreateFunc Create(IDataverseEntityCreateSupplier entityCreateSupplier)
-        =>
-        new(
-            entityCreateSupplier ?? throw new ArgumentNullException(nameof(entityCreateSupplier)));
-    
     private static readonly ReadOnlyCollection<string> selectedFields;
 
     static IncidentCreateFunc()
@@ -21,7 +16,12 @@ internal sealed partial class IncidentCreateFunc : IAsyncValueFunc<IncidentCreat
     private IncidentCreateFunc(IDataverseEntityCreateSupplier entityCreateSupplier)
         =>
         this.entityCreateSupplier = entityCreateSupplier;
-    
+
+    public static IncidentCreateFunc Create(IDataverseEntityCreateSupplier entityCreateSupplier)
+        =>
+        new(
+            entityCreateSupplier ?? throw new ArgumentNullException(nameof(entityCreateSupplier)));
+
     public partial ValueTask<Result<IncidentCreateOut, Failure<IncidentCreateFailureCode>>> InvokeAsync(
         IncidentCreateIn input, CancellationToken cancellationToken = default);
 }

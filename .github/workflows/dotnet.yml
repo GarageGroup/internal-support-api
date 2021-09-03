@@ -71,6 +71,14 @@ jobs:
 
     - name: Pack Incident.Create.Api.csproj
       run: dotnet pack ./src/*/*/Incident.Create.Api.csproj --no-restore -o ~/nuget  -c Release
+    
+      # Incident.Create.Api.Tests.csproj
+    
+    - name: Restore Dataverse.Api.Core.EntityKey.csproj
+      run: dotnet restore ./src/*/*/Incident.Create.Api.Tests.csproj
+
+    - name: Test Incident.Create.Api.Tests.csproj
+      run: dotnet test ./src/*/*/Incident.Create.Api.Tests.csproj --no-restore  -c Release
 
     # User.Get.InOut.csproj
     

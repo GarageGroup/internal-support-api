@@ -2,12 +2,12 @@
 
 namespace GGroupp.Internal.Support;
 
-public record UserGetJsonOut
+public sealed record UserGetJsonOut
 {
     public UserGetJsonOut(Guid systemUserId)
         =>
         SystemUserId = systemUserId;
 
-    [JsonPropertyName(ApiJsonFieldName.SystemUserId)]
+    [JsonPropertyName(ApiConstants.SystemUserId)]
     public Guid SystemUserId{ get; init; }
 }
