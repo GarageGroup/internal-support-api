@@ -34,5 +34,4 @@ public sealed partial class CustomerSetFindFuncTest
 
         return mock;
     }
-
 }
