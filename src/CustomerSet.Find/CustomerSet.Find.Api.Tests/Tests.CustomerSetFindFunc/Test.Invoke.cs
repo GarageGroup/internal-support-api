@@ -33,7 +33,7 @@ partial class CustomerSetFindFuncTest
     [Fact]
     public async  Task InvokeAsync_CancellationTokenHasNotCanceled_ExpectCallDataVerseApiClientOnce()
     {
-        const string searchString = "льс";
+        const string searchString = "\u043B\u044C\u0441";
         
 
         var success = new DataverseEntitySetGetOut<CustomerSetFindJsonOut>(null);
@@ -85,7 +85,7 @@ partial class CustomerSetFindFuncTest
         
         var searchText = "title";
         var accountId = Guid.NewGuid();
-        var title = "Renesans";
+        var title = "Renessans";
 
         var success = new DataverseEntitySetGetOut<CustomerSetFindJsonOut>( new CustomerSetFindJsonOut[] { new(accountId, title) });
         var mockDataverseApiClient = CreateMockDataverseApiClient(success);

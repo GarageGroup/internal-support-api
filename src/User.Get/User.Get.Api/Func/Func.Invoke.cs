@@ -19,7 +19,7 @@ partial class UserGetFunc
         .PipeValue(
                 entityGetSupplier.GetEntityAsync<UserGetJsonOut>)
         .MapFailure(
-            MapDataverseFailureCode)
+            failure => failure.MapFailureCode(MapDataverseFailureCode))
         .MapSuccess(
             entityGetOut => new UserGetOut(entityGetOut?.Value?.SystemUserId ?? default));
 
@@ -31,11 +31,11 @@ partial class UserGetFunc
                 new(ApiNames.ActiveDirectoryObjectId, activeDirectoryId.ToString("D", CultureInfo.InvariantCulture))
             });
 
-    private static Failure<UserGetFailureCode> MapDataverseFailureCode(Failure<int> dataverseFailureCode)
+    private static UserGetFailureCode MapDataverseFailureCode(int dataverseFailureCode)
         =>
         dataverseFailureCode switch
         {
-            { FailureCode: ApiNames.NotFoundFailureCode } => dataverseFailureCode.MapFailureCode(_ => UserGetFailureCode.NotFound),
-            _ => dataverseFailureCode.MapFailureCode(_ => UserGetFailureCode.Unknown)
+            ApiNames.NotFoundFailureCode  => UserGetFailureCode.NotFound,
+            _ =>UserGetFailureCode.Unknown
         };
 }

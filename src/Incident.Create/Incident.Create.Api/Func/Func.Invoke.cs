@@ -23,18 +23,18 @@ partial class IncidentCreateFunc
         .PipeValue(
             entityCreateSupplier.CreateEntityAsync<CreateIncidentJsonIn, CreateIncidentJsonOut>)
         .MapFailure(
-            MapDataverseFailureCode)
+            failure => failure.MapFailureCode(MapDataverseFailureCode))
         .MapSuccess(
             entityCreateOut =>
                 new IncidentCreateOut(
                     id: entityCreateOut?.Value?.IncidentId ?? default,
                     title: entityCreateOut?.Value?.Title));
 
-    public static Failure<IncidentCreateFailureCode> MapDataverseFailureCode(Failure<int> dataverseFailureCode)
+    public static IncidentCreateFailureCode MapDataverseFailureCode(int dataverseFailureCode)
         =>
         dataverseFailureCode switch
         {
-            { FailureCode: ApiNames.NotFoundFailureCode} => dataverseFailureCode.MapFailureCode( _ => IncidentCreateFailureCode.NotFound),
-            _ => dataverseFailureCode.MapFailureCode(_ => IncidentCreateFailureCode.Unknown)
+            ApiNames.NotFoundFailureCode => IncidentCreateFailureCode.NotFound,
+            _ => IncidentCreateFailureCode.Unknown
         };
 }

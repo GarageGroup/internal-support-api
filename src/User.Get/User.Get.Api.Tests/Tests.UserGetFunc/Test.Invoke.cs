@@ -40,7 +40,6 @@ partial class UserGetFuncTest
         var mockDataverseApiClient = CreateMockDataverseApiClient(success, IsMatchDataverseInput);
 
         var token = new CancellationToken(false);
-        
 
         var func = CreateFunc(mockDataverseApiClient.Object);
         _ = await func.InvokeAsync(new(validActiveDirectoryGuid), token);
@@ -73,7 +72,7 @@ partial class UserGetFuncTest
     [InlineData(int.MinValue, UserGetFailureCode.Unknown)]
     [InlineData(int.MaxValue, UserGetFailureCode.Unknown)]
     [InlineData(0, UserGetFailureCode.Unknown)]
-    [InlineData(-2147220969, UserGetFailureCode.Unknown)]
+    [InlineData(dataverseNotFoundStatusCode, UserGetFailureCode.NotFound)]
     public async Task InvokeAsync_FailureResultIsGiven_ExpectFailure(int failureCode, UserGetFailureCode userGetFailureCode)
     {
         const string failureMessge = "Bad request";
@@ -90,7 +89,6 @@ partial class UserGetFuncTest
     [Fact]
     public async Task InvokeAsync_SuccessResultIsGiven_ExpectSuccessResult()
     {
-
         var success = new DataverseEntityGetOut<UserGetJsonOut>(new(validSystemUserId));
         var mockDataverseApiClient = CreateMockDataverseApiClient(success);
 
