@@ -109,11 +109,11 @@ jobs:
 
     # User.Get.Api.Tests.csproj
     
-    - name: Restore Dataverse.Api.Core.EntityKey.csproj
+    - name: Restore User.Get.Api.Tests.csproj
       run: dotnet restore ./src/*/*/User.Get.Api.Tests.csproj
 
-    - name: Test User.Get.Tests.csproj
-      run: dotnet test ./src/*/*/User.Get.Tests.csproj --no-restore  -c Release
+    - name: Test User.Get.Api.Tests.csproj
+      run: dotnet test ./src/*/*/User.Get.Api.Tests.csproj --no-restore  -c Release
     
     # Push
       
