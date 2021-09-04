@@ -9,7 +9,7 @@ internal sealed partial class UserGetFunc : IAsyncValueFunc<UserGetIn, Result<Us
 
     static UserGetFunc()
         =>
-        selectedFields = new(new[] { ApiConstants.SystemUserId });
+        selectedFields = new(new[] { ApiNames.SystemUserId });
 
     private readonly IDataverseEntityGetSupplier entityGetSupplier;
 

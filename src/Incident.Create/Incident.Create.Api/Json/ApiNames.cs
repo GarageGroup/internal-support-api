@@ -1,6 +1,6 @@
 ﻿namespace GGroupp.Internal.Support;
 
-internal static class ApiJsonFieldName
+internal static class ApiNames
 {
     public const string CustomerIdOdataBind = "customerid_account@odata.bind";
     
@@ -13,4 +13,6 @@ internal static class ApiJsonFieldName
     public const string Title = "title";
 
     public const string IncidentId = "incidentid";
+
+    public const int NotFoundFailureCode = -2147220969;
 }

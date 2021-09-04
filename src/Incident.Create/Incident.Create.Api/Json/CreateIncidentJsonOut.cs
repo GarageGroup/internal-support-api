@@ -12,9 +12,9 @@ public record CreateIncidentJsonOut
         Title = title ?? string.Empty;
     }
 
-    [JsonPropertyName(ApiJsonFieldName.IncidentId)]
+    [JsonPropertyName(ApiNames.IncidentId)]
     public Guid IncidentId{ get; init; }
 
-    [JsonPropertyName(ApiJsonFieldName.Title)]
+    [JsonPropertyName(ApiNames.Title)]
     public string Title { get; init;}
 }
