@@ -35,7 +35,7 @@ partial class UserGetFunc
         =>
         dataverseFailureCode switch
         {
-            ApiNames.NotFoundFailureCode  => UserGetFailureCode.NotFound,
-            _ =>UserGetFailureCode.Unknown
+            ApiNames.NotFoundFailureCode => UserGetFailureCode.NotFound,
+            _ => UserGetFailureCode.Unknown
         };
 }
