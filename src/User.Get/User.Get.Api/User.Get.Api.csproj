@@ -6,7 +6,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>GGroupp.Internal.Support</RootNamespace>
     <AssemblyName>GGroupp.Internal.Support.User.Get.Api</AssemblyName>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
   </PropertyGroup>
 
   <ItemGroup>
