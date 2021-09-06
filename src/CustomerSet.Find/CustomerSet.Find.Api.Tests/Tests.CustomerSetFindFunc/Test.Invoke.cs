@@ -84,7 +84,7 @@ partial class CustomerSetFindFuncTest
     public async Task InvokeAsync_SuccessResultIsGiven_ExpectSuccessResult()
     {
         var searchText = "title";
-        var accountId = Guid.NewGuid();
+        var accountId = Guid.Parse("1b91d06f-208d-4c1c-b630-0ee9996a8a59");
         var title = "Renessans";
 
         var success = new DataverseEntitySetGetOut<CustomerSetFindJsonOut>(new CustomerSetFindJsonOut[] { new(accountId, title) });
