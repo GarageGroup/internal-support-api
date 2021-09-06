@@ -9,7 +9,7 @@ internal sealed partial class IncidentCreateFunc : IAsyncValueFunc<IncidentCreat
 
     static IncidentCreateFunc()
         =>
-        selectedFields = new(new[] { ApiJsonFieldName.IncidentId, ApiJsonFieldName.Title });
+        selectedFields = new(new[] { ApiNames.IncidentId, ApiNames.Title });
 
     private readonly IDataverseEntityCreateSupplier entityCreateSupplier;
 

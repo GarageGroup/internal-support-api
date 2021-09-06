@@ -2,7 +2,7 @@
 
 namespace GGroupp.Internal.Support;
 
-public record CreateIncidentJsonIn
+public sealed record CreateIncidentJsonIn
 {
     public CreateIncidentJsonIn(
         string ownerId,
@@ -16,15 +16,15 @@ public record CreateIncidentJsonIn
         Description = description ?? string.Empty;
     }
 
-    [JsonPropertyName(ApiJsonFieldName.OwnerIdOdataBind)]
+    [JsonPropertyName(ApiNames.OwnerIdOdataBind)]
     public string OwnerId { get; init; }
 
-    [JsonPropertyName(ApiJsonFieldName.CustomerIdOdataBind)]
-    public string CustomerId { get; init;}
+    [JsonPropertyName(ApiNames.CustomerIdOdataBind)]
+    public string CustomerId { get; init; }
 
-    [JsonPropertyName(ApiJsonFieldName.Title)]
+    [JsonPropertyName(ApiNames.Title)]
     public string Title { get; init; }
 
-    [JsonPropertyName(ApiJsonFieldName.Description)]
-    public string Description { get; init;}
+    [JsonPropertyName(ApiNames.Description)]
+    public string Description { get; init; }
 }

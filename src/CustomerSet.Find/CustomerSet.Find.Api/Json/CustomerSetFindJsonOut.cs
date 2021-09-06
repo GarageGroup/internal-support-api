@@ -2,7 +2,7 @@
 
 namespace GGroupp.Internal.Support;
 
-public record CustomerSetFindJsonOut
+public sealed record CustomerSetFindJsonOut
 {
     public CustomerSetFindJsonOut(
         Guid id,
@@ -13,8 +13,8 @@ public record CustomerSetFindJsonOut
     }
 
     [JsonPropertyName(ApiJsonFieldName.AccountId)]
-    public Guid  Id{ get; init; }
+    public Guid Id { get; init; }
 
     [JsonPropertyName(ApiJsonFieldName.Name)]
-    public string Title { get; init;}
+    public string Title { get; init; }
 }

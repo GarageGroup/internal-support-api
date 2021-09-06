@@ -67,11 +67,12 @@ partial class IncidentCreateFuncTest
     }
 
     [Theory]
-    [InlineData(404)]
-    [InlineData(int.MinValue)]
-    [InlineData(int.MaxValue)]
-    [InlineData(0)]
-    public async Task InvokeAsync_FailureResultIsGiven_ExpectUnknownFailureResult(int failureCode)
+    [InlineData(404, IncidentCreateFailureCode.Unknown)]
+    [InlineData(int.MinValue, IncidentCreateFailureCode.Unknown)]
+    [InlineData(int.MaxValue, IncidentCreateFailureCode.Unknown)]
+    [InlineData(0, IncidentCreateFailureCode.Unknown)]
+    [InlineData(DataverseNotFoundStatusCode, IncidentCreateFailureCode.NotFound)]
+    public async Task InvokeAsync_FailureResultIsGiven_ExpectFailure(int failureCode, IncidentCreateFailureCode incidentCreateFailureCode)
     {
         const string failureMessge = "Bad request";
         var failure = Failure.Create(failureCode, failureMessge);
@@ -80,7 +81,7 @@ partial class IncidentCreateFuncTest
         var func = CreateFunc(mockDataverseApiClient.Object);
         var actualResult = await func.InvokeAsync(Input, CancellationToken.None);
 
-        var expectedFailure = Failure.Create(IncidentCreateFailureCode.Unknown, failureMessge);
+        var expectedFailure = Failure.Create(incidentCreateFailureCode, failureMessge);
         Assert.Equal(expectedFailure, actualResult);
     }
 
@@ -99,8 +100,6 @@ partial class IncidentCreateFuncTest
         var expectedFailure = new IncidentCreateOut(incidentId, title);
         Assert.Equal(expectedFailure, actualResult);
     }
-
-    
 
     [Fact]
     public async Task InvokeAsync_SuccessResultIsNull_ExpectSuccessResult()

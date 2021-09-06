@@ -1,13 +1,9 @@
 name: DotnetSixProjectBuilder
 on:
   push:
-    branches: [ feature/* ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -15,7 +11,8 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 6.0.100-preview.7.21379.14
+        dotnet-version: 6.0.x
+        include-prerelease: true  
         
      # Add NuGet Sources
 
@@ -50,6 +47,14 @@ jobs:
     - name: Pack CustomerSet.Find.Api.csproj
       run: dotnet pack ./src/*/*/CustomerSet.Find.Api.csproj --no-restore -o ~/nuget  -c Release
 
+    # CustomerSet.Find.Api.Tests.csproj
+    
+    - name: Restore CustomerSet.Find.Api.Tests.csproj
+      run: dotnet restore ./src/*/*/CustomerSet.Find.Api.Tests.csproj
+
+    - name: Test CustomerSet.Find.Api.Tests.csproj
+      run: dotnet test ./src/*/*/CustomerSet.Find.Api.Tests.csproj --no-restore  -c Release
+
     # Incident.Create.InOut.csproj
     
     - name: Restore Incident.Create.InOut.csproj
@@ -72,9 +77,9 @@ jobs:
     - name: Pack Incident.Create.Api.csproj
       run: dotnet pack ./src/*/*/Incident.Create.Api.csproj --no-restore -o ~/nuget  -c Release
     
-      # Incident.Create.Api.Tests.csproj
+    # Incident.Create.Api.Tests.csproj
     
-    - name: Restore Dataverse.Api.Core.EntityKey.csproj
+    - name: Restore Incident.Create.Api.Tests.csproj
       run: dotnet restore ./src/*/*/Incident.Create.Api.Tests.csproj
 
     - name: Test Incident.Create.Api.Tests.csproj
@@ -101,6 +106,14 @@ jobs:
 
     - name: Pack User.Get.Api.csproj
       run: dotnet pack ./src/*/*/User.Get.Api.csproj --no-restore -o ~/nuget  -c Release
+
+    # User.Get.Api.Tests.csproj
+    
+    - name: Restore User.Get.Api.Tests.csproj
+      run: dotnet restore ./src/*/*/User.Get.Api.Tests.csproj
+
+    - name: Test User.Get.Api.Tests.csproj
+      run: dotnet test ./src/*/*/User.Get.Api.Tests.csproj --no-restore  -c Release
     
     # Push
       

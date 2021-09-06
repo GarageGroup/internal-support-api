@@ -13,13 +13,13 @@ partial class UserGetFunc
             cancellationToken)
         .Pipe(
             @in => new DataverseEntityGetIn(
-                entityPluralName: ApiConstants.SystemUserEntity,
+                entityPluralName: ApiNames.SystemUserEntity,
                 entityKey: BuildAlternateKey(input.ActiveDirectoryUserId),
                 selectFields: selectedFields))
         .PipeValue(
-                entityGetSupplier.GetEntityAsync<UserGetJsonOut>)
+            entityGetSupplier.GetEntityAsync<UserGetJsonOut>)
         .MapFailure(
-            failure => failure.MapFailureCode(_ => UserGetFailureCode.Unknown))
+            failure => failure.MapFailureCode(MapDataverseFailureCode))
         .MapSuccess(
             entityGetOut => new UserGetOut(entityGetOut?.Value?.SystemUserId ?? default));
 
@@ -28,6 +28,14 @@ partial class UserGetFunc
         new(
             new KeyValuePair<string, string>[]
             {
-                new(ApiConstants.ActiveDirectoryObjectId, activeDirectoryId.ToString("D", CultureInfo.InvariantCulture))
+                new(ApiNames.ActiveDirectoryObjectId, activeDirectoryId.ToString("D", CultureInfo.InvariantCulture))
             });
+
+    private static UserGetFailureCode MapDataverseFailureCode(int dataverseFailureCode)
+        =>
+        dataverseFailureCode switch
+        {
+            ApiNames.NotFoundFailureCode => UserGetFailureCode.NotFound,
+            _ => UserGetFailureCode.Unknown
+        };
 }

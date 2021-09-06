@@ -2,7 +2,7 @@
 
 namespace GGroupp.Internal.Support;
 
-public record CreateIncidentJsonOut
+public sealed record CreateIncidentJsonOut
 {
     public CreateIncidentJsonOut(
         Guid incidentId,
@@ -12,9 +12,9 @@ public record CreateIncidentJsonOut
         Title = title ?? string.Empty;
     }
 
-    [JsonPropertyName(ApiJsonFieldName.IncidentId)]
+    [JsonPropertyName(ApiNames.IncidentId)]
     public Guid IncidentId{ get; init; }
 
-    [JsonPropertyName(ApiJsonFieldName.Title)]
-    public string Title { get; init;}
+    [JsonPropertyName(ApiNames.Title)]
+    public string Title { get; init; }
 }

@@ -8,6 +8,6 @@ public sealed record UserGetJsonOut
         =>
         SystemUserId = systemUserId;
 
-    [JsonPropertyName(ApiConstants.SystemUserId)]
-    public Guid SystemUserId{ get; init; }
+    [JsonPropertyName(ApiNames.SystemUserId)]
+    public Guid SystemUserId { get; init; }
 }
