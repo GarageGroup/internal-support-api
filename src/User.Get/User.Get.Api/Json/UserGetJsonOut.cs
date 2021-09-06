@@ -9,5 +9,5 @@ public sealed record UserGetJsonOut
         SystemUserId = systemUserId;
 
     [JsonPropertyName(ApiNames.SystemUserId)]
-    public Guid SystemUserId{ get; init; }
+    public Guid SystemUserId { get; init; }
 }
