@@ -20,11 +20,11 @@ public sealed record CreateIncidentJsonIn
     public string OwnerId { get; init; }
 
     [JsonPropertyName(ApiNames.CustomerIdOdataBind)]
-    public string CustomerId { get; init;}
+    public string CustomerId { get; init; }
 
     [JsonPropertyName(ApiNames.Title)]
     public string Title { get; init; }
 
     [JsonPropertyName(ApiNames.Description)]
-    public string Description { get; init;}
+    public string Description { get; init; }
 }
