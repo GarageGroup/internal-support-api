@@ -16,5 +16,5 @@ public sealed record CreateIncidentJsonOut
     public Guid IncidentId{ get; init; }
 
     [JsonPropertyName(ApiNames.Title)]
-    public string Title { get; init;}
+    public string Title { get; init; }
 }
