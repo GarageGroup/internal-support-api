@@ -13,7 +13,6 @@ internal sealed partial class CustomerSetFindFunc : IAsyncValueFunc<CustomerSetF
 
     private readonly IDataverseEntitySetGetSupplier dataverseEntitySetGetSupplier;
 
-
     private CustomerSetFindFunc(IDataverseEntitySetGetSupplier dataverseEntitySetGetSupplier)
         =>
         this.dataverseEntitySetGetSupplier = dataverseEntitySetGetSupplier;
