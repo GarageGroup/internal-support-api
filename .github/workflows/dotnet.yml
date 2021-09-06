@@ -120,3 +120,36 @@ jobs:
     - name: Push Packages
       if: ${{ github.ref == 'refs/heads/main' }}
       run: dotnet nuget push "../../../nuget/*.nupkg" -s ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -k ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --skip-duplicate
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.100-preview.7.21379.14
+    
+    # CustomerSet.Find.Api.Tests.csproj
+    
+    - name: Restore CustomerSet.Find.Api.Tests.csproj
+      run: dotnet restore ./src/*/*/CustomerSet.Find.Api.Tests.csproj
+
+    - name: Test CustomerSet.Find.Api.Tests.csproj
+      run: dotnet test ./src/*/*/CustomerSet.Find.Api.Tests.csproj --no-restore  -c Release
+
+    # User.Get.Api.Tests.csproj
+    
+    - name: Restore User.Get.Api.Tests.csproj
+      run: dotnet restore ./src/*/*/User.Get.Api.Tests.csproj
+
+    - name: Test User.Get.Api.Tests.csproj
+      run: dotnet test ./src/*/*/User.Get.Api.Tests.csproj --no-restore  -c Release
+
+    # Incident.Create.Api.Tests.csproj
+    
+    - name: Restore Incident.Create.Api.Tests.csproj
+      run: dotnet restore ./src/*/*/Incident.Create.Api.Tests.csproj
+
+    - name: Test Incident.Create.Api.Tests.csproj
+      run: dotnet test ./src/*/*/Incident.Create.Api.Tests.csproj --no-restore  -c Release

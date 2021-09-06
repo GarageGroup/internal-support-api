@@ -59,9 +59,6 @@ partial class UserGetFuncTest
                                     new("azureactivedirectoryobjectid", validActiveDirectoryGuid.ToString("D", CultureInfo.InvariantCulture))
                                 }),
                     selectFields: new ReadOnlyCollection<string>(new[] { "systemuserid" }));
-            Assert.Equal(expected.EntityPluralName, actual.EntityPluralName);
-            Assert.Equal(expected.EntityKey, actual.EntityKey);
-            Assert.Equal(expected.SelectFields, actual.SelectFields);
 
             actual.ShouldDeepEqual(expected);
         }
@@ -102,7 +99,7 @@ partial class UserGetFuncTest
     [Fact]
     public async Task InvokeAsync_SuccessResultIsNull_ExpectSuccessResult()
     {
-        var success = new DataverseEntityGetOut<UserGetJsonOut>(null!);
+        var success = new DataverseEntityGetOut<UserGetJsonOut>(null);
         var mockDataverseApiClient = CreateMockDataverseApiClient(success);
 
         var func = CreateFunc(mockDataverseApiClient.Object);

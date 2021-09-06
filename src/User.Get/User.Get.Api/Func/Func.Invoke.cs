@@ -17,7 +17,7 @@ partial class UserGetFunc
                 entityKey: BuildAlternateKey(input.ActiveDirectoryUserId),
                 selectFields: selectedFields))
         .PipeValue(
-                entityGetSupplier.GetEntityAsync<UserGetJsonOut>)
+            entityGetSupplier.GetEntityAsync<UserGetJsonOut>)
         .MapFailure(
             failure => failure.MapFailureCode(MapDataverseFailureCode))
         .MapSuccess(

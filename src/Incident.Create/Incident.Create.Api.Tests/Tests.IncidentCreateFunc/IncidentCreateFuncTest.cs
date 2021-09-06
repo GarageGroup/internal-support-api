@@ -42,5 +42,5 @@ public sealed partial class IncidentCreateFuncTest
             title: "title",
             description: "decription");
 
-    private const int dataverseNotFoundStatusCode = -2147220969;
+    private const int DataverseNotFoundStatusCode = -2147220969;
 }

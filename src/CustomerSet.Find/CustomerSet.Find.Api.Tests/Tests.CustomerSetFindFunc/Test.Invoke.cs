@@ -35,7 +35,7 @@ partial class CustomerSetFindFuncTest
     [InlineData("\u043B\u044C\u0441", "contains(name,'\u043B\u044C\u0441')")]
     [InlineData(Strings.Empty, Strings.Empty)]
     [InlineData(null, Strings.Empty)]
-    public async  Task InvokeAsync_CancellationTokenHasNotCanceled_ExpectCallDataVerseApiClientOnce(
+    public async Task InvokeAsync_CancellationTokenHasNotCanceled_ExpectCallDataVerseApiClientOnce(
         string searchString, string expectedFilter)
     {
         var success = new DataverseEntitySetGetOut<CustomerSetFindJsonOut>(null);
@@ -48,7 +48,7 @@ partial class CustomerSetFindFuncTest
 
         mockDataverseApiClient.Verify(
             c => c.GetEntitySetAsync<CustomerSetFindJsonOut>(
-                It.IsAny<DataverseEntitySetGetIn>(), token), 
+                It.IsAny<DataverseEntitySetGetIn>(), token),
             Times.Once);
 
         void IsMatchDataverseInput(DataverseEntitySetGetIn actual)
@@ -74,7 +74,7 @@ partial class CustomerSetFindFuncTest
         var mockDataverseApiClient = CreateMockDataverseApiClient(failure);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
-        var actualResult = await func.InvokeAsync(new(""), CancellationToken.None);
+        var actualResult = await func.InvokeAsync(new(string.Empty), CancellationToken.None);
 
         var expectedFailure = Failure.Create(CustomerSetFindFailureCode.Unknown, failureMessge);
         Assert.Equal(expectedFailure, actualResult);
@@ -83,31 +83,34 @@ partial class CustomerSetFindFuncTest
     [Fact]
     public async Task InvokeAsync_SuccessResultIsGiven_ExpectSuccessResult()
     {
-        
         var searchText = "title";
         var accountId = Guid.NewGuid();
         var title = "Renessans";
 
-        var success = new DataverseEntitySetGetOut<CustomerSetFindJsonOut>( new CustomerSetFindJsonOut[] { new(accountId, title) });
+        var success = new DataverseEntitySetGetOut<CustomerSetFindJsonOut>(new CustomerSetFindJsonOut[] { new(accountId, title) });
         var mockDataverseApiClient = CreateMockDataverseApiClient(success);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
-        var actualResult = (await func.InvokeAsync(new(searchText), default)).SuccessOrThrow();
+        var actualResult = (await func.InvokeAsync(new(searchText), default));
+        Assert.True(actualResult.IsSuccess);
 
-        var expectedFailure = new CustomerSetFindOut(new CustomerItemFindOut[] { new(accountId, title) });
-        Assert.Equal(expectedFailure.Customers, actualResult.Customers);
+        var actual = actualResult.SuccessOrThrow().Customers;
+        var expected = new CustomerItemFindOut[] { new(accountId, title) };
+        Assert.Equal(expected, actual);
     }
 
     [Fact]
-    public async  Task InvokeAsync_SuccessResultIsEmptyArray_ExpectSuccessResult()
+    public async Task InvokeAsync_SuccessResultIsEmptyArray_ExpectSuccessResult()
     {
         var success = new DataverseEntitySetGetOut<CustomerSetFindJsonOut>(new CustomerSetFindJsonOut[0]);
         var mockDataverseApiClient = CreateMockDataverseApiClient(success);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
-        var actualResult = await func.InvokeAsync(new(""), default);
+        var actualResult = await func.InvokeAsync(new(string.Empty), default);
 
-        var expected = new CustomerSetFindOut(new CustomerItemFindOut[0]);
-        Assert.Equal(expected.Customers, actualResult.SuccessOrThrow().Customers);
+        Assert.True(actualResult.IsSuccess);
+        var customers = actualResult.SuccessOrThrow().Customers;
+
+        Assert.Empty(customers);
     }
 }
