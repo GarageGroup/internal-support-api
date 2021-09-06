@@ -16,5 +16,5 @@ public sealed record CustomerSetFindJsonOut
     public Guid Id { get; init; }
 
     [JsonPropertyName(ApiJsonFieldName.Name)]
-    public string Title { get; init;}
+    public string Title { get; init; }
 }
