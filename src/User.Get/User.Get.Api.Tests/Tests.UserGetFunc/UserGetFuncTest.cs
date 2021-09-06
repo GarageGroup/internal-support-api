@@ -10,9 +10,15 @@ public sealed partial class UserGetFuncTest
 {
     static UserGetFuncTest()
     {
-        validActiveDirectoryGuid = new("1203c0e2-3648-4596-80dd-127fdd2610b7");
-        validSystemUserId = new("bd8b8e33-554e-e611-80dc-c4346bad0190");
+        ValidActiveDirectoryGuid = Guid.Parse("1203c0e2-3648-4596-80dd-127fdd2610b7");
+        ValidSystemUserId = Guid.Parse("bd8b8e33-554e-e611-80dc-c4346bad0190");
     }
+    
+    private static readonly Guid ValidActiveDirectoryGuid;
+    
+    private static readonly Guid ValidSystemUserId;
+    
+    private const int DataverseNotFoundStatusCode = -2147088239;
 
     private static IUserGetFunc CreateFunc(IDataverseEntityGetSupplier dataverseEntityGetSupplier)
         =>
@@ -40,8 +46,4 @@ public sealed partial class UserGetFuncTest
 
         return mock;
     }
-
-    private static readonly Guid validActiveDirectoryGuid;
-    private static readonly Guid validSystemUserId;
-    private const int dataverseNotFoundStatusCode = -2147088239;
 }
