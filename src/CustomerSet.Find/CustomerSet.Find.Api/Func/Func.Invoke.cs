@@ -11,10 +11,12 @@ partial class CustomerSetFindFunc
             input ?? throw new ArgumentNullException(nameof(input)),
             cancellationToken)
         .Pipe(
-            @in => new DataverseEntitySetGetIn(
+            input => input.SearchText.IsNullOrEmpty() ? string.Empty : $"contains(name,'{input.SearchText}')")
+        .Pipe(
+            filter => new DataverseEntitySetGetIn(
                 entitySetName: "accounts",
                 selectFields: selectedFields,
-                filter: $"contains(name,'{@in.SearchText}')"))
+                filter: filter))
         .PipeValue(
             dataverseEntitySetGetSupplier.GetEntitySetAsync<CustomerSetFindJsonOut>)
         .MapFailure(

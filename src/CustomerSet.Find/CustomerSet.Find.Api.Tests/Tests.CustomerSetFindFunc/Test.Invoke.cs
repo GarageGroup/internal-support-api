@@ -20,27 +20,28 @@ partial class CustomerSetFindFuncTest
     }
 
     [Fact]
-    public async Task InvokeAsync_CancellationTokenHasCanceled_ExpectTaskCanceledException()
+    public void InvokeAsync_CancellationTokenHasCanceled_ExpectTaskIsCanceled()
     {
         var success = new DataverseEntitySetGetOut<CustomerSetFindJsonOut>(default);
         var mockDataverseApiClient = CreateMockDataverseApiClient(success);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
 
-        _ = await Assert.ThrowsAsync<TaskCanceledException>(() => func.InvokeAsync(new(""), new CancellationToken(true)).AsTask());
+        var valueTask = func.InvokeAsync(new(string.Empty), new CancellationToken(true));
+        Assert.True(valueTask.IsCanceled);
     }
 
-    [Fact]
-    public async  Task InvokeAsync_CancellationTokenHasNotCanceled_ExpectCallDataVerseApiClientOnce()
+    [Theory]
+    [InlineData("\u043B\u044C\u0441", "contains(name,'\u043B\u044C\u0441')")]
+    [InlineData(Strings.Empty, Strings.Empty)]
+    [InlineData(null, Strings.Empty)]
+    public async  Task InvokeAsync_CancellationTokenHasNotCanceled_ExpectCallDataVerseApiClientOnce(
+        string searchString, string expectedFilter)
     {
-        const string searchString = "\u043B\u044C\u0441";
-        
-
         var success = new DataverseEntitySetGetOut<CustomerSetFindJsonOut>(null);
         var mockDataverseApiClient = CreateMockDataverseApiClient(success, IsMatchDataverseInput);
 
         var token = new CancellationToken(false);
-        
 
         var func = CreateFunc(mockDataverseApiClient.Object);
         _ = await func.InvokeAsync(new(searchString), token);
@@ -50,12 +51,12 @@ partial class CustomerSetFindFuncTest
                 It.IsAny<DataverseEntitySetGetIn>(), token), 
             Times.Once);
 
-        static void IsMatchDataverseInput(DataverseEntitySetGetIn actual)
+        void IsMatchDataverseInput(DataverseEntitySetGetIn actual)
         {
             var expected = new DataverseEntitySetGetIn(
                 entitySetName: "accounts",
                 selectFields: new[] { "name", "accountid" },
-                filter: $"contains(name,'{searchString}')");
+                filter: expectedFilter);
             actual.ShouldDeepEqual(expected);
         }
     }
