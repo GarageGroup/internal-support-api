@@ -2,7 +2,7 @@
 
 namespace GGroupp.Internal.Support;
 
-public record CreateIncidentJsonOut
+public sealed record CreateIncidentJsonOut
 {
     public CreateIncidentJsonOut(
         Guid incidentId,
