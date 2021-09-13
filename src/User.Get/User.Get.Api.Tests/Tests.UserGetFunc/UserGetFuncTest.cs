@@ -22,7 +22,7 @@ public sealed partial class UserGetFuncTest
 
     private static IUserGetFunc CreateFunc(IDataverseEntityGetSupplier dataverseEntityGetSupplier)
         =>
-        Dependency.Create(_ => dataverseEntityGetSupplier)
+        Dependency.Of(dataverseEntityGetSupplier)
         .UseUserGetApi()
         .Resolve(Mock.Of<IServiceProvider>());
 
