@@ -22,19 +22,22 @@ partial class UserGetFuncTest
     }
 
     [Fact]
-    public async Task InvokeAsync_CancellationTokenHasCanceled_ExpectTaskCanceledException()
+    public void InvokeAsync_CancellationTokenIsCanceled_ExpectValueTaskIsCanceled()
     {
         var success = new DataverseEntityGetOut<UserGetJsonOut>(default);
         var mockDataverseApiClient = CreateMockDataverseApiClient(success);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
 
-        _ = await Assert.ThrowsAsync<TaskCanceledException>(
-            () => func.InvokeAsync(new(ValidActiveDirectoryGuid), new(true)).AsTask());
+        var input = new UserGetIn(ValidActiveDirectoryGuid);
+        var token = new CancellationToken(canceled: true);
+
+        var actual = func.InvokeAsync(input, token);
+        Assert.True(actual.IsCanceled);
     }
 
     [Fact]
-    public async  Task InvokeAsync_CancellationTokenHasNotCanceled_ExpectCallDataVerseApiClientOnce()
+    public async  Task InvokeAsync_CancellationTokenIsNotCanceled_ExpectCallDataVerseApiClientOnce()
     {
         var success = new DataverseEntityGetOut<UserGetJsonOut>(null);
         var mockDataverseApiClient = CreateMockDataverseApiClient(success, IsMatchDataverseInput);

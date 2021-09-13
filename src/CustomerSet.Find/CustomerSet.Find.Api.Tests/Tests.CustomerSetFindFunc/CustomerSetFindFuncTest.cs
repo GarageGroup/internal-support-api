@@ -10,7 +10,7 @@ public sealed partial class CustomerSetFindFuncTest
 {
     private static ICustomerSetFindFunc CreateFunc(IDataverseEntitySetGetSupplier dataverseEntitySetGetSupplier)
         =>
-        Dependency.Create(_ => dataverseEntitySetGetSupplier)
+        Dependency.Of(dataverseEntitySetGetSupplier)
         .UseCustomerSetFindApi()
         .Resolve(Mock.Of<IServiceProvider>());
 

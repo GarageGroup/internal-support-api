@@ -20,7 +20,7 @@ partial class CustomerSetFindFuncTest
     }
 
     [Fact]
-    public void InvokeAsync_CancellationTokenHasCanceled_ExpectTaskIsCanceled()
+    public void InvokeAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
     {
         var success = new DataverseEntitySetGetOut<CustomerSetFindJsonOut>(default);
         var mockDataverseApiClient = CreateMockDataverseApiClient(success);
@@ -35,7 +35,7 @@ partial class CustomerSetFindFuncTest
     [InlineData("\u043B\u044C\u0441", "contains(name,'\u043B\u044C\u0441')")]
     [InlineData(Strings.Empty, Strings.Empty)]
     [InlineData(null, Strings.Empty)]
-    public async Task InvokeAsync_CancellationTokenHasNotCanceled_ExpectCallDataVerseApiClientOnce(
+    public async Task InvokeAsync_CancellationTokenIsNotCanceled_ExpectCallDataVerseApiClientOnce(
         string searchString, string expectedFilter)
     {
         var success = new DataverseEntitySetGetOut<CustomerSetFindJsonOut>(null);

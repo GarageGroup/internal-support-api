@@ -3,7 +3,9 @@ using System.Collections.ObjectModel;
 
 namespace GGroupp.Internal.Support;
 
-internal sealed partial class CustomerSetFindFunc : IAsyncValueFunc<CustomerSetFindIn, Result<CustomerSetFindOut, Failure<CustomerSetFindFailureCode>>>
+using ICustomerSetFindFunc = IAsyncValueFunc<CustomerSetFindIn, Result<CustomerSetFindOut, Failure<CustomerSetFindFailureCode>>>;
+
+internal sealed partial class CustomerSetFindFunc : ICustomerSetFindFunc
 {
     private static readonly ReadOnlyCollection<string> selectedFields;
 

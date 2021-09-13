@@ -10,7 +10,7 @@ public sealed partial class IncidentCreateFuncTest
 {
     private static IIncidentCreateFunc CreateFunc(IDataverseEntityCreateSupplier dataverseEntityCreateSupplier)
         =>
-        Dependency.Create(_ => dataverseEntityCreateSupplier)
+        Dependency.Of(dataverseEntityCreateSupplier)
         .UseIncidentCreateApi()
         .Resolve(Mock.Of<IServiceProvider>());
 
@@ -35,7 +35,7 @@ public sealed partial class IncidentCreateFuncTest
         return mock;
     }
 
-    private static IncidentCreateIn Input { get; } = 
+    private static IncidentCreateIn SomeInput { get; } = 
         new(
             ownerId: Guid.Parse("1203c0e2-3648-4596-80dd-127fdd2610b6"),
             customerId: Guid.Parse("bd8b8e33-554e-e611-80dc-c4346bad0190"),
