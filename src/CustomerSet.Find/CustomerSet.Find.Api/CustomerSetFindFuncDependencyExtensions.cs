@@ -7,8 +7,7 @@ using ICustomerSetFind = IAsyncValueFunc<CustomerSetFindIn, Result<CustomerSetFi
 
 public static class CustomerSetFindFuncDependencyExtensions
 {
-    public static Dependency<ICustomerSetFind> UseCustomerSetFindApi<TDataverseApiClient>(
-        this Dependency<TDataverseApiClient> dependency)
+    public static Dependency<ICustomerSetFind> UseCustomerSetFindApi<TDataverseApiClient>(this Dependency<TDataverseApiClient> dependency)
         where TDataverseApiClient : IDataverseEntitySetGetSupplier
         =>
         dependency.Map<ICustomerSetFind>(apiClient => CustomerSetFindFunc.Create(apiClient));
