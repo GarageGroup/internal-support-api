@@ -10,8 +10,8 @@ public sealed record CreateIncidentJsonIn
         string title,
         string description)
     {
-        OwnerId = ownerId;
-        CustomerId = customerId;
+        OwnerId = ownerId ?? string.Empty;
+        CustomerId = customerId ?? string.Empty;
         Title = title ?? string.Empty;
         Description = description ?? string.Empty;
     }

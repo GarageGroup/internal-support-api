@@ -20,18 +20,22 @@ partial class IncidentCreateFuncTest
     }
 
     [Fact]
-    public async Task InvokeAsync_CancellationTokenHasCanceled_ExpectTaskCanceledException()
+    public void InvokeAsync_CancellationTokenIsCanceled_ExpectValueTaskIsCanceled()
     {
         var success = new DataverseEntityCreateOut<CreateIncidentJsonOut>(default);
         var mockDataverseApiClient = CreateMockDataverseApiClient(success);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
 
-        _ = await Assert.ThrowsAsync<TaskCanceledException>(() => func.InvokeAsync(Input, new CancellationToken(true)).AsTask());
+        var input = SomeInput;
+        var token = new CancellationToken(canceled: true);
+
+        var actual = func.InvokeAsync(input, token);
+        Assert.True(actual.IsCanceled);
     }
 
     [Fact]
-    public async Task InvokeAsync_CancellationTokenHasNotCanceled_ExpectCallDataVerseApiClientOnce()
+    public async Task InvokeAsync_CancellationTokenIsNotCanceled_ExpectCallDataVerseApiClientOnce()
     {
         const string ownerId = "1203c0e2-3648-4596-80dd-127fdd2610b6";
         const string customerId = "bd8b8e33-554e-e611-80dc-c4346bad0190";
@@ -79,7 +83,7 @@ partial class IncidentCreateFuncTest
         var mockDataverseApiClient = CreateMockDataverseApiClient(failure);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
-        var actualResult = await func.InvokeAsync(Input, CancellationToken.None);
+        var actualResult = await func.InvokeAsync(SomeInput, CancellationToken.None);
 
         var expectedFailure = Failure.Create(incidentCreateFailureCode, failureMessge);
         Assert.Equal(expectedFailure, actualResult);
@@ -95,7 +99,7 @@ partial class IncidentCreateFuncTest
         var mockDataverseApiClient = CreateMockDataverseApiClient(success);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
-        var actualResult = await func.InvokeAsync(Input, default);
+        var actualResult = await func.InvokeAsync(SomeInput, default);
 
         var expectedFailure = new IncidentCreateOut(incidentId, title);
         Assert.Equal(expectedFailure, actualResult);
@@ -108,7 +112,7 @@ partial class IncidentCreateFuncTest
         var mockDataverseApiClient = CreateMockDataverseApiClient(success);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
-        var actualResult = await func.InvokeAsync(Input, default);
+        var actualResult = await func.InvokeAsync(SomeInput, default);
 
         var expected = new IncidentCreateOut(default, default);
         Assert.Equal(expected, actualResult);

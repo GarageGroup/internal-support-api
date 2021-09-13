@@ -3,7 +3,9 @@ using System.Collections.ObjectModel;
 
 namespace GGroupp.Internal.Support;
 
-internal sealed partial class IncidentCreateFunc : IAsyncValueFunc<IncidentCreateIn, Result<IncidentCreateOut, Failure<IncidentCreateFailureCode>>>
+using IIncidentCreateFunc = IAsyncValueFunc<IncidentCreateIn, Result<IncidentCreateOut, Failure<IncidentCreateFailureCode>>>;
+
+internal sealed partial class IncidentCreateFunc : IIncidentCreateFunc
 {
     private static readonly ReadOnlyCollection<string> selectedFields;
 

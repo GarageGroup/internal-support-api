@@ -7,8 +7,7 @@ using IIncidentCreateFunc = IAsyncValueFunc<IncidentCreateIn, Result<IncidentCre
 
 public static class IncidentCreateFuncDependencyExtensions
 {
-    public static Dependency<IIncidentCreateFunc> UseIncidentCreateApi<TDataverseApiClient>(
-        this Dependency<TDataverseApiClient> dependency)
+    public static Dependency<IIncidentCreateFunc> UseIncidentCreateApi<TDataverseApiClient>(this Dependency<TDataverseApiClient> dependency)
         where TDataverseApiClient : IDataverseEntityCreateSupplier
         =>
         dependency.Map<IIncidentCreateFunc>(apiClient => IncidentCreateFunc.Create(apiClient));
