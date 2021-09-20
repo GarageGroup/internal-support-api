@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RootNamespace>GGroupp.Internal.Support</RootNamespace>
+    <AssemblyName>GGroupp.Internal.Support.CustomerSet.Search.InOut</AssemblyName>
+    <Version>1.0.1</Version>
+  </PropertyGroup>
+
+</Project>
