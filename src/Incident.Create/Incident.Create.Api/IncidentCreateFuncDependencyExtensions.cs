@@ -1,5 +1,6 @@
 ﻿using GGroupp.Infra;
 using PrimeFuncPack;
+using System;
 
 namespace GGroupp.Internal.Support;
 
