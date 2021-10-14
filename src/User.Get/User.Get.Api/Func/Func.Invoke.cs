@@ -12,7 +12,7 @@ partial class UserGetFunc
     public partial ValueTask<Result<UserGetOut, Failure<UserGetFailureCode>>> InvokeAsync(
         UserGetIn input, CancellationToken cancellationToken)
         =>
-        AsyncPipeline.Start(
+        AsyncPipeline.Pipe(
             input ?? throw new ArgumentNullException(nameof(input)),
             cancellationToken)
         .Pipe(
