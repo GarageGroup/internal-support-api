@@ -10,7 +10,7 @@ public sealed record IncidentCreateIn
         Guid customerId,
         string title,
         [AllowNull] string description,
-        int? caseOriginCode)
+        int? caseOriginCode = null)
     {
         OwnerId = ownerId;
         CustomerId = customerId;

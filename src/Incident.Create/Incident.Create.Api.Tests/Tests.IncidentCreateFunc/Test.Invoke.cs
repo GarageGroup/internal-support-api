@@ -81,7 +81,7 @@ partial class IncidentCreateFuncTest
     [InlineData(int.MaxValue, IncidentCreateFailureCode.Unknown)]
     [InlineData(0, IncidentCreateFailureCode.Unknown)]
     [InlineData(DataverseNotFoundStatusCode, IncidentCreateFailureCode.NotFound)]
-    [InlineData(DataversePicklistValueOutOfRangeStatusCode, IncidentCreateFailureCode.CaseOriginCodeOutOfRange)]
+    [InlineData(DataversePicklistValueOutOfRangeStatusCode, IncidentCreateFailureCode.UnexpectedCaseOriginCode)]
     public async Task InvokeAsync_FailureResultIsGiven_ExpectFailure(int failureCode, IncidentCreateFailureCode incidentCreateFailureCode)
     {
         const string failureMessge = "Bad request";

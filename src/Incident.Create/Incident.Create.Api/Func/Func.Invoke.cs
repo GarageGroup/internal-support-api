@@ -39,7 +39,7 @@ partial class IncidentCreateFunc
         dataverseFailureCode switch
         {
             ApiNames.NotFoundFailureCode => IncidentCreateFailureCode.NotFound,
-            ApiNames.PicklistValueOutOfRangeFailureCode => IncidentCreateFailureCode.CaseOriginCodeOutOfRange,
+            ApiNames.PicklistValueOutOfRangeFailureCode => IncidentCreateFailureCode.UnexpectedCaseOriginCode,
             _ => IncidentCreateFailureCode.Unknown
         };
 }
