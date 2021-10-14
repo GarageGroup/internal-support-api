@@ -1,5 +1,9 @@
 ﻿using GGroupp.Infra;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace GGroupp.Internal.Support;
 
@@ -8,7 +12,7 @@ partial class UserGetFunc
     public partial ValueTask<Result<UserGetOut, Failure<UserGetFailureCode>>> InvokeAsync(
         UserGetIn input, CancellationToken cancellationToken)
         =>
-        AsyncPipeline.Start(
+        AsyncPipeline.Pipe(
             input ?? throw new ArgumentNullException(nameof(input)),
             cancellationToken)
         .Pipe(

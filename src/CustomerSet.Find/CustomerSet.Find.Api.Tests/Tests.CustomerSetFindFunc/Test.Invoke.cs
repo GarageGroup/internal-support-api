@@ -1,6 +1,9 @@
 ﻿using DeepEqual.Syntax;
 using GGroupp.Infra;
 using Moq;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace GGroupp.Internal.Support.CustomerSet.Find.Api.Tests;
