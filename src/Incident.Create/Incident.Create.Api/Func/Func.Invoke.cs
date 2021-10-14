@@ -11,7 +11,7 @@ partial class IncidentCreateFunc
     public partial ValueTask<Result<IncidentCreateOut, Failure<IncidentCreateFailureCode>>> InvokeAsync(
         IncidentCreateIn input, CancellationToken cancellationToken)
         =>
-        AsyncPipeline.Start(
+        AsyncPipeline.Pipe(
             input ?? throw new ArgumentNullException(nameof(input)),
             cancellationToken)
         .Pipe(

@@ -3,10 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
     <IsPackable>false</IsPackable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>GGroupp.Internal.Support.CustomerSet.Find.Api.Tests</RootNamespace>
-	<AssemblyName>GGroupp.Internal.Support.CustomerSet.Find.Api.Tests</AssemblyName>
+    <AssemblyName>GGroupp.Internal.Support.CustomerSet.Find.Api.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

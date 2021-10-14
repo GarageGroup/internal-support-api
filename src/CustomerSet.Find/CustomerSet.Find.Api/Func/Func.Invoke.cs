@@ -11,7 +11,7 @@ partial class CustomerSetFindFunc
     public partial ValueTask<Result<CustomerSetFindOut, Failure<CustomerSetFindFailureCode>>> InvokeAsync(
         CustomerSetFindIn input, CancellationToken cancellationToken)
         =>
-        AsyncPipeline.Start(
+        AsyncPipeline.Pipe(
             input ?? throw new ArgumentNullException(nameof(input)),
             cancellationToken)
         .Pipe(
