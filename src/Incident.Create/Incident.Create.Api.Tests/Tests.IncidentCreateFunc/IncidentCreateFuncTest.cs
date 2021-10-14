@@ -43,7 +43,10 @@ public sealed partial class IncidentCreateFuncTest
             ownerId: Guid.Parse("1203c0e2-3648-4596-80dd-127fdd2610b6"),
             customerId: Guid.Parse("bd8b8e33-554e-e611-80dc-c4346bad0190"),
             title: "title",
-            description: "decription");
+            description: "decription",
+            caseOriginCode: 1);
 
     private const int DataverseNotFoundStatusCode = -2147220969;
+
+    private const int DataversePicklistValueOutOfRangeStatusCode = -2147204326;
 }

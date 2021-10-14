@@ -3,5 +3,6 @@
 public enum IncidentCreateFailureCode
 {
     Unknown,
-    NotFound
+    NotFound,
+    UnexpectedCaseOriginCode
 }

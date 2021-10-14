@@ -22,7 +22,8 @@ partial class IncidentCreateFunc
                         ownerId: Invariant($"/systemusers({input.OwnerId:D})"),
                         customerId: Invariant($"/accounts({input.CustomerId:D})"),
                         title: input.Title,
-                        description: input.Description)))
+                        description: input.Description,
+                        caseOriginCode: input.CaseOriginCode)))
         .PipeValue(
             entityCreateSupplier.CreateEntityAsync<CreateIncidentJsonIn, CreateIncidentJsonOut>)
         .MapFailure(
@@ -38,6 +39,7 @@ partial class IncidentCreateFunc
         dataverseFailureCode switch
         {
             ApiNames.NotFoundFailureCode => IncidentCreateFailureCode.NotFound,
+            ApiNames.PicklistValueOutOfRangeFailureCode => IncidentCreateFailureCode.UnexpectedCaseOriginCode,
             _ => IncidentCreateFailureCode.Unknown
         };
 }
