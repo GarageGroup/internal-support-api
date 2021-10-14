@@ -8,12 +8,14 @@ public sealed record CreateIncidentJsonIn
         string ownerId,
         string customerId,
         string title,
-        string description)
+        string description,
+        int? caseOriginCode)
     {
         OwnerId = ownerId ?? string.Empty;
         CustomerId = customerId ?? string.Empty;
         Title = title ?? string.Empty;
         Description = description ?? string.Empty;
+        CaseOriginCode = caseOriginCode;
     }
 
     [JsonPropertyName(ApiNames.OwnerIdOdataBind)]
@@ -27,4 +29,7 @@ public sealed record CreateIncidentJsonIn
 
     [JsonPropertyName(ApiNames.Description)]
     public string Description { get; init; }
+
+    [JsonPropertyName(ApiNames.CaseOriginCode)]
+    public int? CaseOriginCode { get; init; }
 }
