@@ -20,7 +20,8 @@ partial class CustomerSetFindFunc
             filter => new DataverseEntitySetGetIn(
                 entitySetName: "accounts",
                 selectFields: selectedFields,
-                filter: filter))
+                filter: filter,
+                top: input.Top))
         .PipeValue(
             dataverseEntitySetGetSupplier.GetEntitySetAsync<CustomerSetFindJsonOut>)
         .MapFailure(

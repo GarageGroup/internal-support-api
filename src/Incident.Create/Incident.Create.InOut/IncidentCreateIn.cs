@@ -10,12 +10,14 @@ public sealed record IncidentCreateIn
         Guid customerId,
         string title,
         [AllowNull] string description,
+        int caseTypeCode,
         int? caseOriginCode = null)
     {
         OwnerId = ownerId;
         CustomerId = customerId;
         Title = title ?? string.Empty;
         Description = description ?? string.Empty;
+        CaseTypeCode = caseTypeCode;
         CaseOriginCode = caseOriginCode;
     }
 
@@ -26,6 +28,8 @@ public sealed record IncidentCreateIn
     public string Title { get; }
 
     public string Description { get; }
+
+    public int CaseTypeCode {  get; }
 
     public int? CaseOriginCode {  get; }
 }

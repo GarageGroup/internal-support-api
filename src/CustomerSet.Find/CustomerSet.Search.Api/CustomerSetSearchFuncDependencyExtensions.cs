@@ -4,7 +4,7 @@ using System;
 
 namespace GGroupp.Internal.Support;
 
-using ICustomerSearchSearch = IAsyncValueFunc<CustomerSetSearchIn, Result<CustomerSetSearchOut, Failure<CustomerSetSearchFailureCode>>>;
+using ICustomerSearchSearch = IAsyncValueFunc<CustomerSetFindIn, Result<CustomerSetFindOut, Failure<CustomerSetFindFailureCode>>>;
 
 public static class CustomerSetSearchFuncDependencyExtensions
 {
