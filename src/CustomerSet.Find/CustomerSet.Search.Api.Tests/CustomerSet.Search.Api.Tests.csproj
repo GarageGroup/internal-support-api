@@ -6,8 +6,8 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <IsPackable>false</IsPackable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <RootNamespace>GGroupp.Internal.Support.CustomerSet.Find.Api.Tests</RootNamespace>
-    <AssemblyName>GGroupp.Internal.Support.CustomerSet.Find.Api.Tests</AssemblyName>
+    <RootNamespace>GGroupp.Internal.Support.CustomerSet.Search.Api.Tests</RootNamespace>
+    <AssemblyName>GGroupp.Internal.Support.CustomerSet.Search.Api.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
