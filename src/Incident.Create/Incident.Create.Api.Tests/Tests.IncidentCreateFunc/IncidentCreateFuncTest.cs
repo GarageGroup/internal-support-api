@@ -44,6 +44,7 @@ public sealed partial class IncidentCreateFuncTest
             customerId: Guid.Parse("bd8b8e33-554e-e611-80dc-c4346bad0190"),
             title: "title",
             description: "decription",
+            caseTypeCode: 1,
             caseOriginCode: 1);
 
     private const int DataverseNotFoundStatusCode = -2147220969;

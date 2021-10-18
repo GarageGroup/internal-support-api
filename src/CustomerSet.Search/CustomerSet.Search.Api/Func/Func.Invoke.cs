@@ -1,5 +1,6 @@
 ﻿using GGroupp.Infra;
 using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,33 +9,36 @@ namespace GGroupp.Internal.Support;
 
 partial class CustomerSetSearchFunc
 {
-    public partial ValueTask<Result<CustomerSetSearchOut, Failure<CustomerSetSearchFailureCode>>> InvokeAsync(
-        CustomerSetSearchIn input, CancellationToken cancellationToken)
+    public partial ValueTask<Result<CustomerSetFindOut, Failure<CustomerSetFindFailureCode>>> InvokeAsync(
+        CustomerSetFindIn input, CancellationToken cancellationToken)
         =>
         AsyncPipeline.Pipe(
             input ?? throw new ArgumentNullException(nameof(input)),
             cancellationToken)
         .Pipe(
-            @in => new DataverseSearchIn(@in.SearchText)
+            @in => new DataverseSearchIn($"*{@in.SearchText}*")
             {
-                Entities = entities
+                Entities = entities,
+                Top = @in.Top 
             })
         .PipeValue(
             dataverseSearchSupplier.SearchAsync)
         .MapFailure(
             failure =>
             {
-                var fall = failure.MapFailureCode(fail => CustomerSetSearchFailureCode.Unknown);
+                var fall = failure.MapFailureCode(fail => CustomerSetFindFailureCode.Unknown);
                 return fall;
             })
         .MapSuccess(
             MapDataverseSearchOut);
 
-    private static CustomerSetSearchOut MapDataverseSearchOut(DataverseSearchOut dataverseSearchOut)
+    private static CustomerSetFindOut MapDataverseSearchOut(DataverseSearchOut dataverseSearchOut)
         =>
         new(
             dataverseSearchOut.Value
             .Select(
-                item => new CustomerItemSearchOut(item.ObjectId))
+                item => new CustomerItemFindOut(
+                    item.ObjectId, 
+                    item.ExtensionData?.GetValueOrAbsent("name").OrDefault()?.ToString() ?? string.Empty))
             .ToArray());
 }

@@ -44,13 +44,14 @@ partial class IncidentCreateFuncTest
         const string customerId = "bd8b8e33-554e-e611-80dc-c4346bad0190";
         const string title = "title";
         const string description = "description";
+        const int caseTypeCode = 1;
         const int caseOriginCode = 1;
 
         var success = new DataverseEntityCreateOut<CreateIncidentJsonOut>(null);
         var mockDataverseApiClient = CreateMockDataverseApiClient(success, IsMatchDataverseInput);
 
         var token = new CancellationToken(false);
-        var _input = new IncidentCreateIn(new(ownerId), new(customerId), title, description, caseOriginCode);
+        var _input = new IncidentCreateIn(new(ownerId), new(customerId), title, description, caseTypeCode, caseOriginCode);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
         _ = await func.InvokeAsync(_input, token);
@@ -70,6 +71,7 @@ partial class IncidentCreateFuncTest
                         customerId: $"/accounts({customerId})",
                         title: title,
                         description: description,
+                        caseTypeCode: caseTypeCode,
                         caseOriginCode: caseOriginCode));
             actual.ShouldDeepEqual(expected);
         }
@@ -81,7 +83,7 @@ partial class IncidentCreateFuncTest
     [InlineData(int.MaxValue, IncidentCreateFailureCode.Unknown)]
     [InlineData(0, IncidentCreateFailureCode.Unknown)]
     [InlineData(DataverseNotFoundStatusCode, IncidentCreateFailureCode.NotFound)]
-    [InlineData(DataversePicklistValueOutOfRangeStatusCode, IncidentCreateFailureCode.UnexpectedCaseOriginCode)]
+    [InlineData(DataversePicklistValueOutOfRangeStatusCode, IncidentCreateFailureCode.UnexpectedCaseCode)]
     public async Task InvokeAsync_FailureResultIsGiven_ExpectFailure(int failureCode, IncidentCreateFailureCode incidentCreateFailureCode)
     {
         const string failureMessge = "Bad request";

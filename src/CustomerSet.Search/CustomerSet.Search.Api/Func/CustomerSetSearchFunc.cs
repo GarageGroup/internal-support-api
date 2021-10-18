@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GGroupp.Internal.Support;
 
-internal sealed partial class CustomerSetSearchFunc : IAsyncValueFunc<CustomerSetSearchIn, Result<CustomerSetSearchOut, Failure<CustomerSetSearchFailureCode>>>
+internal sealed partial class CustomerSetSearchFunc : IAsyncValueFunc<CustomerSetFindIn, Result<CustomerSetFindOut, Failure<CustomerSetFindFailureCode>>>
 {
     private static readonly ReadOnlyCollection<string> entities;
 
@@ -25,6 +25,6 @@ internal sealed partial class CustomerSetSearchFunc : IAsyncValueFunc<CustomerSe
         new(
             dataverseEntityCreateSupplier ?? throw new ArgumentNullException(nameof(dataverseEntityCreateSupplier)));
 
-    public partial ValueTask<Result<CustomerSetSearchOut, Failure<CustomerSetSearchFailureCode>>> InvokeAsync(
-        CustomerSetSearchIn input, CancellationToken cancellationToken = default);
+    public partial ValueTask<Result<CustomerSetFindOut, Failure<CustomerSetFindFailureCode>>> InvokeAsync(
+        CustomerSetFindIn input, CancellationToken cancellationToken = default);
 }

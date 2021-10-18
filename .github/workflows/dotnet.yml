@@ -47,6 +47,14 @@ jobs:
     - name: Pack CustomerSet.Search.Api.csproj
       run: dotnet pack ./src/*/*/CustomerSet.Search.Api.csproj --no-restore -o ~/nuget  -c Release
 
+    # CustomerSet.Search.Api.csproj
+    
+    - name: Restore CustomerSet.Search.Api.Tests.csproj
+      run: dotnet restore ./src/*/*/CustomerSet.Search.Api.Tests.csproj
+
+    - name: Test CustomerSet.Search.Api.Tests.csproj
+      run: dotnet test ./src/*/*/CustomerSet.Search.Api.Tests.csproj --no-restore  -c Release
+
     # CustomerSet.Find.InOut.csproj
     
     - name: Restore CustomerSet.Find.InOut.csproj

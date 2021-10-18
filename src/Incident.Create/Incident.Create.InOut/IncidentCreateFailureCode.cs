@@ -4,5 +4,5 @@ public enum IncidentCreateFailureCode
 {
     Unknown,
     NotFound,
-    UnexpectedCaseOriginCode
+    UnexpectedCaseCode
 }
