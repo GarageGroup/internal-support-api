@@ -138,7 +138,7 @@ partial class ContactSetSearchFuncTest
         var actualResult = (await func.InvokeAsync(new(searchText, new()), default));
         Assert.True(actualResult.IsSuccess);
 
-        var actual = actualResult.SuccessOrThrow().Сontacts;
+        var actual = actualResult.SuccessOrThrow().Contacts;
         var expected = new ContactItemSearchOut[] { new(contactId, fullName) };
         Assert.Equal(expected, actual);
     }
@@ -153,7 +153,7 @@ partial class ContactSetSearchFuncTest
         var actualResult = await func.InvokeAsync(default, default);
 
         Assert.True(actualResult.IsSuccess);
-        var customers = actualResult.SuccessOrThrow().Сontacts;
+        var customers = actualResult.SuccessOrThrow().Contacts;
 
         Assert.Empty(customers);
     }
