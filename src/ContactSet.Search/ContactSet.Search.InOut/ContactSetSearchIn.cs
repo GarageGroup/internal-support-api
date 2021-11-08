@@ -9,11 +9,11 @@ public readonly record struct ContactSetSearchIn
 
     public ContactSetSearchIn(
         [AllowNull] string searchText,
-        Guid ñustomerId,
+        Guid customerId,
         int? top = null)
     {
         this.searchText = searchText != string.Empty ? searchText : null;
-        CustomerId = ñustomerId;
+        CustomerId = customerId;
         Top = top;
     }
 
