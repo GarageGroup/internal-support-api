@@ -79,10 +79,10 @@ jobs:
     - name: Restore ContactSet.Search.InOut.csproj
       run: dotnet restore ./src/*/*/ContactSet.Search.InOut.csproj
 
-    - name: Build CustomerSet.Find.InOut.csproj
+    - name: Build ContactSet.Search.InOut.csproj
       run: dotnet build ./src/*/*/ContactSet.Search.InOut.csproj --no-restore  -c Release
 
-    - name: Pack CustomerSet.Find.InOut.csproj
+    - name: Pack ContactSet.Search.InOut.csproj
       run: dotnet pack ./src/*/*/ContactSet.Search.InOut.csproj --no-restore -o ~/nuget  -c Release
 
      # ContactSet.Search.Api.csproj
