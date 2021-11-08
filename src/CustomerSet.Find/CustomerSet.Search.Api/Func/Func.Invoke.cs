@@ -24,11 +24,7 @@ partial class CustomerSetSearchFunc
         .PipeValue(
             dataverseSearchSupplier.SearchAsync)
         .MapFailure(
-            failure =>
-            {
-                var fall = failure.MapFailureCode(fail => CustomerSetFindFailureCode.Unknown);
-                return fall;
-            })
+            failure => failure.MapFailureCode(fail => CustomerSetFindFailureCode.Unknown))
         .MapSuccess(
             MapDataverseSearchOut);
 

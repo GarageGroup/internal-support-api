@@ -6,14 +6,14 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>GGroupp.Internal.Support</RootNamespace>
-    <AssemblyName>GGroupp.Internal.Support.CustomerSet.Search.Api</AssemblyName>
-    <Version>1.1.0</Version>
+    <AssemblyName>GGroupp.Internal.Support.ContactSet.Search.Api</AssemblyName>
+    <Version>1.0.0-build.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="EarlyFuncPack.Core.AsyncPipeline" Version="0.0.1" />
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.Search" Version="1.0.5" />
-    <PackageReference Include="GGroupp.Internal.Support.CustomerSet.Find.InOut" Version="1.1.0" />
+    <PackageReference Include="GGroupp.Internal.Support.ContactSet.Search.InOut" Version="1.0.0-build.5" />
     <PackageReference Include="PrimeFuncPack.Core" Version="1.1.1" />
     <PackageReference Include="PrimeFuncPack.Dependency.Core" Version="1.2.1" />
   </ItemGroup>

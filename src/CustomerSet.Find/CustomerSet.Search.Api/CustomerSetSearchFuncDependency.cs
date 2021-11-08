@@ -6,7 +6,7 @@ namespace GGroupp.Internal.Support;
 
 using ICustomerSearchSearch = IAsyncValueFunc<CustomerSetFindIn, Result<CustomerSetFindOut, Failure<CustomerSetFindFailureCode>>>;
 
-public static class CustomerSetSearchFuncDependencyExtensions
+public static class CustomerSetSearchFuncDependency
 {
     public static Dependency<ICustomerSearchSearch> UseCustomerSetSearchApi<TDataverseApiClient>(
         this Dependency<TDataverseApiClient> dependency)

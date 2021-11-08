@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace GGroupp.Internal.Support;
 
-public sealed record CreateIncidentJsonOut
+internal sealed record class CreateIncidentJsonOut
 {
     public CreateIncidentJsonOut(
         Guid incidentId,

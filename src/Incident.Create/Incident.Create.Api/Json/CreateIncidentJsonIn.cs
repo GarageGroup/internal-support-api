@@ -2,7 +2,7 @@
 
 namespace GGroupp.Internal.Support;
 
-public sealed record CreateIncidentJsonIn
+internal sealed record class CreateIncidentJsonIn
 {
     public CreateIncidentJsonIn(
         string ownerId,
