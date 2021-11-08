@@ -8,7 +8,7 @@ public sealed record class ContactSetSearchOut
 {
     public ContactSetSearchOut([AllowNull] IReadOnlyCollection<ContactItemSearchOut> contacts)
         =>
-        Ñontacts = contacts ?? Array.Empty<ContactItemSearchOut>();
+        Contacts = contacts ?? Array.Empty<ContactItemSearchOut>();
 
-    public IReadOnlyCollection<ContactItemSearchOut> Ñontacts { get; }
+    public IReadOnlyCollection<ContactItemSearchOut> Contacts { get; }
 }
