@@ -25,7 +25,7 @@ partial class ContactSetSearchFunc
         .PipeValue(
             dataverseSearchSupplier.SearchAsync)
         .MapFailure(
-            failure =>failure.MapFailureCode(fail => ContactSetSearchFailureCode.Unknown))
+            failure => failure.MapFailureCode(fail => ContactSetSearchFailureCode.Unknown))
         .MapSuccess(
             MapDataverseSearchOut);
 

@@ -15,7 +15,6 @@ namespace GGroupp.Internal.Support.ContactSet.Search.Api.Tests;
 
 partial class ContactSetSearchFuncTest
 {
-
     [Fact]
     public void InvokeAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
     {
@@ -54,15 +53,15 @@ partial class ContactSetSearchFuncTest
             var expected = new DataverseSearchIn(
                 $"*{searchString}*")
             { 
-                Entities = new ReadOnlyCollection<string>(new[] { "contact" }), 
-                Filter = $"parentcustomerid eq '{Guid.Parse(guidString).ToString("D", CultureInfo.InvariantCulture)}'"
+                Entities = new[] { "contact" }, 
+                Filter = $"parentcustomerid eq '{guidString}'"
             };
             actual.ShouldDeepEqual(expected);
         }
     }
 
     [Fact]
-    public async Task InvokeAsync_CancellationTokenIsNotCanceledDefaultInput_ExpectCallDataVerseApiClientOnce()
+    public async Task InvokeAsync_CancellationTokenIsNotCanceledAndInputIsDefault_ExpectCallDataVerseApiClientOnce()
     {
         var success = new DataverseSearchOut(0, null);
         var mockDataverseApiClient = CreateMockDataverseApiClient(success, IsMatchDataverseInput);
@@ -83,7 +82,7 @@ partial class ContactSetSearchFuncTest
                 $"**")
             {
                 Entities = new ReadOnlyCollection<string>(new[] { "contact" }),
-                Filter = $"parentcustomerid eq '{new Guid().ToString("D", CultureInfo.InvariantCulture)}'"
+                Filter = $"parentcustomerid eq '00000000-0000-0000-0000-000000000000'"
             };
             actual.ShouldDeepEqual(expected);
         }
@@ -115,23 +114,22 @@ partial class ContactSetSearchFuncTest
         var contactId = Guid.Parse("1b91d06f-208d-4c1c-b630-0ee9996a8a59");
         var fullName = "Виктор Васнецов";
 
-        var jsElementNullable = JsonSerializer.Deserialize<JsonExt>($"{{\"fullname\":\"{fullName}\"}}")?.ExtensionData?.First().Value;
-        var jsElement = 
-            jsElementNullable.HasValue ? 
-            jsElementNullable.Value : 
-            throw new ArgumentNullException(nameof(jsElementNullable));
+        var jsElementNullable = JsonSerializer.Deserialize<SearchOutJson>($"{{\"fullname\":\"{fullName}\"}}")?.ExtensionData?.First().Value;
+        var jsElement = jsElementNullable!.Value;
 
-        var success = new DataverseSearchOut(-1, new ReadOnlyCollection<DataverseSearchItem>(new DataverseSearchItem[] 
-        {
-            new(
-                searchScore:2,
-                entityName:"accountId",
-                objectId:contactId,
-                extensionData: new(new Dictionary<string, DataverseSearchJsonValue>()
-                { 
-                    {"fullname", new DataverseSearchJsonValue(jsElement) }
-                }))
-        }));
+        var success = new DataverseSearchOut(
+            totalRecordCount: -1, 
+            value: new ReadOnlyCollection<DataverseSearchItem>(new DataverseSearchItem[]
+            {
+                new(
+                    searchScore: 2,
+                    entityName: "accountId",
+                    objectId: contactId,
+                    extensionData: new(new Dictionary<string, DataverseSearchJsonValue>()
+                    {
+                        {"fullname", new DataverseSearchJsonValue(jsElement) }
+                    }))
+            }));
         var mockDataverseApiClient = CreateMockDataverseApiClient(success);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
