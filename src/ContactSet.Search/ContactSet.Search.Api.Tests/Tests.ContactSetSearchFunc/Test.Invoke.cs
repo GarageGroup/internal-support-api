@@ -81,7 +81,7 @@ partial class ContactSetSearchFuncTest
             var expected = new DataverseSearchIn(
                 $"**")
             {
-                Entities = new ReadOnlyCollection<string>(new[] { "contact" }),
+                Entities = new[] { "contact" },
                 Filter = $"parentcustomerid eq '00000000-0000-0000-0000-000000000000'"
             };
             actual.ShouldDeepEqual(expected);
@@ -119,7 +119,7 @@ partial class ContactSetSearchFuncTest
 
         var success = new DataverseSearchOut(
             totalRecordCount: -1, 
-            value: new ReadOnlyCollection<DataverseSearchItem>(new DataverseSearchItem[]
+            value: new DataverseSearchItem[]
             {
                 new(
                     searchScore: 2,
@@ -129,11 +129,11 @@ partial class ContactSetSearchFuncTest
                     {
                         {"fullname", new DataverseSearchJsonValue(jsElement) }
                     }))
-            }));
+            });
         var mockDataverseApiClient = CreateMockDataverseApiClient(success);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
-        var actualResult = (await func.InvokeAsync(new(searchText, new()), default));
+        var actualResult = await func.InvokeAsync(new(searchText, new()), default);
         Assert.True(actualResult.IsSuccess);
 
         var actual = actualResult.SuccessOrThrow().Contacts;
