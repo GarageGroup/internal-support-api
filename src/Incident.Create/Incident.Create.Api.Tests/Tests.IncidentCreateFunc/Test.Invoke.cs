@@ -103,7 +103,7 @@ partial class IncidentCreateFuncTest
         Guid incidentId = Guid.Parse("1203c0e2-3648-4596-80dd-127fdd2610b6");
         var title = "title";
 
-        var success = new DataverseEntityCreateOut<CreateIncidentJsonOut>(new(incidentId, title));
+        var success = new DataverseEntityCreateOut<CreateIncidentJsonOut>(new() { IncidentId = incidentId, Title = title});
         var mockDataverseApiClient = CreateMockDataverseApiClient(success);
 
         var func = CreateFunc(mockDataverseApiClient.Object);

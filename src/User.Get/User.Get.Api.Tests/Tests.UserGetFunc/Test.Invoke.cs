@@ -93,7 +93,7 @@ partial class UserGetFuncTest
     [Fact]
     public async Task InvokeAsync_SuccessResultIsGiven_ExpectSuccessResult()
     {
-        var success = new DataverseEntityGetOut<UserGetJsonOut>(new(ValidSystemUserId));
+        var success = new DataverseEntityGetOut<UserGetJsonOut>(new() { SystemUserId = ValidSystemUserId });
         var mockDataverseApiClient = CreateMockDataverseApiClient(success);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
