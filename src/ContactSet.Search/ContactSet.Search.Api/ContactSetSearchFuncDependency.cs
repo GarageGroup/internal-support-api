@@ -6,7 +6,7 @@ namespace GGroupp.Internal.Support;
 
 using IContactSearch = IAsyncValueFunc<ContactSetSearchIn, Result<ContactSetSearchOut, Failure<ContactSetSearchFailureCode>>>;
 
-public static class ContactSetSearchFuncDependencyExtensions
+public static class ContactSetSearchFuncDependency
 {
     public static Dependency<IContactSearch> UseContactSetSearchApi<TDataverseApiClient>(
         this Dependency<TDataverseApiClient> dependency)
