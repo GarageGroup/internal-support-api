@@ -144,7 +144,7 @@ partial class ContactSetSearchFuncTest
     [Fact]
     public async Task InvokeAsync_SuccessResultIsEmptyArray_ExpectSuccessResult()
     {
-        var success = new DataverseSearchOut(0, new DataverseSearchItem[0]);
+        var success = new DataverseSearchOut(0, Array.Empty<DataverseSearchItem>());
         var mockDataverseApiClient = CreateMockDataverseApiClient(success);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
