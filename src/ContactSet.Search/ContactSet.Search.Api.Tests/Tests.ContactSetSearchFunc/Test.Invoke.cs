@@ -127,7 +127,7 @@ partial class ContactSetSearchFuncTest
                     objectId: contactId,
                     extensionData: new(new Dictionary<string, DataverseSearchJsonValue>()
                     {
-                        {"fullname", new DataverseSearchJsonValue(jsElement) }
+                        { "fullname", new(jsElement) }
                     }))
             });
         var mockDataverseApiClient = CreateMockDataverseApiClient(success);
