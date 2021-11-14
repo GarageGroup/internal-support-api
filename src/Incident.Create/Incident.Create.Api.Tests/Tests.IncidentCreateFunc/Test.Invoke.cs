@@ -11,22 +11,10 @@ namespace GGroupp.Internal.Support.Incident.Create.Api.Tests;
 partial class IncidentCreateFuncTest
 {
     [Fact]
-    public async Task InvokeAsync_InputIsNull_ExpectArgumentNullExcepcion()
-    {
-        var success = new DataverseEntityCreateOut<CreateIncidentJsonOut>(default);
-        var mockDataverseApiClient = CreateMockDataverseApiClient(success);
-
-        var func = CreateFunc(mockDataverseApiClient.Object);
-
-        var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => func.InvokeAsync(null!, CancellationToken.None).AsTask());
-        Assert.Equal("input", exception.ParamName);
-    }
-
-    [Fact]
     public void InvokeAsync_CancellationTokenIsCanceled_ExpectValueTaskIsCanceled()
     {
-        var success = new DataverseEntityCreateOut<CreateIncidentJsonOut>(default);
-        var mockDataverseApiClient = CreateMockDataverseApiClient(success);
+        var dataverseOut = new DataverseEntityCreateOut<IncidentJsonCreateOut>(default);
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
 
@@ -42,37 +30,47 @@ partial class IncidentCreateFuncTest
     {
         const string ownerId = "1203c0e2-3648-4596-80dd-127fdd2610b6";
         const string customerId = "bd8b8e33-554e-e611-80dc-c4346bad0190";
-        const string title = "title";
-        const string description = "description";
-        const int caseTypeCode = 1;
-        const int caseOriginCode = 1;
 
-        var success = new DataverseEntityCreateOut<CreateIncidentJsonOut>(null);
-        var mockDataverseApiClient = CreateMockDataverseApiClient(success, IsMatchDataverseInput);
+        const string title = "Some title";
+        const string description = "Some description";
 
-        var token = new CancellationToken(false);
-        var _input = new IncidentCreateIn(new(ownerId), new(customerId), title, description, caseTypeCode, caseOriginCode);
+        const int caseTypeCode = 357;
+        const int caseOriginCode = 12358;
+
+        var dataverseOut = new DataverseEntityCreateOut<IncidentJsonCreateOut>(default);
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut, IsMatchDataverseInput);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
-        _ = await func.InvokeAsync(_input, token);
+
+        var input = new IncidentCreateIn(
+            ownerId: Guid.Parse(ownerId),
+            customerId: Guid.Parse(customerId),
+            title: title,
+            description: description,
+            caseTypeCode: caseTypeCode,
+            caseOriginCode: caseOriginCode);
+
+        var token = new CancellationToken(false);
+        _ = await func.InvokeAsync(input, token);
 
         mockDataverseApiClient.Verify(
-            c => c.CreateEntityAsync<CreateIncidentJsonIn, CreateIncidentJsonOut>(
-                It.IsAny<DataverseEntityCreateIn<CreateIncidentJsonIn>>(), token), 
+            c => c.CreateEntityAsync<IncidentJsonCreateIn, IncidentJsonCreateOut>(
+                It.IsAny<DataverseEntityCreateIn<IncidentJsonCreateIn>>(), token), 
             Times.Once);
 
-        static void IsMatchDataverseInput(DataverseEntityCreateIn<CreateIncidentJsonIn> actual)
+        static void IsMatchDataverseInput(DataverseEntityCreateIn<IncidentJsonCreateIn> actual)
         {
-            var expected = new DataverseEntityCreateIn<CreateIncidentJsonIn>(
-                    entityPluralName: "incidents",
-                    selectFields: new[] { "incidentid", "title" },
-                    entityData: new(
-                        ownerId: $"/systemusers({ownerId})",
-                        customerId: $"/accounts({customerId})",
-                        title: title,
-                        description: description,
-                        caseTypeCode: caseTypeCode,
-                        caseOriginCode: caseOriginCode));
+            var expected = new DataverseEntityCreateIn<IncidentJsonCreateIn>(
+                entityPluralName: "incidents",
+                selectFields: new[] { "incidentid", "title" },
+                entityData: new(
+                    ownerId: $"/systemusers({ownerId})",
+                    customerId: $"/accounts({customerId})",
+                    title: title,
+                    description: description,
+                    caseTypeCode: caseTypeCode,
+                    caseOriginCode: caseOriginCode));
+
             actual.ShouldDeepEqual(expected);
         }
     }
@@ -84,45 +82,34 @@ partial class IncidentCreateFuncTest
     [InlineData(0, IncidentCreateFailureCode.Unknown)]
     [InlineData(DataverseNotFoundStatusCode, IncidentCreateFailureCode.NotFound)]
     [InlineData(DataversePicklistValueOutOfRangeStatusCode, IncidentCreateFailureCode.UnexpectedCaseCode)]
-    public async Task InvokeAsync_FailureResultIsGiven_ExpectFailure(int failureCode, IncidentCreateFailureCode incidentCreateFailureCode)
+    public async Task InvokeAsync_DataverseResultIsFailure_ExpectFailure(int failureCode, IncidentCreateFailureCode expectedFailureCode)
     {
-        const string failureMessge = "Bad request";
-        var failure = Failure.Create(failureCode, failureMessge);
-        var mockDataverseApiClient = CreateMockDataverseApiClient(failure);
+        var dataverseFailure = Failure.Create(failureCode, "Some failure message");
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseFailure);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
-        var actualResult = await func.InvokeAsync(SomeInput, CancellationToken.None);
+        var actual = await func.InvokeAsync(SomeInput, CancellationToken.None);
 
-        var expectedFailure = Failure.Create(incidentCreateFailureCode, failureMessge);
-        Assert.Equal(expectedFailure, actualResult);
+        var expected = Failure.Create(expectedFailureCode, dataverseFailure.FailureMessage);
+        Assert.Equal(expected, actual);
     }
 
     [Fact]
-    public async Task InvokeAsync_SuccessResultIsGiven_ExpectSuccessResult()
+    public async Task InvokeAsync_DataverseResultIsSuccess_ExpectSuccess()
     {
-        Guid incidentId = Guid.Parse("1203c0e2-3648-4596-80dd-127fdd2610b6");
-        var title = "title";
+        var incidentJsonOut = new IncidentJsonCreateOut
+        {
+            IncidentId = Guid.Parse("1203c0e2-3648-4596-80dd-127fdd2610b6"),
+            Title = "Some incident title"
+        };
 
-        var success = new DataverseEntityCreateOut<CreateIncidentJsonOut>(new() { IncidentId = incidentId, Title = title});
-        var mockDataverseApiClient = CreateMockDataverseApiClient(success);
+        var dataverseOut = new DataverseEntityCreateOut<IncidentJsonCreateOut>(incidentJsonOut);
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
-        var actualResult = await func.InvokeAsync(SomeInput, default);
+        var actual = await func.InvokeAsync(SomeInput, default);
 
-        var expectedSuccess = new IncidentCreateOut(incidentId, title);
-        Assert.Equal(expectedSuccess, actualResult);
-    }
-
-    [Fact]
-    public async Task InvokeAsync_SuccessResultIsNull_ExpectSuccessResult()
-    {
-        var success = new DataverseEntityCreateOut<CreateIncidentJsonOut>(null);
-        var mockDataverseApiClient = CreateMockDataverseApiClient(success);
-
-        var func = CreateFunc(mockDataverseApiClient.Object);
-        var actualResult = await func.InvokeAsync(SomeInput, default);
-
-        var expected = new IncidentCreateOut(default, default);
-        Assert.Equal(expected, actualResult);
+        var expected = new IncidentCreateOut(incidentJsonOut.IncidentId, incidentJsonOut.Title);
+        Assert.Equal(expected, actual);
     }
 }

@@ -22,8 +22,7 @@ internal sealed partial class UserGetFunc : IAsyncValueFunc<UserGetIn, Result<Us
 
     public static UserGetFunc Create(IDataverseEntityGetSupplier entityGetSupplier)
         =>
-        new(
-            entityGetSupplier ?? throw new ArgumentNullException(nameof(entityGetSupplier)));
+        new(entityGetSupplier ?? throw new ArgumentNullException(nameof(entityGetSupplier)));
 
     public partial ValueTask<Result<UserGetOut, Failure<UserGetFailureCode>>> InvokeAsync(
         UserGetIn input, CancellationToken cancellationToken = default);

@@ -3,8 +3,10 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace GGroupp.Internal.Support;
 
-public sealed record IncidentCreateIn
+public readonly record struct IncidentCreateIn
 {
+    private readonly string? title, description;
+
     public IncidentCreateIn(
         Guid ownerId,
         Guid customerId,
@@ -15,8 +17,8 @@ public sealed record IncidentCreateIn
     {
         OwnerId = ownerId;
         CustomerId = customerId;
-        Title = title ?? string.Empty;
-        Description = description ?? string.Empty;
+        this.title = title.OrNullIfEmpty();
+        this.description = description.OrNullIfEmpty();
         CaseTypeCode = caseTypeCode;
         CaseOriginCode = caseOriginCode;
     }
@@ -25,11 +27,13 @@ public sealed record IncidentCreateIn
 
     public Guid CustomerId { get; }
 
-    public string Title { get; }
+    public string Title => title.OrEmpty();
 
-    public string Description { get; }
+    public string Description => description.OrEmpty();
 
     public int CaseTypeCode {  get; }
 
     public int? CaseOriginCode {  get; }
+
+    
 }

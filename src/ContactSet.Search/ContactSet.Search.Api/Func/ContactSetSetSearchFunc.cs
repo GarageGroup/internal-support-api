@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace GGroupp.Internal.Support;
 
-internal sealed partial class ContactSetSearchFunc : IAsyncValueFunc<ContactSetSearchIn, Result<ContactSetSearchOut, Failure<ContactSetSearchFailureCode>>>
+using IContactSetSearchFunc = IAsyncValueFunc<ContactSetSearchIn, Result<ContactSetSearchOut, Failure<ContactSetSearchFailureCode>>>;
+
+internal sealed partial class ContactSetSearchFunc : IContactSetSearchFunc
 {
     private static readonly ReadOnlyCollection<string> entities;
 

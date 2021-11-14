@@ -3,8 +3,6 @@ using GGroupp.Infra;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
@@ -18,43 +16,48 @@ partial class ContactSetSearchFuncTest
     [Fact]
     public void InvokeAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
     {
-        var success = new DataverseSearchOut(0, null);
-        var mockDataverseApiClient = CreateMockDataverseApiClient(success);
+        var dataverseOut = new DataverseSearchOut(1, new[] { SomeDataverseSearchItem });
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
 
-        var valueTask = func.InvokeAsync(new(string.Empty, new()), new CancellationToken(true));
+        var input = SomeInput;
+        var token = new CancellationToken(canceled: true);
+
+        var valueTask = func.InvokeAsync(input, token);
         Assert.True(valueTask.IsCanceled);
     }
 
     [Theory]
-    [InlineData("\u043B\u044C\u0441")]
-    [InlineData(Strings.Empty)]
-    [InlineData(null)]
-    public async Task InvokeAsync_CancellationTokenIsNotCanceled_ExpectCallDataVerseApiClientOnce(
-        string searchString)
+    [InlineData("\u043B\u044C\u0441", null)]
+    [InlineData(Strings.Empty, 15)]
+    [InlineData(null, -1)]
+    public async Task InvokeAsync_CancellationTokenIsNotCanceledAndTop_ExpectCallDataVerseApiClientOnce(
+        string searchString, int? top)
     {
-        const string guidString = "2a5d892f-1400-ec11-94ef-000d3a4a099f";
-        var success = new DataverseSearchOut(0, null);
-        var mockDataverseApiClient = CreateMockDataverseApiClient(success, IsMatchDataverseInput);
+        var dataverseOut = new DataverseSearchOut(15, new[] { SomeDataverseSearchItem });
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut, IsMatchDataverseInput);
 
-        var token = new CancellationToken(false);
+        const string customerId = "2a5d892f-1400-ec11-94ef-000d3a4a099f";
+        var input = new ContactSetSearchIn(
+            searchText: searchString,
+            customerId: Guid.Parse(customerId),
+            top: top);
+
+        var token = new CancellationToken(canceled: false);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
-        _ = await func.InvokeAsync(new(searchString, new(guidString)), token);
+        _ = await func.InvokeAsync(input, token);
 
-        mockDataverseApiClient.Verify(
-            c => c.SearchAsync(
-                It.IsAny<DataverseSearchIn>(), token),
-            Times.Once);
+        mockDataverseApiClient.Verify(c => c.SearchAsync(It.IsAny<DataverseSearchIn>(), token), Times.Once);
 
         void IsMatchDataverseInput(DataverseSearchIn actual)
         {
-            var expected = new DataverseSearchIn(
-                $"*{searchString}*")
+            var expected = new DataverseSearchIn($"*{searchString}*")
             { 
                 Entities = new[] { "contact" }, 
-                Filter = $"parentcustomerid eq '{guidString}'"
+                Filter = $"parentcustomerid eq '{customerId}'",
+                Top = top
             };
             actual.ShouldDeepEqual(expected);
         }
@@ -63,23 +66,19 @@ partial class ContactSetSearchFuncTest
     [Fact]
     public async Task InvokeAsync_CancellationTokenIsNotCanceledAndInputIsDefault_ExpectCallDataVerseApiClientOnce()
     {
-        var success = new DataverseSearchOut(0, null);
-        var mockDataverseApiClient = CreateMockDataverseApiClient(success, IsMatchDataverseInput);
+        var dataverseOut = new DataverseSearchOut(1, new[] { SomeDataverseSearchItem });
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut, IsMatchDataverseInput);
 
         var token = new CancellationToken(false);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
         _ = await func.InvokeAsync(default, token);
 
-        mockDataverseApiClient.Verify(
-            c => c.SearchAsync(
-                It.IsAny<DataverseSearchIn>(), token),
-            Times.Once);
+        mockDataverseApiClient.Verify(c => c.SearchAsync(It.IsAny<DataverseSearchIn>(), token), Times.Once);
 
-        void IsMatchDataverseInput(DataverseSearchIn actual)
+        static void IsMatchDataverseInput(DataverseSearchIn actual)
         {
-            var expected = new DataverseSearchIn(
-                $"**")
+            var expected = new DataverseSearchIn($"**")
             {
                 Entities = new[] { "contact" },
                 Filter = $"parentcustomerid eq '00000000-0000-0000-0000-000000000000'"
@@ -94,65 +93,72 @@ partial class ContactSetSearchFuncTest
     [InlineData(int.MaxValue)]
     [InlineData(0)]
     [InlineData(-2147220969)]
-    public async Task InvokeAsync_FailureResultIsGiven_ExpectFailure(int failureCode)
+    public async Task InvokeAsync_DataverseResultIsFailure_ExpectFailure(int failureCode)
     {
-        const string failureMessge = "Bad request";
-        var failure = Failure.Create(failureCode, failureMessge);
-        var mockDataverseApiClient = CreateMockDataverseApiClient(failure);
+        var dataverseFailure = Failure.Create(failureCode, "Some Failure message");
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseFailure);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
-        var actualResult = await func.InvokeAsync(new(string.Empty, new()), CancellationToken.None);
+        var actual = await func.InvokeAsync(SomeInput, CancellationToken.None);
 
-        var expectedFailure = Failure.Create(ContactSetSearchFailureCode.Unknown, failureMessge);
-        Assert.Equal(expectedFailure, actualResult);
-    }
-
-    [Fact]
-    public async Task InvokeAsync_SuccessResultIsGiven_ExpectSuccessResult()
-    {
-        var searchText = "вик";
-        var contactId = Guid.Parse("1b91d06f-208d-4c1c-b630-0ee9996a8a59");
-        var fullName = "Виктор Васнецов";
-
-        var jsElementNullable = JsonSerializer.Deserialize<SearchOutJson>($"{{\"fullname\":\"{fullName}\"}}")?.ExtensionData?.First().Value;
-        var jsElement = jsElementNullable!.Value;
-
-        var success = new DataverseSearchOut(
-            totalRecordCount: -1, 
-            value: new DataverseSearchItem[]
-            {
-                new(
-                    searchScore: 2,
-                    entityName: "accountId",
-                    objectId: contactId,
-                    extensionData: new(new Dictionary<string, DataverseSearchJsonValue>()
-                    {
-                        { "fullname", new(jsElement) }
-                    }))
-            });
-        var mockDataverseApiClient = CreateMockDataverseApiClient(success);
-
-        var func = CreateFunc(mockDataverseApiClient.Object);
-        var actualResult = await func.InvokeAsync(new(searchText, new()), default);
-        Assert.True(actualResult.IsSuccess);
-
-        var actual = actualResult.SuccessOrThrow().Contacts;
-        var expected = new ContactItemSearchOut[] { new(contactId, fullName) };
+        var expected = Failure.Create(ContactSetSearchFailureCode.Unknown, dataverseFailure.FailureMessage);
         Assert.Equal(expected, actual);
     }
 
     [Fact]
-    public async Task InvokeAsync_SuccessResultIsEmptyArray_ExpectSuccessResult()
+    public async Task InvokeAsync_DataverseResultIsSuccessNotEmpty_ExpectSuccessNotEmpty()
     {
-        var success = new DataverseSearchOut(0, Array.Empty<DataverseSearchItem>());
-        var mockDataverseApiClient = CreateMockDataverseApiClient(success);
+        var firstContactId = Guid.Parse("604fae90-7894-48ea-92bf-e888bf0ce6ca");
 
+        var firstDataverseSearchItem = new DataverseSearchItem(
+            searchScore: -81263.91,
+            objectId: firstContactId,
+            entityName: "First entity name",
+            extensionData: default);
+
+        var secondContactId = Guid.Parse("eaf4a5e1-3303-4ec1-84cd-626b3828b13b");
+        var secondFullName = "Some Full Name";
+
+        var secondDataverseSearchItem = new DataverseSearchItem(
+            searchScore: 1000,
+            objectId: secondContactId,
+            entityName: "SecondEntityName",
+            extensionData: new Dictionary<string, DataverseSearchJsonValue>
+            {
+                ["fullName"] = new(JsonSerializer.SerializeToElement("Some value")),
+                ["fullname"] = new(JsonSerializer.SerializeToElement(secondFullName))
+            });
+
+        var dataverseOut = new DataverseSearchOut(
+            totalRecordCount: 0, 
+            value: new[] { firstDataverseSearchItem, secondDataverseSearchItem });
+
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut);
         var func = CreateFunc(mockDataverseApiClient.Object);
-        var actualResult = await func.InvokeAsync(default, default);
+
+        var actualResult = await func.InvokeAsync(SomeInput, default);
 
         Assert.True(actualResult.IsSuccess);
-        var customers = actualResult.SuccessOrThrow().Contacts;
+        var actual = actualResult.SuccessOrThrow().Contacts;
 
-        Assert.Empty(customers);
+        var expected = new ContactItemSearchOut[]
+        {
+            new(firstContactId, string.Empty),
+            new(secondContactId, secondFullName)
+        };
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public async Task InvokeAsync_DataverseResultIsSuccessEmpty_ExpectSuccessEmpty()
+    {
+        var dataverseOut = new DataverseSearchOut(5, Array.Empty<DataverseSearchItem>());
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut);
+
+        var func = CreateFunc(mockDataverseApiClient.Object);
+        var actualResult = await func.InvokeAsync(SomeInput, CancellationToken.None);
+
+        Assert.True(actualResult.IsSuccess);
+        Assert.Empty(actualResult.SuccessOrThrow().Contacts);
     }
 }
