@@ -3,7 +3,7 @@ using PrimeFuncPack;
 using System;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("GGroupp.Internal.Support.CustomerSet.Find.Api.Tests")]
+[assembly: InternalsVisibleTo("GGroupp.Internal.Support.User.Get.Api.Tests")]
 
 namespace GGroupp.Internal.Support;
 

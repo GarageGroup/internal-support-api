@@ -13,19 +13,18 @@ partial class UserGetFunc
         UserGetIn input, CancellationToken cancellationToken)
         =>
         AsyncPipeline.Pipe(
-            input ?? throw new ArgumentNullException(nameof(input)),
-            cancellationToken)
+            input, cancellationToken)
         .Pipe(
             @in => new DataverseEntityGetIn(
                 entityPluralName: ApiNames.SystemUserEntity,
                 entityKey: BuildAlternateKey(input.ActiveDirectoryUserId),
                 selectFields: selectedFields))
         .PipeValue(
-            entityGetSupplier.GetEntityAsync<UserGetJsonOut>)
+            entityGetSupplier.GetEntityAsync<UserJsonGetOut>)
         .MapFailure(
             failure => failure.MapFailureCode(MapDataverseFailureCode))
         .MapSuccess(
-            entityGetOut => new UserGetOut(entityGetOut?.Value?.SystemUserId ?? default));
+            entityGetOut => new UserGetOut(entityGetOut.Value.SystemUserId));
 
     private static DataverseAlternateKey BuildAlternateKey(Guid activeDirectoryId)
         => 

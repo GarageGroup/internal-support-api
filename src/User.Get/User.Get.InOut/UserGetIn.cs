@@ -2,7 +2,7 @@ using System;
 
 namespace GGroupp.Internal.Support;
 
-public sealed record UserGetIn
+public readonly record struct UserGetIn
 {
     public UserGetIn(Guid activeDirectoryUserId)
         =>

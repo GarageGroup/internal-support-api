@@ -1,6 +1,6 @@
 namespace GGroupp.Internal.Support;
 
-public enum CustomerSetFindFailureCode
+public enum CustomerSetSearchFailureCode
 {
     Unknown
 }

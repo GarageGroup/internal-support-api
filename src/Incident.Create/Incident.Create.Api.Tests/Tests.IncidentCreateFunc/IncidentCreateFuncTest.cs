@@ -11,6 +11,20 @@ using IIncidentCreateFunc = IAsyncValueFunc<IncidentCreateIn, Result<IncidentCre
 
 public sealed partial class IncidentCreateFuncTest
 {
+    private const int DataverseNotFoundStatusCode = -2147220969;
+
+    private const int DataversePicklistValueOutOfRangeStatusCode = -2147204326;
+
+    private static readonly IncidentCreateIn SomeInput
+        =
+        new(
+            ownerId: Guid.Parse("1203c0e2-3648-4596-80dd-127fdd2610b6"),
+            customerId: Guid.Parse("bd8b8e33-554e-e611-80dc-c4346bad0190"),
+            title: "title",
+            description: "decription",
+            caseTypeCode: 91,
+            caseOriginCode: 7);
+
     private static IIncidentCreateFunc CreateFunc(IDataverseEntityCreateSupplier dataverseEntityCreateSupplier)
         =>
         Dependency.Of(dataverseEntityCreateSupplier)
@@ -18,36 +32,23 @@ public sealed partial class IncidentCreateFuncTest
         .Resolve(Mock.Of<IServiceProvider>());
 
     private static Mock<IDataverseEntityCreateSupplier> CreateMockDataverseApiClient(
-        Result<DataverseEntityCreateOut<CreateIncidentJsonOut>, Failure<int>> result, 
-        Action<DataverseEntityCreateIn<CreateIncidentJsonIn>>? callBack = null)
+        Result<DataverseEntityCreateOut<IncidentJsonCreateOut>, Failure<int>> result, 
+        Action<DataverseEntityCreateIn<IncidentJsonCreateIn>>? callback = null)
     {
         var mock = new Mock<IDataverseEntityCreateSupplier>();
         
         var m = mock.Setup(
-            s => s.CreateEntityAsync<CreateIncidentJsonIn, CreateIncidentJsonOut>(
-                It.IsAny<DataverseEntityCreateIn<CreateIncidentJsonIn>>(), 
+            s => s.CreateEntityAsync<IncidentJsonCreateIn, IncidentJsonCreateOut>(
+                It.IsAny<DataverseEntityCreateIn<IncidentJsonCreateIn>>(), 
                 It.IsAny<CancellationToken>()))
             .Returns(result.Pipe(ValueTask.FromResult));
 
-        if(callBack is not null)
+        if(callback is not null)
         {
-            m.Callback<DataverseEntityCreateIn<CreateIncidentJsonIn>, CancellationToken>(
-                (@in, _) => callBack.Invoke(@in));
+            m.Callback<DataverseEntityCreateIn<IncidentJsonCreateIn>, CancellationToken>(
+                (@in, _) => callback.Invoke(@in));
         }
 
         return mock;
     }
-
-    private static IncidentCreateIn SomeInput { get; } = 
-        new(
-            ownerId: Guid.Parse("1203c0e2-3648-4596-80dd-127fdd2610b6"),
-            customerId: Guid.Parse("bd8b8e33-554e-e611-80dc-c4346bad0190"),
-            title: "title",
-            description: "decription",
-            caseTypeCode: 1,
-            caseOriginCode: 1);
-
-    private const int DataverseNotFoundStatusCode = -2147220969;
-
-    private const int DataversePicklistValueOutOfRangeStatusCode = -2147204326;
 }

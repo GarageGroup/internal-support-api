@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace GGroupp.Internal.Support;
 
-internal sealed record class UserGetJsonOut
+internal readonly record struct UserJsonGetOut
 {
     [JsonPropertyName(ApiNames.SystemUserId)]
     public Guid SystemUserId { get; init; }

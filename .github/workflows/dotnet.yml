@@ -25,35 +25,16 @@ jobs:
     - name: Add GGroupp NuGet Source
       run: dotnet nuget add source ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -n ggroupp -u ${{ secrets.GGROUPP_NUGET_SOURCE_USER_NAME }} -p ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --store-password-in-clear-text
 
-    # CustomerSet.Find.InOut.csproj
+    # CustomerSet.Search.InOut.csproj
     
-    - name: Restore CustomerSet.Find.InOut.csproj
-      run: dotnet restore ./src/*/*/CustomerSet.Find.InOut.csproj
+    - name: Restore CustomerSet.Search.InOut.csproj
+      run: dotnet restore ./src/*/*/CustomerSet.Search.InOut.csproj
 
-    - name: Build CustomerSet.Find.InOut.csproj
-      run: dotnet build ./src/*/*/CustomerSet.Find.InOut.csproj --no-restore  -c Release
+    - name: Build CustomerSet.Search.InOut.csproj
+      run: dotnet build ./src/*/*/CustomerSet.Search.InOut.csproj --no-restore  -c Release
 
-    - name: Pack CustomerSet.Find.InOut.csproj
-      run: dotnet pack ./src/*/*/CustomerSet.Find.InOut.csproj --no-restore -o ~/nuget  -c Release
-
-    # CustomerSet.Find.Api.csproj
-    
-    - name: Restore CustomerSet.Find.Api.csproj
-      run: dotnet restore ./src/*/*/CustomerSet.Find.Api.csproj
-
-    - name: Build CustomerSet.Find.Api.csproj
-      run: dotnet build ./src/*/*/CustomerSet.Find.Api.csproj --no-restore  -c Release
-
-    - name: Pack CustomerSet.Find.Api.csproj
-      run: dotnet pack ./src/*/*/CustomerSet.Find.Api.csproj --no-restore -o ~/nuget  -c Release
-
-    # CustomerSet.Find.Api.Tests.csproj
-    
-    - name: Restore CustomerSet.Find.Api.Tests.csproj
-      run: dotnet restore ./src/*/*/CustomerSet.Find.Api.Tests.csproj
-
-    - name: Test CustomerSet.Find.Api.Tests.csproj
-      run: dotnet test ./src/*/*/CustomerSet.Find.Api.Tests.csproj --no-restore  -c Release
+    - name: Pack CustomerSet.Search.InOut.csproj
+      run: dotnet pack ./src/*/*/CustomerSet.Search.InOut.csproj --no-restore -o ~/nuget  -c Release
 
     # CustomerSet.Search.Api.csproj
     

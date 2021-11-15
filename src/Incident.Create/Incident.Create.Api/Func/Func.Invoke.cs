@@ -12,30 +12,28 @@ partial class IncidentCreateFunc
         IncidentCreateIn input, CancellationToken cancellationToken)
         =>
         AsyncPipeline.Pipe(
-            input ?? throw new ArgumentNullException(nameof(input)),
-            cancellationToken)
+            input, cancellationToken)
         .Pipe(
-            @in => new DataverseEntityCreateIn<CreateIncidentJsonIn>(
-                    entityPluralName: "incidents",
-                    selectFields: selectedFields,
-                    entityData: new(
-                        ownerId: Invariant($"/systemusers({input.OwnerId:D})"),
-                        customerId: Invariant($"/accounts({input.CustomerId:D})"),
-                        title: input.Title,
-                        description: input.Description,
-                        caseTypeCode: input.CaseTypeCode,
-                        caseOriginCode: input.CaseOriginCode)))
+            @in => new DataverseEntityCreateIn<IncidentJsonCreateIn>(
+                entityPluralName: "incidents",
+                selectFields: selectedFields,
+                entityData: new(
+                    ownerId: Invariant($"/systemusers({input.OwnerId:D})"),
+                    customerId: Invariant($"/accounts({input.CustomerId:D})"),
+                    title: input.Title,
+                    description: input.Description,
+                    caseTypeCode: input.CaseTypeCode,
+                    caseOriginCode: input.CaseOriginCode)))
         .PipeValue(
-            entityCreateSupplier.CreateEntityAsync<CreateIncidentJsonIn, CreateIncidentJsonOut>)
+            entityCreateSupplier.CreateEntityAsync<IncidentJsonCreateIn, IncidentJsonCreateOut>)
         .MapFailure(
             failure => failure.MapFailureCode(MapDataverseFailureCode))
         .MapSuccess(
-            entityCreateOut =>
-                new IncidentCreateOut(
-                    id: entityCreateOut?.Value?.IncidentId ?? default,
-                    title: entityCreateOut?.Value?.Title));
+            entityCreateOut => new IncidentCreateOut(
+                id: entityCreateOut.Value.IncidentId,
+                title: entityCreateOut.Value.Title));
 
-    public static IncidentCreateFailureCode MapDataverseFailureCode(int dataverseFailureCode)
+    private static IncidentCreateFailureCode MapDataverseFailureCode(int dataverseFailureCode)
         =>
         dataverseFailureCode switch
         {

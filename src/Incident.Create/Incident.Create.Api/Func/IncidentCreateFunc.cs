@@ -24,8 +24,7 @@ internal sealed partial class IncidentCreateFunc : IIncidentCreateFunc
 
     public static IncidentCreateFunc Create(IDataverseEntityCreateSupplier entityCreateSupplier)
         =>
-        new(
-            entityCreateSupplier ?? throw new ArgumentNullException(nameof(entityCreateSupplier)));
+        new(entityCreateSupplier ?? throw new ArgumentNullException(nameof(entityCreateSupplier)));
 
     public partial ValueTask<Result<IncidentCreateOut, Failure<IncidentCreateFailureCode>>> InvokeAsync(
         IncidentCreateIn input, CancellationToken cancellationToken = default);

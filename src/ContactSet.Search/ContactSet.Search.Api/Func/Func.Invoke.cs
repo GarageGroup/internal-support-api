@@ -1,6 +1,5 @@
 ﻿using GGroupp.Infra;
 using System;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -27,15 +26,12 @@ partial class ContactSetSearchFunc
         .MapFailure(
             failure => failure.MapFailureCode(fail => ContactSetSearchFailureCode.Unknown))
         .MapSuccess(
-            MapDataverseSearchOut);
+            @out => new ContactSetSearchOut(
+                @out.Value.Select(MapDataverseSearchItem).ToArray()));
 
-    private static ContactSetSearchOut MapDataverseSearchOut(DataverseSearchOut dataverseSearchOut)
+    private static ContactItemSearchOut MapDataverseSearchItem(DataverseSearchItem item)
         =>
         new(
-            dataverseSearchOut.Value
-            .Select(
-                item => new ContactItemSearchOut(
-                    item.ObjectId, 
-                    item.ExtensionData?.GetValueOrAbsent("fullname").OrDefault()?.ToString() ?? string.Empty))
-            .ToArray());
+            id: item.ObjectId,
+            fullName: item.ExtensionData.GetValueOrAbsent("fullname").OrDefault()?.ToString());
 }

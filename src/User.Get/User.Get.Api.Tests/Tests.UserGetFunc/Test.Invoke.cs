@@ -3,7 +3,6 @@ using GGroupp.Infra;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,26 +13,14 @@ namespace GGroupp.Internal.Support.User.Get.Api.Tests;
 partial class UserGetFuncTest
 {
     [Fact]
-    public async Task InvokeAsync_InputIsNull_ExpectArgumentNullExcepcion()
-    {
-        var success = new DataverseEntityGetOut<UserGetJsonOut>(default);
-        var mockDataverseApiClient = CreateMockDataverseApiClient(success);
-
-        var func = CreateFunc(mockDataverseApiClient.Object);
-
-        var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => func.InvokeAsync(null!, CancellationToken.None).AsTask());
-        Assert.Equal("input", exception.ParamName);
-    }
-
-    [Fact]
     public void InvokeAsync_CancellationTokenIsCanceled_ExpectValueTaskIsCanceled()
     {
-        var success = new DataverseEntityGetOut<UserGetJsonOut>(default);
-        var mockDataverseApiClient = CreateMockDataverseApiClient(success);
+        var dataverseOut = new DataverseEntityGetOut<UserJsonGetOut>(default);
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
 
-        var input = new UserGetIn(ValidActiveDirectoryGuid);
+        var input = new UserGetIn(SomeActiveDirectoryGuid);
         var token = new CancellationToken(canceled: true);
 
         var actual = func.InvokeAsync(input, token);
@@ -43,29 +30,30 @@ partial class UserGetFuncTest
     [Fact]
     public async  Task InvokeAsync_CancellationTokenIsNotCanceled_ExpectCallDataVerseApiClientOnce()
     {
-        var success = new DataverseEntityGetOut<UserGetJsonOut>(null);
-        var mockDataverseApiClient = CreateMockDataverseApiClient(success, IsMatchDataverseInput);
-
-        var token = new CancellationToken(false);
+        var dataverseOut = new DataverseEntityGetOut<UserJsonGetOut>(default);
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut, IsMatchDataverseInput);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
-        _ = await func.InvokeAsync(new(ValidActiveDirectoryGuid), token);
+
+        var input = new UserGetIn(SomeActiveDirectoryGuid);
+        var token = new CancellationToken(false);
+
+        _ = await func.InvokeAsync(input, token);
 
         mockDataverseApiClient.Verify(
-            c => c.GetEntityAsync<UserGetJsonOut>(
-                It.IsAny<DataverseEntityGetIn>(), token), 
+            c => c.GetEntityAsync<UserJsonGetOut>(It.IsAny<DataverseEntityGetIn>(), token),
             Times.Once);
 
         static void IsMatchDataverseInput(DataverseEntityGetIn actual)
         {
             var expected = new DataverseEntityGetIn(
-                    entityPluralName: "systemusers",
-                    entityKey: new DataverseAlternateKey(
-                                new KeyValuePair<string, string>[]
-                                {
-                                    new("azureactivedirectoryobjectid", ValidActiveDirectoryGuid.ToString("D", CultureInfo.InvariantCulture))
-                                }),
-                    selectFields: new ReadOnlyCollection<string>(new[] { "systemuserid" }));
+                entityPluralName: "systemusers",
+                entityKey: new DataverseAlternateKey(
+                    new KeyValuePair<string, string>[]
+                    {
+                        new("azureactivedirectoryobjectid", SomeActiveDirectoryGuid.ToString("D", CultureInfo.InvariantCulture))
+                    }),
+                selectFields: new[] { "systemuserid" });
 
             actual.ShouldDeepEqual(expected);
         }
@@ -77,42 +65,37 @@ partial class UserGetFuncTest
     [InlineData(int.MaxValue, UserGetFailureCode.Unknown)]
     [InlineData(0, UserGetFailureCode.Unknown)]
     [InlineData(DataverseNotFoundStatusCode, UserGetFailureCode.NotFound)]
-    public async Task InvokeAsync_FailureResultIsGiven_ExpectFailure(int failureCode, UserGetFailureCode userGetFailureCode)
+    public async Task InvokeAsync_DataverseResultIsFailure_ExpectFailure(int failureCode, UserGetFailureCode userGetFailureCode)
     {
-        const string failureMessge = "Bad request";
-        var failure = Failure.Create(failureCode, failureMessge);
-        var mockDataverseApiClient = CreateMockDataverseApiClient(failure);
+        var dataverseFailure = Failure.Create(failureCode, "Some failure message");
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseFailure);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
-        var actualResult = await func.InvokeAsync(new(ValidActiveDirectoryGuid), CancellationToken.None);
 
-        var expectedFailure = Failure.Create(userGetFailureCode, failureMessge);
-        Assert.Equal(expectedFailure, actualResult);
+        var input = new UserGetIn(SomeActiveDirectoryGuid);
+        var actual = await func.InvokeAsync(input, CancellationToken.None);
+
+        var expected = Failure.Create(userGetFailureCode, dataverseFailure.FailureMessage);
+        Assert.Equal(expected, actual);
     }
 
     [Fact]
-    public async Task InvokeAsync_SuccessResultIsGiven_ExpectSuccessResult()
+    public async Task InvokeAsync_DataverseResultIsSuccess_ExpectSuccess()
     {
-        var success = new DataverseEntityGetOut<UserGetJsonOut>(new() { SystemUserId = ValidSystemUserId });
-        var mockDataverseApiClient = CreateMockDataverseApiClient(success);
+        var dataverseUser = new UserJsonGetOut
+        {
+            SystemUserId = SomeSystemUserId
+        };
+
+        var dataverseOut = new DataverseEntityGetOut<UserJsonGetOut>(dataverseUser);
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
-        var actualResult = (await func.InvokeAsync(new(ValidActiveDirectoryGuid), default)).SuccessOrThrow();
 
-        var expectedFailure = new UserGetOut(ValidSystemUserId);
-        Assert.Equal(expectedFailure.SystemUserId, actualResult.SystemUserId);
-    }
+        var input = new UserGetIn(SomeActiveDirectoryGuid);
+        var actual = await func.InvokeAsync(input, CancellationToken.None);
 
-    [Fact]
-    public async Task InvokeAsync_SuccessResultIsNull_ExpectSuccessResult()
-    {
-        var success = new DataverseEntityGetOut<UserGetJsonOut>(null);
-        var mockDataverseApiClient = CreateMockDataverseApiClient(success);
-
-        var func = CreateFunc(mockDataverseApiClient.Object);
-        var actualResult = await func.InvokeAsync(new(ValidActiveDirectoryGuid), default);
-
-        var expected = new UserGetOut(default);
-        Assert.Equal(expected, actualResult.SuccessOrThrow());
+        var expected = new UserGetOut(dataverseUser.SystemUserId);
+        Assert.Equal(expected, actual);
     }
 }

@@ -1,10 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace GGroupp.Internal.Support;
 
-internal sealed record class CreateIncidentJsonIn
+internal sealed record class IncidentJsonCreateIn
 {
-    public CreateIncidentJsonIn(
+    public IncidentJsonCreateIn(
         string ownerId,
         string customerId,
         string title,
@@ -12,29 +13,29 @@ internal sealed record class CreateIncidentJsonIn
         int caseTypeCode,
         int? caseOriginCode)
     {
-        OwnerId = ownerId ?? string.Empty;
-        CustomerId = customerId ?? string.Empty;
-        Title = title ?? string.Empty;
-        Description = description ?? string.Empty;
+        OwnerId = ownerId.OrEmpty();
+        CustomerId = customerId.OrEmpty();
+        Title = title.OrEmpty();
+        Description = description.OrEmpty();
         CaseTypeCode = caseTypeCode;
         CaseOriginCode = caseOriginCode;
     }
 
     [JsonPropertyName(ApiNames.OwnerIdOdataBind)]
-    public string OwnerId { get; init; }
+    public string OwnerId { get; }
 
     [JsonPropertyName(ApiNames.CustomerIdOdataBind)]
-    public string CustomerId { get; init; }
+    public string CustomerId { get; }
 
     [JsonPropertyName(ApiNames.Title)]
-    public string Title { get; init; }
+    public string Title { get; }
 
     [JsonPropertyName(ApiNames.Description)]
-    public string Description { get; init; }
+    public string Description { get; }
 
     [JsonPropertyName(ApiNames.CaseTypeCode)]
-    public int CaseTypeCode {  get; init; }
+    public int CaseTypeCode {  get; }
 
     [JsonPropertyName(ApiNames.CaseOriginCode)]
-    public int? CaseOriginCode { get; init; }
+    public int? CaseOriginCode { get; }
 }
