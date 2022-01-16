@@ -34,6 +34,4 @@ public readonly record struct IncidentCreateIn
     public int CaseTypeCode {  get; }
 
     public int? CaseOriginCode {  get; }
-
-    
 }

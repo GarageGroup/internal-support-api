@@ -8,7 +8,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <IsPackable>false</IsPackable>
     <RootNamespace>GGroupp.Internal.Support.Incident.Create.Api.Tests</RootNamespace>
-	<AssemblyName>GGroupp.Internal.Support.Incident.Create.Api.Tests</AssemblyName>
+    <AssemblyName>GGroupp.Internal.Support.Incident.Create.Api.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
