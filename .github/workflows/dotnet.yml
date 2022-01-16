@@ -13,7 +13,7 @@ jobs:
       with:
         dotnet-version: 6.0.x
         include-prerelease: true  
-        
+
      # Add NuGet Sources
 
     - name: Create Local NuGet Directory
@@ -37,7 +37,7 @@ jobs:
       run: dotnet pack ./src/*/*/CustomerSet.Search.InOut.csproj --no-restore -o ~/nuget  -c Release
 
     # CustomerSet.Search.Api.csproj
-    
+
     - name: Restore CustomerSet.Search.Api.csproj
       run: dotnet restore ./src/*/*/CustomerSet.Search.Api.csproj
 
@@ -48,13 +48,13 @@ jobs:
       run: dotnet pack ./src/*/*/CustomerSet.Search.Api.csproj --no-restore -o ~/nuget  -c Release
 
     # CustomerSet.Search.Api.Tests.csproj
-    
+
     - name: Restore CustomerSet.Search.Api.Tests.csproj
       run: dotnet restore ./src/*/*/CustomerSet.Search.Api.Tests.csproj
 
     - name: Test CustomerSet.Search.Api.Tests.csproj
       run: dotnet test ./src/*/*/CustomerSet.Search.Api.Tests.csproj --no-restore  -c Release
-    
+
     # ContactSet.Search.InOut.csproj
     
     - name: Restore ContactSet.Search.InOut.csproj
@@ -67,7 +67,7 @@ jobs:
       run: dotnet pack ./src/*/*/ContactSet.Search.InOut.csproj --no-restore -o ~/nuget  -c Release
 
      # ContactSet.Search.Api.csproj
-    
+
     - name: Restore ContactSet.Search.Api.csproj
       run: dotnet restore ./src/*/*/ContactSet.Search.Api.csproj
 
@@ -78,7 +78,7 @@ jobs:
       run: dotnet pack ./src/*/*/ContactSet.Search.Api.csproj --no-restore -o ~/nuget  -c Release
 
     # CustomerSet.Search.Api.Tests.csproj
-    
+
     - name: Restore ContactSet.Search.Api.Tests.csproj
       run: dotnet restore ./src/*/*/ContactSet.Search.Api.Tests.csproj
 
@@ -86,7 +86,7 @@ jobs:
       run: dotnet test ./src/*/*/ContactSet.Search.Api.Tests.csproj --no-restore  -c Release
 
     # Incident.Create.InOut.csproj
-    
+
     - name: Restore Incident.Create.InOut.csproj
       run: dotnet restore ./src/*/*/Incident.Create.InOut.csproj
 
@@ -97,7 +97,7 @@ jobs:
       run: dotnet pack ./src/*/*/Incident.Create.InOut.csproj --no-restore -o ~/nuget  -c Release
 
     # Incident.Create.Api.csproj
-    
+
     - name: Restore Incident.Create.Api.csproj
       run: dotnet restore ./src/*/*/Incident.Create.Api.csproj
 
@@ -106,47 +106,17 @@ jobs:
 
     - name: Pack Incident.Create.Api.csproj
       run: dotnet pack ./src/*/*/Incident.Create.Api.csproj --no-restore -o ~/nuget  -c Release
-    
+
     # Incident.Create.Api.Tests.csproj
-    
+
     - name: Restore Incident.Create.Api.Tests.csproj
       run: dotnet restore ./src/*/*/Incident.Create.Api.Tests.csproj
 
     - name: Test Incident.Create.Api.Tests.csproj
       run: dotnet test ./src/*/*/Incident.Create.Api.Tests.csproj --no-restore  -c Release
 
-    # User.Get.InOut.csproj
-    
-    - name: Restore User.Get.InOut.csproj
-      run: dotnet restore ./src/*/*/User.Get.InOut.csproj
-
-    - name: Build User.Get.InOut.csproj
-      run: dotnet build ./src/*/*/User.Get.InOut.csproj --no-restore  -c Release
-
-    - name: Pack User.Get.InOut.csproj
-      run: dotnet pack ./src/*/*/User.Get.InOut.csproj --no-restore -o ~/nuget  -c Release
-
-    # User.Get.Api.csproj
-    
-    - name: Restore User.Get.Api.csproj
-      run: dotnet restore ./src/*/*/User.Get.Api.csproj
-
-    - name: Build User.Get.Api.csproj
-      run: dotnet build ./src/*/*/User.Get.Api.csproj --no-restore  -c Release
-
-    - name: Pack User.Get.Api.csproj
-      run: dotnet pack ./src/*/*/User.Get.Api.csproj --no-restore -o ~/nuget  -c Release
-
-    # User.Get.Api.Tests.csproj
-    
-    - name: Restore User.Get.Api.Tests.csproj
-      run: dotnet restore ./src/*/*/User.Get.Api.Tests.csproj
-
-    - name: Test User.Get.Api.Tests.csproj
-      run: dotnet test ./src/*/*/User.Get.Api.Tests.csproj --no-restore  -c Release
-    
     # Push
-      
+
     - name: Push Packages
       if: ${{ github.ref == 'refs/heads/main' }}
       run: dotnet nuget push "../../../nuget/*.nupkg" -s ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -k ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --skip-duplicate
