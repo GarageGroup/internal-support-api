@@ -13,10 +13,12 @@ public readonly record struct IncidentCreateIn
         string title,
         [AllowNull] string description,
         int caseTypeCode,
+        Guid? contactId = null,
         int? caseOriginCode = null)
     {
         OwnerId = ownerId;
         CustomerId = customerId;
+        ContactId = contactId;
         this.title = title.OrNullIfEmpty();
         this.description = description.OrNullIfEmpty();
         CaseTypeCode = caseTypeCode;
@@ -27,11 +29,13 @@ public readonly record struct IncidentCreateIn
 
     public Guid CustomerId { get; }
 
+    public Guid? ContactId { get; }
+
     public string Title => title.OrEmpty();
 
     public string Description => description.OrEmpty();
 
-    public int CaseTypeCode {  get; }
+    public int CaseTypeCode { get; }
 
-    public int? CaseOriginCode {  get; }
+    public int? CaseOriginCode { get; }
 }

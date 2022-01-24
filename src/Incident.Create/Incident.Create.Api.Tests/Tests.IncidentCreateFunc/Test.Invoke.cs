@@ -25,8 +25,10 @@ partial class IncidentCreateFuncTest
         Assert.True(actual.IsCanceled);
     }
 
-    [Fact]
-    public async Task InvokeAsync_CancellationTokenIsNotCanceled_ExpectCallDataVerseApiClientOnce()
+    [Theory]
+    [InlineData("b6010aeb-bd3c-ec11-b6e5-000d3abfc6af", "/contacts(b6010aeb-bd3c-ec11-b6e5-000d3abfc6af)")]
+    [InlineData(null, null)]
+    public async Task InvokeAsync_CancellationTokenIsNotCanceled_ExpectCallDataVerseApiClientOnce(string? sourceContactId, string? expectedContactId)
     {
         const string ownerId = "1203c0e2-3648-4596-80dd-127fdd2610b6";
         const string customerId = "bd8b8e33-554e-e611-80dc-c4346bad0190";
@@ -48,17 +50,18 @@ partial class IncidentCreateFuncTest
             title: title,
             description: description,
             caseTypeCode: caseTypeCode,
-            caseOriginCode: caseOriginCode);
+            caseOriginCode: caseOriginCode,
+            contactId: sourceContactId is not null ? Guid.Parse(sourceContactId) : null);
 
         var token = new CancellationToken(false);
         _ = await func.InvokeAsync(input, token);
 
         mockDataverseApiClient.Verify(
             c => c.CreateEntityAsync<IncidentJsonCreateIn, IncidentJsonCreateOut>(
-                It.IsAny<DataverseEntityCreateIn<IncidentJsonCreateIn>>(), token), 
+                It.IsAny<DataverseEntityCreateIn<IncidentJsonCreateIn>>(), token),
             Times.Once);
 
-        static void IsMatchDataverseInput(DataverseEntityCreateIn<IncidentJsonCreateIn> actual)
+        void IsMatchDataverseInput(DataverseEntityCreateIn<IncidentJsonCreateIn> actual)
         {
             var expected = new DataverseEntityCreateIn<IncidentJsonCreateIn>(
                 entityPluralName: "incidents",
@@ -69,7 +72,8 @@ partial class IncidentCreateFuncTest
                     title: title,
                     description: description,
                     caseTypeCode: caseTypeCode,
-                    caseOriginCode: caseOriginCode));
+                    caseOriginCode: caseOriginCode,
+                    contactId: expectedContactId));
 
             actual.ShouldDeepEqual(expected);
         }
