@@ -30,6 +30,7 @@ partial class IncidentCreateFuncTest
     {
         const string ownerId = "1203c0e2-3648-4596-80dd-127fdd2610b6";
         const string customerId = "bd8b8e33-554e-e611-80dc-c4346bad0190";
+        const string contactId = "b6010aeb-bd3c-ec11-b6e5-000d3abfc6af";
 
         const string title = "Some title";
         const string description = "Some description";
@@ -49,7 +50,7 @@ partial class IncidentCreateFuncTest
             description: description,
             caseTypeCode: caseTypeCode,
             caseOriginCode: caseOriginCode,
-            contactId: Guid.Parse(ownerId));
+            contactId: Guid.Parse(contactId));
 
         var token = new CancellationToken(false);
         _ = await func.InvokeAsync(input, token);
@@ -71,7 +72,7 @@ partial class IncidentCreateFuncTest
                     description: description,
                     caseTypeCode: caseTypeCode,
                     caseOriginCode: caseOriginCode,
-                    contactId: $"/contacts({ownerId})"));
+                    contactId: $"/contacts({contactId})"));
 
             actual.ShouldDeepEqual(expected);
         }
