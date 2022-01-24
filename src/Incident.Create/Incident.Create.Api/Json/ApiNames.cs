@@ -3,7 +3,9 @@
 internal static class ApiNames
 {
     public const string CustomerIdOdataBind = "customerid_account@odata.bind";
-    
+
+    public const string ContactIdOdataBind = "primarycontactid@odata.bind";
+
     public const string CustomerId = "_customerid_value";
 
     public const string Description = "description";

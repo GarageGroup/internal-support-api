@@ -48,14 +48,15 @@ partial class IncidentCreateFuncTest
             title: title,
             description: description,
             caseTypeCode: caseTypeCode,
-            caseOriginCode: caseOriginCode);
+            caseOriginCode: caseOriginCode,
+            contactId: Guid.Parse(ownerId));
 
         var token = new CancellationToken(false);
         _ = await func.InvokeAsync(input, token);
 
         mockDataverseApiClient.Verify(
             c => c.CreateEntityAsync<IncidentJsonCreateIn, IncidentJsonCreateOut>(
-                It.IsAny<DataverseEntityCreateIn<IncidentJsonCreateIn>>(), token), 
+                It.IsAny<DataverseEntityCreateIn<IncidentJsonCreateIn>>(), token),
             Times.Once);
 
         static void IsMatchDataverseInput(DataverseEntityCreateIn<IncidentJsonCreateIn> actual)
@@ -69,7 +70,8 @@ partial class IncidentCreateFuncTest
                     title: title,
                     description: description,
                     caseTypeCode: caseTypeCode,
-                    caseOriginCode: caseOriginCode));
+                    caseOriginCode: caseOriginCode,
+                    contactId: $"/contacts({ownerId})"));
 
             actual.ShouldDeepEqual(expected);
         }

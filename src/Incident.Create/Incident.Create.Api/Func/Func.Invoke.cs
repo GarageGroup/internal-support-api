@@ -23,7 +23,8 @@ partial class IncidentCreateFunc
                     title: input.Title,
                     description: input.Description,
                     caseTypeCode: input.CaseTypeCode,
-                    caseOriginCode: input.CaseOriginCode)))
+                    caseOriginCode: input.CaseOriginCode,
+                    contactId: input.ContactId is null ? null : Invariant($"/contacts({input.ContactId})"))))
         .PipeValue(
             entityCreateSupplier.CreateEntityAsync<IncidentJsonCreateIn, IncidentJsonCreateOut>)
         .MapFailure(
