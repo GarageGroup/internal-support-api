@@ -6,5 +6,9 @@ public enum IncidentCreateFailureCode
 
     NotFound,
 
-    UnexpectedCaseCode
+    UnexpectedCaseCode,
+
+    NotAllowed,
+
+    TooManyRequests
 }

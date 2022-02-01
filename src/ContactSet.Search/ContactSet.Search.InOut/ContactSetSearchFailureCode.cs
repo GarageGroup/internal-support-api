@@ -2,5 +2,9 @@ namespace GGroupp.Internal.Support;
 
 public enum ContactSetSearchFailureCode
 {
-    Unknown
+    Unknown,
+
+    NotAllowed,
+
+    TooManyRequests
 }

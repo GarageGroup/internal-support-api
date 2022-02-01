@@ -87,20 +87,23 @@ partial class ContactSetSearchFuncTest
     }
 
     [Theory]
-    [InlineData(404)]
-    [InlineData(int.MinValue)]
-    [InlineData(int.MaxValue)]
-    [InlineData(0)]
-    [InlineData(-2147220969)]
-    public async Task InvokeAsync_DataverseResultIsFailure_ExpectFailure(int failureCode)
+    [InlineData(DataverseFailureCode.Unknown, ContactSetSearchFailureCode.Unknown)]
+    [InlineData(DataverseFailureCode.PicklistValueOutOfRange, ContactSetSearchFailureCode.Unknown)]
+    [InlineData(DataverseFailureCode.PrivilegeDenied, ContactSetSearchFailureCode.Unknown)]
+    [InlineData(DataverseFailureCode.RecordNotFound, ContactSetSearchFailureCode.Unknown)]
+    [InlineData(DataverseFailureCode.Throttling, ContactSetSearchFailureCode.TooManyRequests)]
+    [InlineData(DataverseFailureCode.UserNotEnabled, ContactSetSearchFailureCode.NotAllowed)]
+    [InlineData(DataverseFailureCode.SearchableEntityNotFound, ContactSetSearchFailureCode.NotAllowed)]
+    public async Task InvokeAsync_DataverseResultIsFailure_ExpectFailure(
+        DataverseFailureCode sourceFailureCode, ContactSetSearchFailureCode expectedFailureCode)
     {
-        var dataverseFailure = Failure.Create(failureCode, "Some Failure message");
+        var dataverseFailure = Failure.Create(sourceFailureCode, "Some Failure message");
         var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseFailure);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
         var actual = await func.InvokeAsync(SomeInput, CancellationToken.None);
 
-        var expected = Failure.Create(ContactSetSearchFailureCode.Unknown, dataverseFailure.FailureMessage);
+        var expected = Failure.Create(expectedFailureCode, dataverseFailure.FailureMessage);
         Assert.Equal(expected, actual);
     }
 

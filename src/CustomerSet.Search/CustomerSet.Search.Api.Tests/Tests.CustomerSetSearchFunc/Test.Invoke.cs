@@ -55,15 +55,17 @@ partial class CustomerSetSearchFuncTest
     }
 
     [Theory]
-    [InlineData(404)]
-    [InlineData(int.MinValue)]
-    [InlineData(int.MaxValue)]
-    [InlineData(0)]
-    [InlineData(-2147220969)]
-    public async Task InvokeAsync_DataverseSearchResultIsFailure_ExpectFailure(int failureCode)
+    [InlineData(DataverseFailureCode.Throttling, CustomerSetSearchFailureCode.TooManyRequests)]
+    [InlineData(DataverseFailureCode.UserNotEnabled, CustomerSetSearchFailureCode.NotAllowed)]
+    [InlineData(DataverseFailureCode.SearchableEntityNotFound, CustomerSetSearchFailureCode.NotAllowed)]
+    [InlineData(DataverseFailureCode.PicklistValueOutOfRange, CustomerSetSearchFailureCode.Unknown)]
+    [InlineData(DataverseFailureCode.RecordNotFound, CustomerSetSearchFailureCode.Unknown)]
+    [InlineData(DataverseFailureCode.Unknown, CustomerSetSearchFailureCode.Unknown)]
+    public async Task InvokeAsync_DataverseSearchResultIsFailure_ExpectFailure(
+        DataverseFailureCode sourceFailureCode, CustomerSetSearchFailureCode expectedFailureCode)
     {
         const string failureMessge = "Some failure message";
-        var dataverseFailure = Failure.Create(failureCode, failureMessge);
+        var dataverseFailure = Failure.Create(sourceFailureCode, failureMessge);
 
         var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseFailure);
         var func = CreateFunc(mockDataverseApiClient.Object);
@@ -71,7 +73,7 @@ partial class CustomerSetSearchFuncTest
         var input = new CustomerSetSearchIn("Some search text", 5);
         var actual = await func.InvokeAsync(input, CancellationToken.None);
 
-        var expected = Failure.Create(CustomerSetSearchFailureCode.Unknown, failureMessge);
+        var expected = Failure.Create(expectedFailureCode, failureMessge);
         Assert.Equal(expected, actual);
     }
 

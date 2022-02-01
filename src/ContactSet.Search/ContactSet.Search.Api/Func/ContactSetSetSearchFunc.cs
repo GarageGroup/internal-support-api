@@ -18,14 +18,14 @@ internal sealed partial class ContactSetSearchFunc : IContactSetSearchFunc
 
     private readonly IDataverseSearchSupplier dataverseSearchSupplier;
 
-    private ContactSetSearchFunc(IDataverseSearchSupplier dataverseEntityCreateSupplier)
+    private ContactSetSearchFunc(IDataverseSearchSupplier dataverseSearchSupplier)
         =>
-        this.dataverseSearchSupplier = dataverseEntityCreateSupplier;
+        this.dataverseSearchSupplier = dataverseSearchSupplier;
 
-    public static ContactSetSearchFunc Create(IDataverseSearchSupplier dataverseEntitySearchSupplier)
+    public static ContactSetSearchFunc Create(IDataverseSearchSupplier dataverseSearchSupplier)
         =>
         new(
-            dataverseEntitySearchSupplier ?? throw new ArgumentNullException(nameof(dataverseEntitySearchSupplier)));
+            dataverseSearchSupplier ?? throw new ArgumentNullException(nameof(dataverseSearchSupplier)));
 
     public partial ValueTask<Result<ContactSetSearchOut, Failure<ContactSetSearchFailureCode>>> InvokeAsync(
         ContactSetSearchIn input, CancellationToken cancellationToken = default);

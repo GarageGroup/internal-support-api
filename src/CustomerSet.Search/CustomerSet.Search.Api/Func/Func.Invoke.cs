@@ -22,7 +22,7 @@ partial class CustomerSetSearchFunc
         .PipeValue(
             dataverseSearchSupplier.SearchAsync)
         .MapFailure(
-            failure => failure.MapFailureCode(_ => CustomerSetSearchFailureCode.Unknown))
+            failure => failure.MapFailureCode(MapFailureCode))
         .MapSuccess(
             @out => new CustomerSetSearchOut(
                 @out.Value.Select(MapCustomerItemSearchOut).ToArray()));
@@ -32,4 +32,14 @@ partial class CustomerSetSearchFunc
         new(
             id: item.ObjectId,
             title: item.ExtensionData.GetValueOrAbsent("name").OrDefault()?.ToString());
+
+    private static CustomerSetSearchFailureCode MapFailureCode(DataverseFailureCode failureCode)
+        =>
+        failureCode switch
+        {
+            DataverseFailureCode.UserNotEnabled => CustomerSetSearchFailureCode.NotAllowed,
+            DataverseFailureCode.SearchableEntityNotFound => CustomerSetSearchFailureCode.NotAllowed,
+            DataverseFailureCode.Throttling => CustomerSetSearchFailureCode.TooManyRequests,
+            _ => default
+        };
 }

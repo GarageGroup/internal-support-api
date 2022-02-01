@@ -24,7 +24,7 @@ partial class ContactSetSearchFunc
         .PipeValue(
             dataverseSearchSupplier.SearchAsync)
         .MapFailure(
-            failure => failure.MapFailureCode(fail => ContactSetSearchFailureCode.Unknown))
+            failure => failure.MapFailureCode(MapFailureCode))
         .MapSuccess(
             @out => new ContactSetSearchOut(
                 @out.Value.Select(MapDataverseSearchItem).ToArray()));
@@ -34,4 +34,14 @@ partial class ContactSetSearchFunc
         new(
             id: item.ObjectId,
             fullName: item.ExtensionData.GetValueOrAbsent("fullname").OrDefault()?.ToString());
+
+    private static ContactSetSearchFailureCode MapFailureCode(DataverseFailureCode failureCode)
+        =>
+        failureCode switch
+        {
+            DataverseFailureCode.UserNotEnabled => ContactSetSearchFailureCode.NotAllowed,
+            DataverseFailureCode.SearchableEntityNotFound => ContactSetSearchFailureCode.NotAllowed,
+            DataverseFailureCode.Throttling => ContactSetSearchFailureCode.TooManyRequests,
+            _ => default
+        };
 }
