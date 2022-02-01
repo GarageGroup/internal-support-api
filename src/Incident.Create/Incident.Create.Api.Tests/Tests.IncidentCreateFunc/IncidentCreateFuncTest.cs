@@ -11,10 +11,6 @@ using IIncidentCreateFunc = IAsyncValueFunc<IncidentCreateIn, Result<IncidentCre
 
 public sealed partial class IncidentCreateFuncTest
 {
-    private const int DataverseNotFoundStatusCode = -2147220969;
-
-    private const int DataversePicklistValueOutOfRangeStatusCode = -2147204326;
-
     private static readonly IncidentCreateIn SomeInput
         =
         new(
@@ -32,7 +28,7 @@ public sealed partial class IncidentCreateFuncTest
         .Resolve(Mock.Of<IServiceProvider>());
 
     private static Mock<IDataverseEntityCreateSupplier> CreateMockDataverseApiClient(
-        Result<DataverseEntityCreateOut<IncidentJsonCreateOut>, Failure<int>> result, 
+        Result<DataverseEntityCreateOut<IncidentJsonCreateOut>, Failure<DataverseFailureCode>> result, 
         Action<DataverseEntityCreateIn<IncidentJsonCreateIn>>? callback = null)
     {
         var mock = new Mock<IDataverseEntityCreateSupplier>();
@@ -41,7 +37,7 @@ public sealed partial class IncidentCreateFuncTest
             s => s.CreateEntityAsync<IncidentJsonCreateIn, IncidentJsonCreateOut>(
                 It.IsAny<DataverseEntityCreateIn<IncidentJsonCreateIn>>(), 
                 It.IsAny<CancellationToken>()))
-            .Returns(result.Pipe(ValueTask.FromResult));
+            .Returns(new ValueTask<Result<DataverseEntityCreateOut<IncidentJsonCreateOut>, Failure<DataverseFailureCode>>>(result));
 
         if(callback is not null)
         {

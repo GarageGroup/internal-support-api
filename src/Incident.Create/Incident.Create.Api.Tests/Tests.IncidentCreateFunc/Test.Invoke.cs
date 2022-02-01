@@ -80,15 +80,17 @@ partial class IncidentCreateFuncTest
     }
 
     [Theory]
-    [InlineData(404, IncidentCreateFailureCode.Unknown)]
-    [InlineData(int.MinValue, IncidentCreateFailureCode.Unknown)]
-    [InlineData(int.MaxValue, IncidentCreateFailureCode.Unknown)]
-    [InlineData(0, IncidentCreateFailureCode.Unknown)]
-    [InlineData(DataverseNotFoundStatusCode, IncidentCreateFailureCode.NotFound)]
-    [InlineData(DataversePicklistValueOutOfRangeStatusCode, IncidentCreateFailureCode.UnexpectedCaseCode)]
-    public async Task InvokeAsync_DataverseResultIsFailure_ExpectFailure(int failureCode, IncidentCreateFailureCode expectedFailureCode)
+    [InlineData(DataverseFailureCode.Unknown, IncidentCreateFailureCode.Unknown)]
+    [InlineData(DataverseFailureCode.SearchableEntityNotFound, IncidentCreateFailureCode.Unknown)]
+    [InlineData(DataverseFailureCode.RecordNotFound, IncidentCreateFailureCode.NotFound)]
+    [InlineData(DataverseFailureCode.PicklistValueOutOfRange, IncidentCreateFailureCode.UnexpectedCaseCode)]
+    [InlineData(DataverseFailureCode.PrivilegeDenied, IncidentCreateFailureCode.NotAllowed)]
+    [InlineData(DataverseFailureCode.UserNotEnabled, IncidentCreateFailureCode.NotAllowed)]
+    [InlineData(DataverseFailureCode.Throttling, IncidentCreateFailureCode.TooManyRequests)]
+    public async Task InvokeAsync_DataverseResultIsFailure_ExpectFailure(
+        DataverseFailureCode sourceFailureCode, IncidentCreateFailureCode expectedFailureCode)
     {
-        var dataverseFailure = Failure.Create(failureCode, "Some failure message");
+        var dataverseFailure = Failure.Create(sourceFailureCode, "Some failure message");
         var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseFailure);
 
         var func = CreateFunc(mockDataverseApiClient.Object);

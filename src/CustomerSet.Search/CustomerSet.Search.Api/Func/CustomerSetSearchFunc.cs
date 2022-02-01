@@ -16,14 +16,14 @@ internal sealed partial class CustomerSetSearchFunc : IAsyncValueFunc<CustomerSe
 
     private readonly IDataverseSearchSupplier dataverseSearchSupplier;
 
-    private CustomerSetSearchFunc(IDataverseSearchSupplier dataverseEntityCreateSupplier)
+    private CustomerSetSearchFunc(IDataverseSearchSupplier dataverseSearchSupplier)
         =>
-        this.dataverseSearchSupplier = dataverseEntityCreateSupplier;
+        this.dataverseSearchSupplier = dataverseSearchSupplier;
 
-    public static CustomerSetSearchFunc Create(IDataverseSearchSupplier dataverseEntityCreateSupplier)
+    public static CustomerSetSearchFunc Create(IDataverseSearchSupplier dataverseSearchSupplier)
         =>
         new(
-            dataverseEntityCreateSupplier ?? throw new ArgumentNullException(nameof(dataverseEntityCreateSupplier)));
+            dataverseSearchSupplier ?? throw new ArgumentNullException(nameof(dataverseSearchSupplier)));
 
     public partial ValueTask<Result<CustomerSetSearchOut, Failure<CustomerSetSearchFailureCode>>> InvokeAsync(
         CustomerSetSearchIn input, CancellationToken cancellationToken = default);

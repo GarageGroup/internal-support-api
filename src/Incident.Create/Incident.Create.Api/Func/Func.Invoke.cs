@@ -34,12 +34,15 @@ partial class IncidentCreateFunc
                 id: entityCreateOut.Value.IncidentId,
                 title: entityCreateOut.Value.Title));
 
-    private static IncidentCreateFailureCode MapDataverseFailureCode(int dataverseFailureCode)
+    private static IncidentCreateFailureCode MapDataverseFailureCode(DataverseFailureCode dataverseFailureCode)
         =>
         dataverseFailureCode switch
         {
-            ApiNames.NotFoundFailureCode => IncidentCreateFailureCode.NotFound,
-            ApiNames.PicklistValueOutOfRangeFailureCode => IncidentCreateFailureCode.UnexpectedCaseCode,
-            _ => IncidentCreateFailureCode.Unknown
+            DataverseFailureCode.RecordNotFound => IncidentCreateFailureCode.NotFound,
+            DataverseFailureCode.PicklistValueOutOfRange => IncidentCreateFailureCode.UnexpectedCaseCode,
+            DataverseFailureCode.UserNotEnabled => IncidentCreateFailureCode.NotAllowed,
+            DataverseFailureCode.PrivilegeDenied => IncidentCreateFailureCode.NotAllowed,
+            DataverseFailureCode.Throttling => IncidentCreateFailureCode.TooManyRequests,
+            _ => default
         };
 }

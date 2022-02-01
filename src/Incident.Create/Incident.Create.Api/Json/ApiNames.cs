@@ -19,8 +19,4 @@ internal static class ApiNames
     public const string CaseTypeCode = "casetypecode";
 
     public const string CaseOriginCode = "caseorigincode";
-
-    public const int NotFoundFailureCode = -2147220969;
-
-    public const int PicklistValueOutOfRangeFailureCode = -2147204326;
 }
