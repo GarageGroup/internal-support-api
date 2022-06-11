@@ -1,8 +1,6 @@
 ﻿using GGroupp.Infra;
 using System;
 using System.Collections.ObjectModel;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace GGroupp.Internal.Support;
 
@@ -26,7 +24,4 @@ internal sealed partial class ContactSetSearchFunc : IContactSetSearchFunc
         =>
         new(
             dataverseSearchSupplier ?? throw new ArgumentNullException(nameof(dataverseSearchSupplier)));
-
-    public partial ValueTask<Result<ContactSetSearchOut, Failure<ContactSetSearchFailureCode>>> InvokeAsync(
-        ContactSetSearchIn input, CancellationToken cancellationToken = default);
 }

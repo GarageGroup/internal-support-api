@@ -23,9 +23,7 @@ public sealed partial class IncidentCreateFuncTest
 
     private static IIncidentCreateFunc CreateFunc(IDataverseEntityCreateSupplier dataverseEntityCreateSupplier)
         =>
-        Dependency.Of(dataverseEntityCreateSupplier)
-        .UseIncidentCreateApi()
-        .Resolve(Mock.Of<IServiceProvider>());
+        Dependency.Of(dataverseEntityCreateSupplier).UseIncidentCreateApi().Resolve(Mock.Of<IServiceProvider>());
 
     private static Mock<IDataverseEntityCreateSupplier> CreateMockDataverseApiClient(
         Result<DataverseEntityCreateOut<IncidentJsonCreateOut>, Failure<DataverseFailureCode>> result, 

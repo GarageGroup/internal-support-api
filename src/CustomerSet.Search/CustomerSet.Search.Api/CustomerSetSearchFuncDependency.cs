@@ -4,12 +4,19 @@ using System;
 
 namespace GGroupp.Internal.Support;
 
-using ICustomerSearchSearch = IAsyncValueFunc<CustomerSetSearchIn, Result<CustomerSetSearchOut, Failure<CustomerSetSearchFailureCode>>>;
+using ICustomerSetSearchSearchFunc = IAsyncValueFunc<CustomerSetSearchIn, Result<CustomerSetSearchOut, Failure<CustomerSetSearchFailureCode>>>;
 
 public static class CustomerSetSearchFuncDependency
 {
-    public static Dependency<ICustomerSearchSearch> UseCustomerSetSearchApi<TDataverseApiClient>(this Dependency<TDataverseApiClient> dependency)
-        where TDataverseApiClient : IDataverseSearchSupplier
-        =>
-        dependency.Map<ICustomerSearchSearch>(apiClient => CustomerSetSearchFunc.Create(apiClient));
+    public static Dependency<ICustomerSetSearchSearchFunc> UseCustomerSetSearchApi<TApiClient>(this Dependency<TApiClient> dependency)
+        where TApiClient : IDataverseSearchSupplier
+    {
+        _ = dependency ?? throw new ArgumentNullException(nameof(dependency));
+
+        return dependency.Map<ICustomerSetSearchSearchFunc>(CreateFunc);
+
+        static CustomerSetSearchFunc CreateFunc(TApiClient apiClient)
+            =>
+             CustomerSetSearchFunc.Create(apiClient);
+    }
 }

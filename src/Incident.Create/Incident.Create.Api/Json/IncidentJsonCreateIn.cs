@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace GGroupp.Internal.Support;
@@ -9,16 +10,16 @@ internal sealed record class IncidentJsonCreateIn
         string ownerId,
         string customerId,
         string title,
-        string description,
+        [AllowNull] string description,
         int caseTypeCode,
         int? caseOriginCode,
-        string? contactId)
+        [AllowNull] string contactId)
     {
         OwnerId = ownerId.OrEmpty();
         CustomerId = customerId.OrEmpty();
-        ContactId = contactId;
+        ContactId = contactId.OrNullIfEmpty();
         Title = title.OrEmpty();
-        Description = description.OrEmpty();
+        Description = description.OrNullIfEmpty();
         CaseTypeCode = caseTypeCode;
         CaseOriginCode = caseOriginCode;
     }
@@ -36,7 +37,7 @@ internal sealed record class IncidentJsonCreateIn
     public string Title { get; }
 
     [JsonPropertyName(ApiNames.Description)]
-    public string Description { get; }
+    public string? Description { get; }
 
     [JsonPropertyName(ApiNames.CaseTypeCode)]
     public int CaseTypeCode { get; }

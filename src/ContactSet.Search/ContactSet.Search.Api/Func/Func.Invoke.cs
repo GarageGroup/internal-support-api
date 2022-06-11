@@ -9,13 +9,14 @@ namespace GGroupp.Internal.Support;
 
 partial class ContactSetSearchFunc
 {
-    public partial ValueTask<Result<ContactSetSearchOut, Failure<ContactSetSearchFailureCode>>> InvokeAsync(
+    public ValueTask<Result<ContactSetSearchOut, Failure<ContactSetSearchFailureCode>>> InvokeAsync(
         ContactSetSearchIn input, CancellationToken cancellationToken)
         =>
         AsyncPipeline.Pipe(
             input, cancellationToken)
+        .HandleCancellation()
         .Pipe(
-            @in => new DataverseSearchIn($"*{@in.SearchText}*")
+            static @in => new DataverseSearchIn($"*{@in.SearchText}*")
             {
                 Entities = entities,
                 Filter = $"parentcustomerid eq '{@in.CustomerId.ToString("D", CultureInfo.InvariantCulture)}'",
@@ -24,9 +25,9 @@ partial class ContactSetSearchFunc
         .PipeValue(
             dataverseSearchSupplier.SearchAsync)
         .MapFailure(
-            failure => failure.MapFailureCode(MapFailureCode))
+            static failure => failure.MapFailureCode(MapFailureCode))
         .MapSuccess(
-            @out => new ContactSetSearchOut(
+            static @out => new ContactSetSearchOut(
                 @out.Value.Select(MapDataverseSearchItem).ToArray()));
 
     private static ContactItemSearchOut MapDataverseSearchItem(DataverseSearchItem item)

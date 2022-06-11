@@ -8,29 +8,30 @@ namespace GGroupp.Internal.Support;
 
 partial class IncidentCreateFunc
 {
-    public partial ValueTask<Result<IncidentCreateOut, Failure<IncidentCreateFailureCode>>> InvokeAsync(
+    public ValueTask<Result<IncidentCreateOut, Failure<IncidentCreateFailureCode>>> InvokeAsync(
         IncidentCreateIn input, CancellationToken cancellationToken)
         =>
         AsyncPipeline.Pipe(
             input, cancellationToken)
+        .HandleCancellation()
         .Pipe(
-            @in => new DataverseEntityCreateIn<IncidentJsonCreateIn>(
+            static @in => new DataverseEntityCreateIn<IncidentJsonCreateIn>(
                 entityPluralName: "incidents",
                 selectFields: selectedFields,
                 entityData: new(
-                    ownerId: Invariant($"/systemusers({input.OwnerId:D})"),
-                    customerId: Invariant($"/accounts({input.CustomerId:D})"),
-                    title: input.Title,
-                    description: input.Description,
-                    caseTypeCode: input.CaseTypeCode,
-                    caseOriginCode: input.CaseOriginCode,
-                    contactId: input.ContactId is null ? null : Invariant($"/contacts({input.ContactId})"))))
+                    ownerId: Invariant($"/systemusers({@in.OwnerId:D})"),
+                    customerId: Invariant($"/accounts({@in.CustomerId:D})"),
+                    title: @in.Title,
+                    description: @in.Description,
+                    caseTypeCode: @in.CaseTypeCode,
+                    caseOriginCode: @in.CaseOriginCode,
+                    contactId: @in.ContactId is null ? null :$"/contacts({@in.ContactId})")))
         .PipeValue(
             entityCreateSupplier.CreateEntityAsync<IncidentJsonCreateIn, IncidentJsonCreateOut>)
         .MapFailure(
-            failure => failure.MapFailureCode(MapDataverseFailureCode))
+            static failure => failure.MapFailureCode(MapDataverseFailureCode))
         .MapSuccess(
-            entityCreateOut => new IncidentCreateOut(
+            static entityCreateOut => new IncidentCreateOut(
                 id: entityCreateOut.Value.IncidentId,
                 title: entityCreateOut.Value.Title));
 

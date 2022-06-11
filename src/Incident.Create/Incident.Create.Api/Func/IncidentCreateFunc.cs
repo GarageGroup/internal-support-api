@@ -1,8 +1,6 @@
 ﻿using GGroupp.Infra;
 using System;
 using System.Collections.ObjectModel;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace GGroupp.Internal.Support;
 
@@ -25,7 +23,4 @@ internal sealed partial class IncidentCreateFunc : IIncidentCreateFunc
     public static IncidentCreateFunc Create(IDataverseEntityCreateSupplier entityCreateSupplier)
         =>
         new(entityCreateSupplier ?? throw new ArgumentNullException(nameof(entityCreateSupplier)));
-
-    public partial ValueTask<Result<IncidentCreateOut, Failure<IncidentCreateFailureCode>>> InvokeAsync(
-        IncidentCreateIn input, CancellationToken cancellationToken = default);
 }

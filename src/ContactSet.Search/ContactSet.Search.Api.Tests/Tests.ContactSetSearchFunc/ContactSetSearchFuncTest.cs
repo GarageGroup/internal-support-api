@@ -28,9 +28,7 @@ public sealed partial class ContactSetSearchFuncTest
 
     private static IContactSetSearchFunc CreateFunc(IDataverseSearchSupplier dataverseSearchSupplier)
         =>
-        Dependency.Of(dataverseSearchSupplier)
-        .UseContactSetSearchApi()
-        .Resolve(Mock.Of<IServiceProvider>());
+        Dependency.Of(dataverseSearchSupplier).UseContactSetSearchApi().Resolve(Mock.Of<IServiceProvider>());
 
     private static Mock<IDataverseSearchSupplier> CreateMockDataverseApiClient(
         Result<DataverseSearchOut, Failure<DataverseFailureCode>> result,

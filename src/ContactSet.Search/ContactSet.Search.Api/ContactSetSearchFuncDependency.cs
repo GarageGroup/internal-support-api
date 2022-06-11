@@ -4,13 +4,19 @@ using System;
 
 namespace GGroupp.Internal.Support;
 
-using IContactSearch = IAsyncValueFunc<ContactSetSearchIn, Result<ContactSetSearchOut, Failure<ContactSetSearchFailureCode>>>;
+using IContactSearchFunc = IAsyncValueFunc<ContactSetSearchIn, Result<ContactSetSearchOut, Failure<ContactSetSearchFailureCode>>>;
 
 public static class ContactSetSearchFuncDependency
 {
-    public static Dependency<IContactSearch> UseContactSetSearchApi<TDataverseApiClient>(
-        this Dependency<TDataverseApiClient> dependency)
+    public static Dependency<IContactSearchFunc> UseContactSetSearchApi<TDataverseApiClient>(this Dependency<TDataverseApiClient> dependency)
         where TDataverseApiClient : IDataverseSearchSupplier
-        =>
-        dependency.Map<IContactSearch>(apiClient => ContactSetSearchFunc.Create(apiClient));
+    {
+        _ = dependency ?? throw new ArgumentNullException(nameof(dependency));
+
+        return dependency.Map<IContactSearchFunc>(CreateFunc);
+
+        static ContactSetSearchFunc CreateFunc(TDataverseApiClient apiClient)
+            =>
+            ContactSetSearchFunc.Create(apiClient);
+    }
 }
