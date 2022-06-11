@@ -8,13 +8,14 @@ namespace GGroupp.Internal.Support;
 
 partial class CustomerSetSearchFunc
 {
-    public partial ValueTask<Result<CustomerSetSearchOut, Failure<CustomerSetSearchFailureCode>>> InvokeAsync(
+    public ValueTask<Result<CustomerSetSearchOut, Failure<CustomerSetSearchFailureCode>>> InvokeAsync(
         CustomerSetSearchIn input, CancellationToken cancellationToken)
         =>
         AsyncPipeline.Pipe(
             input, cancellationToken)
+        .HandleCancellation()
         .Pipe(
-            @in => new DataverseSearchIn($"*{@in.SearchText}*")
+            static @in => new DataverseSearchIn($"*{@in.SearchText}*")
             {
                 Entities = entities,
                 Top = @in.Top 
@@ -22,9 +23,9 @@ partial class CustomerSetSearchFunc
         .PipeValue(
             dataverseSearchSupplier.SearchAsync)
         .MapFailure(
-            failure => failure.MapFailureCode(MapFailureCode))
+            static failure => failure.MapFailureCode(MapFailureCode))
         .MapSuccess(
-            @out => new CustomerSetSearchOut(
+            static @out => new CustomerSetSearchOut(
                 @out.Value.Select(MapCustomerItemSearchOut).ToArray()));
 
     private static CustomerItemSearchOut MapCustomerItemSearchOut(DataverseSearchItem item)
