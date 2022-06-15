@@ -10,11 +10,11 @@ public readonly record struct IncidentCreateIn
     public IncidentCreateIn(
         Guid ownerId,
         Guid customerId,
+        Guid? contactId,
         string title,
         [AllowNull] string description,
-        int caseTypeCode,
-        Guid? contactId = null,
-        int? caseOriginCode = null)
+        IncidentCaseTypeCode caseTypeCode,
+        IncidentPriorityCode priorityCode)
     {
         OwnerId = ownerId;
         CustomerId = customerId;
@@ -22,7 +22,7 @@ public readonly record struct IncidentCreateIn
         this.title = title.OrNullIfEmpty();
         this.description = description.OrNullIfEmpty();
         CaseTypeCode = caseTypeCode;
-        CaseOriginCode = caseOriginCode;
+        PriorityCode = priorityCode;
     }
 
     public Guid OwnerId { get; }
@@ -35,7 +35,7 @@ public readonly record struct IncidentCreateIn
 
     public string Description => description.OrEmpty();
 
-    public int CaseTypeCode { get; }
+    public IncidentCaseTypeCode CaseTypeCode { get; }
 
-    public int? CaseOriginCode { get; }
+    public IncidentPriorityCode PriorityCode { get; }
 }

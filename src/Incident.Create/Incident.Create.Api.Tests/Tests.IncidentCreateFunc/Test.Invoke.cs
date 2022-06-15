@@ -26,18 +26,22 @@ partial class IncidentCreateFuncTest
     }
 
     [Theory]
-    [InlineData("b6010aeb-bd3c-ec11-b6e5-000d3abfc6af", "/contacts(b6010aeb-bd3c-ec11-b6e5-000d3abfc6af)")]
-    [InlineData(null, null)]
-    public async Task InvokeAsync_CancellationTokenIsNotCanceled_ExpectCallDataVerseApiClientOnce(string? sourceContactId, string? expectedContactId)
+    [InlineData(SomeContactId, IncidentCaseTypeCode.Question, IncidentPriorityCode.Low, "/contacts(" + SomeContactId + ")", 1, 3)]
+    [InlineData(null, IncidentCaseTypeCode.Request, IncidentPriorityCode.Hight, null, 3, 1)]
+    [InlineData(AnotherContactId, IncidentCaseTypeCode.Problem, IncidentPriorityCode.Normal, "/contacts(" + AnotherContactId + ")", 2, 2)]
+    public async Task InvokeAsync_CancellationTokenIsNotCanceled_ExpectCallDataVerseApiClientOnce(
+        string? sourceContactId,
+        IncidentCaseTypeCode sourceCaseTypeCode,
+        IncidentPriorityCode sourcePriorityCode,
+        string? expectedContactId,
+        int expectedCaseTypeCode,
+        int expectedPriorityCode)
     {
         const string ownerId = "1203c0e2-3648-4596-80dd-127fdd2610b6";
         const string customerId = "bd8b8e33-554e-e611-80dc-c4346bad0190";
 
         const string title = "Some title";
         const string description = "Some description";
-
-        const int caseTypeCode = 357;
-        const int caseOriginCode = 12358;
 
         var dataverseOut = new DataverseEntityCreateOut<IncidentJsonCreateOut>(default);
         var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut, IsMatchDataverseInput);
@@ -47,11 +51,11 @@ partial class IncidentCreateFuncTest
         var input = new IncidentCreateIn(
             ownerId: Guid.Parse(ownerId),
             customerId: Guid.Parse(customerId),
+            contactId: sourceContactId is not null ? Guid.Parse(sourceContactId) : null,
             title: title,
             description: description,
-            caseTypeCode: caseTypeCode,
-            caseOriginCode: caseOriginCode,
-            contactId: sourceContactId is not null ? Guid.Parse(sourceContactId) : null);
+            caseTypeCode: sourceCaseTypeCode,
+            priorityCode: sourcePriorityCode);
 
         var token = new CancellationToken(false);
         _ = await func.InvokeAsync(input, token);
@@ -69,11 +73,12 @@ partial class IncidentCreateFuncTest
                 entityData: new(
                     ownerId: $"/systemusers({ownerId})",
                     customerId: $"/accounts({customerId})",
+                    contactId: expectedContactId,
                     title: title,
                     description: description,
-                    caseTypeCode: caseTypeCode,
-                    caseOriginCode: caseOriginCode,
-                    contactId: expectedContactId));
+                    caseTypeCode: expectedCaseTypeCode,
+                    priorityCode: expectedPriorityCode,
+                    caseOriginCode: null));
 
             actual.ShouldDeepEqual(expected);
         }
@@ -82,8 +87,8 @@ partial class IncidentCreateFuncTest
     [Theory]
     [InlineData(DataverseFailureCode.Unknown, IncidentCreateFailureCode.Unknown)]
     [InlineData(DataverseFailureCode.SearchableEntityNotFound, IncidentCreateFailureCode.Unknown)]
+    [InlineData(DataverseFailureCode.PicklistValueOutOfRange, IncidentCreateFailureCode.Unknown)]
     [InlineData(DataverseFailureCode.RecordNotFound, IncidentCreateFailureCode.NotFound)]
-    [InlineData(DataverseFailureCode.PicklistValueOutOfRange, IncidentCreateFailureCode.UnexpectedCaseCode)]
     [InlineData(DataverseFailureCode.PrivilegeDenied, IncidentCreateFailureCode.NotAllowed)]
     [InlineData(DataverseFailureCode.UserNotEnabled, IncidentCreateFailureCode.NotAllowed)]
     [InlineData(DataverseFailureCode.Throttling, IncidentCreateFailureCode.TooManyRequests)]

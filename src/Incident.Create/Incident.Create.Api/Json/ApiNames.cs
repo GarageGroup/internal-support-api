@@ -18,5 +18,7 @@ internal static class ApiNames
 
     public const string CaseTypeCode = "casetypecode";
 
+    public const string PriorityCode = "prioritycode";
+
     public const string CaseOriginCode = "caseorigincode";
 }

@@ -11,15 +11,20 @@ using IIncidentCreateFunc = IAsyncValueFunc<IncidentCreateIn, Result<IncidentCre
 
 public sealed partial class IncidentCreateFuncTest
 {
+    private const string SomeContactId = "b6010aeb-bd3c-ec11-b6e5-000d3abfc6af";
+
+    private const string AnotherContactId = "c4934709-0ab1-4f20-8168-13140033caf6";
+
     private static readonly IncidentCreateIn SomeInput
         =
         new(
             ownerId: Guid.Parse("1203c0e2-3648-4596-80dd-127fdd2610b6"),
             customerId: Guid.Parse("bd8b8e33-554e-e611-80dc-c4346bad0190"),
+            contactId: Guid.Parse("7a8b61a2-7f83-4519-9bd6-9a50c124613d"),
             title: "title",
             description: "decription",
-            caseTypeCode: 91,
-            caseOriginCode: 7);
+            caseTypeCode: IncidentCaseTypeCode.Question,
+            priorityCode: IncidentPriorityCode.Normal);
 
     private static IIncidentCreateFunc CreateFunc(IDataverseEntityCreateSupplier dataverseEntityCreateSupplier)
         =>

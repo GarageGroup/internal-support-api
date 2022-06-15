@@ -9,11 +9,12 @@ internal sealed record class IncidentJsonCreateIn
     internal IncidentJsonCreateIn(
         string ownerId,
         string customerId,
+        [AllowNull] string contactId,
         string title,
         [AllowNull] string description,
-        int caseTypeCode,
-        int? caseOriginCode,
-        [AllowNull] string contactId)
+        int? caseTypeCode,
+        int? priorityCode,
+        int? caseOriginCode = null)
     {
         OwnerId = ownerId.OrEmpty();
         CustomerId = customerId.OrEmpty();
@@ -21,6 +22,7 @@ internal sealed record class IncidentJsonCreateIn
         Title = title.OrEmpty();
         Description = description.OrNullIfEmpty();
         CaseTypeCode = caseTypeCode;
+        PriorityCode = priorityCode;
         CaseOriginCode = caseOriginCode;
     }
 
@@ -40,7 +42,10 @@ internal sealed record class IncidentJsonCreateIn
     public string? Description { get; }
 
     [JsonPropertyName(ApiNames.CaseTypeCode)]
-    public int CaseTypeCode { get; }
+    public int? CaseTypeCode { get; }
+
+    [JsonPropertyName(ApiNames.PriorityCode)]
+    public int? PriorityCode { get; }
 
     [JsonPropertyName(ApiNames.CaseOriginCode)]
     public int? CaseOriginCode { get; }

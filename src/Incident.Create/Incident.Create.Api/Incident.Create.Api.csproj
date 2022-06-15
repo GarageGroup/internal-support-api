@@ -8,13 +8,13 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>GGroupp.Internal.Support</RootNamespace>
     <AssemblyName>GGroupp.Internal.Support.Incident.Create.Api</AssemblyName>
-    <Version>2.3.0</Version>
+    <Version>2.4.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="EarlyFuncPack.Core.AsyncPipeline" Version="0.2.0" />
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityCreate" Version="2.2.1" />
-    <PackageReference Include="GGroupp.Internal.Support.Incident.Create.InOut" Version="2.0.2" />
+    <PackageReference Include="GGroupp.Internal.Support.Incident.Create.InOut" Version="2.1.0" />
     <PackageReference Include="PrimeFuncPack.Core.Func.Abstractions.AsyncValue" Version="2.0.0" />
     <PackageReference Include="PrimeFuncPack.Dependency.Core" Version="2.0.2" />
   </ItemGroup>
