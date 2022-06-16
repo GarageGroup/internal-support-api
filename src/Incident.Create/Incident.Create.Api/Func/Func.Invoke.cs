@@ -2,14 +2,13 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using static System.FormattableString;
 
 namespace GGroupp.Internal.Support;
 
 partial class IncidentCreateFunc
 {
     public ValueTask<Result<IncidentCreateOut, Failure<IncidentCreateFailureCode>>> InvokeAsync(
-        IncidentCreateIn input, CancellationToken cancellationToken)
+        IncidentCreateIn input, CancellationToken cancellationToken = default)
         =>
         AsyncPipeline.Pipe(
             input, cancellationToken)
@@ -19,13 +18,25 @@ partial class IncidentCreateFunc
                 entityPluralName: "incidents",
                 selectFields: selectedFields,
                 entityData: new(
-                    ownerId: Invariant($"/systemusers({@in.OwnerId:D})"),
-                    customerId: Invariant($"/accounts({@in.CustomerId:D})"),
+                    ownerId: $"/systemusers({@in.OwnerId:D})",
+                    customerId: $"/accounts({@in.CustomerId:D})",
+                    contactId: @in.ContactId is null ? null : $"/contacts({@in.ContactId})",
                     title: @in.Title,
                     description: @in.Description,
-                    caseTypeCode: @in.CaseTypeCode,
-                    caseOriginCode: @in.CaseOriginCode,
-                    contactId: @in.ContactId is null ? null :$"/contacts({@in.ContactId})")))
+                    caseTypeCode: @in.CaseTypeCode switch
+                    {
+                        IncidentCaseTypeCode.Question   => 1,
+                        IncidentCaseTypeCode.Problem    => 2,
+                        IncidentCaseTypeCode.Request    => 3,
+                        _ => null
+                    },
+                    priorityCode: @in.PriorityCode switch
+                    {
+                        IncidentPriorityCode.Hight  => 1,
+                        IncidentPriorityCode.Normal => 2,
+                        IncidentPriorityCode.Low    => 3,
+                        _ => null
+                    })))
         .PipeValue(
             entityCreateSupplier.CreateEntityAsync<IncidentJsonCreateIn, IncidentJsonCreateOut>)
         .MapFailure(
@@ -39,11 +50,10 @@ partial class IncidentCreateFunc
         =>
         dataverseFailureCode switch
         {
-            DataverseFailureCode.RecordNotFound => IncidentCreateFailureCode.NotFound,
-            DataverseFailureCode.PicklistValueOutOfRange => IncidentCreateFailureCode.UnexpectedCaseCode,
-            DataverseFailureCode.UserNotEnabled => IncidentCreateFailureCode.NotAllowed,
-            DataverseFailureCode.PrivilegeDenied => IncidentCreateFailureCode.NotAllowed,
-            DataverseFailureCode.Throttling => IncidentCreateFailureCode.TooManyRequests,
+            DataverseFailureCode.RecordNotFound     => IncidentCreateFailureCode.NotFound,
+            DataverseFailureCode.UserNotEnabled     => IncidentCreateFailureCode.NotAllowed,
+            DataverseFailureCode.PrivilegeDenied    => IncidentCreateFailureCode.NotAllowed,
+            DataverseFailureCode.Throttling         => IncidentCreateFailureCode.TooManyRequests,
             _ => default
         };
 }
