@@ -77,13 +77,43 @@ jobs:
     - name: Pack ContactSet.Search.Api.csproj
       run: dotnet pack ./src/*/*/ContactSet.Search.Api.csproj --no-restore -o ~/nuget  -c Release
 
-    # CustomerSet.Search.Api.Tests.csproj
+    # ContactSet.Search.Api.Tests.csproj
 
     - name: Restore ContactSet.Search.Api.Tests.csproj
       run: dotnet restore ./src/*/*/ContactSet.Search.Api.Tests.csproj
 
     - name: Test ContactSet.Search.Api.Tests.csproj
       run: dotnet test ./src/*/*/ContactSet.Search.Api.Tests.csproj --no-restore  -c Release
+
+    # UserSet.Search.InOut.csproj
+    
+    - name: Restore UserSet.Search.InOut.csproj
+      run: dotnet restore ./src/*/*/UserSet.Search.InOut.csproj
+
+    - name: Build UserSet.Search.InOut.csproj
+      run: dotnet build ./src/*/*/UserSet.Search.InOut.csproj --no-restore  -c Release
+
+    - name: Pack UserSet.Search.InOut.csproj
+      run: dotnet pack ./src/*/*/UserSet.Search.InOut.csproj --no-restore -o ~/nuget  -c Release
+
+     # UserSet.Search.Api.csproj
+
+    - name: Restore UserSet.Search.Api.csproj
+      run: dotnet restore ./src/*/*/UserSet.Search.Api.csproj
+
+    - name: Build UserSet.Search.Api.csproj
+      run: dotnet build ./src/*/*/UserSet.Search.Api.csproj --no-restore  -c Release
+
+    - name: Pack UserSet.Search.Api.csproj
+      run: dotnet pack ./src/*/*/UserSet.Search.Api.csproj --no-restore -o ~/nuget  -c Release
+
+    # UserSet.Search.Api.Tests.csproj
+
+    - name: Restore UserSet.Search.Api.Tests.csproj
+      run: dotnet restore ./src/*/*/UserSet.Search.Api.Tests.csproj
+
+    - name: Test UserSet.Search.Api.Tests.csproj
+      run: dotnet test ./src/*/*/UserSet.Search.Api.Tests.csproj --no-restore  -c Release
 
     # Incident.Create.InOut.csproj
 
