@@ -7,7 +7,7 @@ using GGroupp.Infra;
 using Moq;
 using PrimeFuncPack;
 
-namespace GGroupp.Internal.Support.UserSet.Search.Tests;
+namespace GGroupp.Internal.Support.UserSet.Search.Api.Testss;
 
 using IUserSetSearchFunc = IAsyncValueFunc<UserSetSearchIn, Result<UserSetSearchOut, Failure<UserSetSearchFailureCode>>>;
 

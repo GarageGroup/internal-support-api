@@ -8,7 +8,7 @@ using GGroupp.Infra;
 using Moq;
 using Xunit;
 
-namespace GGroupp.Internal.Support.UserSet.Search.Tests;
+namespace GGroupp.Internal.Support.UserSet.Search.Api.Tests;
 
 partial class UserSetSearchFuncTest
 {

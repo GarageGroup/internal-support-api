@@ -7,8 +7,8 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <IsPackable>false</IsPackable>
-    <RootNamespace>GGroupp.Internal.Support.UserSet.Search.Tests</RootNamespace>
-    <AssemblyName>GGroupp.Internal.Support.UserSet.Search.Tests</AssemblyName>
+    <RootNamespace>GGroupp.Internal.Support.UserSet.Search.Api.Tests</RootNamespace>
+    <AssemblyName>GGroupp.Internal.Support.UserSet.Search.Api.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
