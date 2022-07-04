@@ -14,7 +14,8 @@ public readonly record struct IncidentCreateIn
         string title,
         [AllowNull] string description,
         IncidentCaseTypeCode caseTypeCode,
-        IncidentPriorityCode priorityCode)
+        IncidentPriorityCode priorityCode,
+        Guid? callerUserId = null)
     {
         OwnerId = ownerId;
         CustomerId = customerId;
@@ -23,6 +24,7 @@ public readonly record struct IncidentCreateIn
         this.description = description.OrNullIfEmpty();
         CaseTypeCode = caseTypeCode;
         PriorityCode = priorityCode;
+        CallerUserId = callerUserId;
     }
 
     public Guid OwnerId { get; }
@@ -38,4 +40,6 @@ public readonly record struct IncidentCreateIn
     public IncidentCaseTypeCode CaseTypeCode { get; }
 
     public IncidentPriorityCode PriorityCode { get; }
+
+    public Guid? CallerUserId { get; }
 }

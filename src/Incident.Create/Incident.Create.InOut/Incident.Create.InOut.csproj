@@ -8,10 +8,12 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>GGroupp.Internal.Support</RootNamespace>
     <AssemblyName>GGroupp.Internal.Support.Incident.Create.InOut</AssemblyName>
-    <Version>2.1.0</Version>
+    <Version>2.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="GGroupp.Internal.Support.Contract.IncidentCaseTypeCode" Version="1.0.0" />
+    <PackageReference Include="GGroupp.Internal.Support.Contract.IncidentPriorityCode" Version="1.0.0" />
     <PackageReference Include="PrimeFuncPack.Primitives.Strings" Version="2.0.1" />
   </ItemGroup>
 

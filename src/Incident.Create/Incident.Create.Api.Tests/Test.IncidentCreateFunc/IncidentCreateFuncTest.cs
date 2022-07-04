@@ -15,6 +15,10 @@ public sealed partial class IncidentCreateFuncTest
 
     private const string AnotherContactId = "c4934709-0ab1-4f20-8168-13140033caf6";
 
+    private const string SomeUserId = "a155bb95-b509-4f12-824e-0c3024c3c692";
+
+    private const string AnotherUserId = "1962491f-aaa1-4464-ba79-b231896f3070";
+
     private static readonly IncidentCreateIn SomeInput
         =
         new(
@@ -28,7 +32,17 @@ public sealed partial class IncidentCreateFuncTest
 
     private static IIncidentCreateFunc CreateFunc(IDataverseEntityCreateSupplier dataverseEntityCreateSupplier)
         =>
-        Dependency.Of(dataverseEntityCreateSupplier).UseIncidentCreateApi().Resolve(Mock.Of<IServiceProvider>());
+        Dependency.Of(dataverseEntityCreateSupplier)
+        .Map(StubDataverseApiClient.Create)
+        .UseIncidentCreateApi()
+        .Resolve(Mock.Of<IServiceProvider>());
+
+    private static IIncidentCreateFunc CreateFunc(IDataverseEntityCreateSupplier dataverseEntityCreateSupplier, IFunc<Guid, Unit> impersonateAction)
+        =>
+        Dependency.Of(dataverseEntityCreateSupplier, impersonateAction)
+        .Fold(StubDataverseApiClient.Create)
+        .UseIncidentCreateApi()
+        .Resolve(Mock.Of<IServiceProvider>());
 
     private static Mock<IDataverseEntityCreateSupplier> CreateMockDataverseApiClient(
         Result<DataverseEntityCreateOut<IncidentJsonCreateOut>, Failure<DataverseFailureCode>> result, 
@@ -47,6 +61,15 @@ public sealed partial class IncidentCreateFuncTest
             m.Callback<DataverseEntityCreateIn<IncidentJsonCreateIn>, CancellationToken>(
                 (@in, _) => callback.Invoke(@in));
         }
+
+        return mock;
+    }
+
+    private static Mock<IFunc<Guid, Unit>> CreateMockImpersonateAction()
+    {
+        var mock = new Mock<IFunc<Guid, Unit>>();
+
+        _ = mock.Setup(a => a.Invoke(It.IsAny<Guid>())).Returns(default(Unit));
 
         return mock;
     }

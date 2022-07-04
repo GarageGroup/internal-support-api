@@ -38,7 +38,7 @@ partial class IncidentCreateFunc
                         _ => null
                     })))
         .PipeValue(
-            entityCreateSupplier.CreateEntityAsync<IncidentJsonCreateIn, IncidentJsonCreateOut>)
+            GetEntityCreateSupplier(input.CallerUserId).CreateEntityAsync<IncidentJsonCreateIn, IncidentJsonCreateOut>)
         .MapFailure(
             static failure => failure.MapFailureCode(MapDataverseFailureCode))
         .MapSuccess(
