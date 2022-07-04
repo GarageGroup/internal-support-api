@@ -8,6 +8,14 @@ using IIncidentCreateFunc = IAsyncValueFunc<IncidentCreateIn, Result<IncidentCre
 
 internal sealed partial class IncidentCreateFunc : IIncidentCreateFunc
 {
+    public static IncidentCreateFunc Create<TApiClient>(TApiClient apiClient)
+        where TApiClient : class, IDataverseEntityCreateSupplier, IDataverseImpersonateSupplier<TApiClient>
+    {
+        _ = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
+
+        return new(apiClient, apiClient);
+    }
+
     private static readonly ReadOnlyCollection<string> selectedFields;
 
     static IncidentCreateFunc()
@@ -16,11 +24,21 @@ internal sealed partial class IncidentCreateFunc : IIncidentCreateFunc
 
     private readonly IDataverseEntityCreateSupplier entityCreateSupplier;
 
-    private IncidentCreateFunc(IDataverseEntityCreateSupplier entityCreateSupplier)
-        =>
-        this.entityCreateSupplier = entityCreateSupplier;
+    private readonly IDataverseImpersonateSupplier<IDataverseEntityCreateSupplier> impersonateSupplier;
 
-    public static IncidentCreateFunc Create(IDataverseEntityCreateSupplier entityCreateSupplier)
+    private IncidentCreateFunc(
+        IDataverseEntityCreateSupplier entityCreateSupplier,
+        IDataverseImpersonateSupplier<IDataverseEntityCreateSupplier> impersonateSupplier)
+    {
+        this.entityCreateSupplier = entityCreateSupplier;
+        this.impersonateSupplier = impersonateSupplier;
+    }
+
+    private IDataverseEntityCreateSupplier GetEntityCreateSupplier(Guid? callerUserId)
         =>
-        new(entityCreateSupplier ?? throw new ArgumentNullException(nameof(entityCreateSupplier)));
+        callerUserId switch
+        {
+            null => entityCreateSupplier,
+            _ => impersonateSupplier.Impersonate(callerUserId.Value)
+        };
 }

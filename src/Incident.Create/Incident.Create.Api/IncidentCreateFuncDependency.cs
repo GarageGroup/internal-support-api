@@ -12,14 +12,10 @@ using IIncidentCreateFunc = IAsyncValueFunc<IncidentCreateIn, Result<IncidentCre
 public static class IncidentCreateFuncDependency
 {
     public static Dependency<IIncidentCreateFunc> UseIncidentCreateApi<TApiClient>(this Dependency<TApiClient> dependency)
-        where TApiClient : IDataverseEntityCreateSupplier
+        where TApiClient : class, IDataverseEntityCreateSupplier, IDataverseImpersonateSupplier<TApiClient>
     {
         _ = dependency ?? throw new ArgumentNullException(nameof(dependency));
 
-        return dependency.Map<IIncidentCreateFunc>(CreateFunc);
-
-        static IncidentCreateFunc CreateFunc(TApiClient apiClient)
-            =>
-            IncidentCreateFunc.Create(apiClient);
+        return dependency.Map<IIncidentCreateFunc>(IncidentCreateFunc.Create);
     }
 }

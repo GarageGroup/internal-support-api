@@ -12,7 +12,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
-        include-prerelease: true  
+        include-prerelease: false  
 
      # Add NuGet Sources
 
@@ -26,7 +26,7 @@ jobs:
       run: dotnet nuget add source ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -n ggroupp -u ${{ secrets.GGROUPP_NUGET_SOURCE_USER_NAME }} -p ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --store-password-in-clear-text
 
     # CustomerSet.Search.InOut.csproj
-    
+
     - name: Restore CustomerSet.Search.InOut.csproj
       run: dotnet restore ./src/*/*/CustomerSet.Search.InOut.csproj
 
@@ -56,7 +56,7 @@ jobs:
       run: dotnet test ./src/*/*/CustomerSet.Search.Api.Tests.csproj --no-restore  -c Release
 
     # ContactSet.Search.InOut.csproj
-    
+
     - name: Restore ContactSet.Search.InOut.csproj
       run: dotnet restore ./src/*/*/ContactSet.Search.InOut.csproj
 
@@ -86,7 +86,7 @@ jobs:
       run: dotnet test ./src/*/*/ContactSet.Search.Api.Tests.csproj --no-restore  -c Release
 
     # UserSet.Search.InOut.csproj
-    
+
     - name: Restore UserSet.Search.InOut.csproj
       run: dotnet restore ./src/*/*/UserSet.Search.InOut.csproj
 

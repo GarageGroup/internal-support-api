@@ -26,13 +26,14 @@ partial class IncidentCreateFuncTest
     }
 
     [Theory]
-    [InlineData(SomeContactId, IncidentCaseTypeCode.Question, IncidentPriorityCode.Low, "/contacts(" + SomeContactId + ")", 1, 3)]
-    [InlineData(null, IncidentCaseTypeCode.Request, IncidentPriorityCode.Hight, null, 3, 1)]
-    [InlineData(AnotherContactId, IncidentCaseTypeCode.Problem, IncidentPriorityCode.Normal, "/contacts(" + AnotherContactId + ")", 2, 2)]
+    [InlineData(SomeContactId, IncidentCaseTypeCode.Question, IncidentPriorityCode.Low, SomeUserId, "/contacts(" + SomeContactId + ")", 1, 3)]
+    [InlineData(null, IncidentCaseTypeCode.Request, IncidentPriorityCode.Hight, AnotherUserId, null, 3, 1)]
+    [InlineData(AnotherContactId, IncidentCaseTypeCode.Problem, IncidentPriorityCode.Normal, null, "/contacts(" + AnotherContactId + ")", 2, 2)]
     public async Task InvokeAsync_CancellationTokenIsNotCanceled_ExpectCallDataVerseApiClientOnce(
         string? sourceContactId,
         IncidentCaseTypeCode sourceCaseTypeCode,
         IncidentPriorityCode sourcePriorityCode,
+        string? callerUserId,
         string? expectedContactId,
         int expectedCaseTypeCode,
         int expectedPriorityCode)
@@ -55,7 +56,8 @@ partial class IncidentCreateFuncTest
             title: title,
             description: description,
             caseTypeCode: sourceCaseTypeCode,
-            priorityCode: sourcePriorityCode);
+            priorityCode: sourcePriorityCode,
+            callerUserId: callerUserId is not null ? Guid.Parse(callerUserId) : null);
 
         var token = new CancellationToken(false);
         _ = await func.InvokeAsync(input, token);
@@ -82,6 +84,54 @@ partial class IncidentCreateFuncTest
 
             actual.ShouldDeepEqual(expected);
         }
+    }
+
+    [Fact]
+    public async Task InvokeAsync_CallerUserIdIsNull_ExpectCallImpersonateNever()
+    {
+        var dataverseOut = new DataverseEntityCreateOut<IncidentJsonCreateOut>(default);
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut);
+
+        var mockImpersonateAction = CreateMockImpersonateAction();
+        var func = CreateFunc(mockDataverseApiClient.Object, mockImpersonateAction.Object);
+
+        var input = new IncidentCreateIn(
+            ownerId: Guid.Parse("041eb1fd-c185-4e17-9ce3-7bb754ce84b6"),
+            customerId: Guid.Parse("b3a2b17c-3c49-4c58-b365-3ff6dc168b6d"),
+            contactId: Guid.Parse("3340639e-847c-49e0-9bad-ee05a8ea0a0f"),
+            title: "Some title",
+            description: "Some description",
+            caseTypeCode: IncidentCaseTypeCode.Problem,
+            priorityCode: IncidentPriorityCode.Hight,
+            callerUserId: null);
+
+        _ = await func.InvokeAsync(input, default);
+        mockImpersonateAction.Verify(a => a.Invoke(It.IsAny<Guid>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task InvokeAsync_CallerUserIdIsNotNull_ExpectCallImpersonateOnce()
+    {
+        var dataverseOut = new DataverseEntityCreateOut<IncidentJsonCreateOut>(default);
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut);
+
+        var mockImpersonateAction = CreateMockImpersonateAction();
+        var func = CreateFunc(mockDataverseApiClient.Object, mockImpersonateAction.Object);
+
+        var callerUserId = Guid.Parse("de42801c-ae9b-4be1-bd39-a0a70324539f");
+
+        var input = new IncidentCreateIn(
+            ownerId: Guid.Parse("0c1040cc-6dff-4eda-b40b-38b04b72bb82"),
+            customerId: Guid.Parse("4b4d6147-da68-4dea-b8da-f0090d118b12"),
+            contactId: Guid.Parse("6cdae1fe-f0c8-4664-9c0c-579aae1ce242"),
+            title: "Some title",
+            description: "Some description",
+            caseTypeCode: IncidentCaseTypeCode.Problem,
+            priorityCode: IncidentPriorityCode.Hight,
+            callerUserId: callerUserId);
+
+        _ = await func.InvokeAsync(input, default);
+        mockImpersonateAction.Verify(a => a.Invoke(callerUserId), Times.Once);
     }
 
     [Theory]
