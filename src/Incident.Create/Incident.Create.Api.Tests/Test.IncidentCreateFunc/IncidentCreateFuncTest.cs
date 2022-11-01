@@ -45,22 +45,15 @@ public sealed partial class IncidentCreateFuncTest
         .Resolve(Mock.Of<IServiceProvider>());
 
     private static Mock<IDataverseEntityCreateSupplier> CreateMockDataverseApiClient(
-        Result<DataverseEntityCreateOut<IncidentJsonCreateOut>, Failure<DataverseFailureCode>> result, 
-        Action<DataverseEntityCreateIn<IncidentJsonCreateIn>>? callback = null)
+        Result<DataverseEntityCreateOut<IncidentJsonCreateOut>, Failure<DataverseFailureCode>> result)
     {
         var mock = new Mock<IDataverseEntityCreateSupplier>();
         
-        var m = mock.Setup(
+        _ = mock.Setup(
             s => s.CreateEntityAsync<IncidentJsonCreateIn, IncidentJsonCreateOut>(
                 It.IsAny<DataverseEntityCreateIn<IncidentJsonCreateIn>>(), 
                 It.IsAny<CancellationToken>()))
             .Returns(new ValueTask<Result<DataverseEntityCreateOut<IncidentJsonCreateOut>, Failure<DataverseFailureCode>>>(result));
-
-        if(callback is not null)
-        {
-            m.Callback<DataverseEntityCreateIn<IncidentJsonCreateIn>, CancellationToken>(
-                (@in, _) => callback.Invoke(@in));
-        }
 
         return mock;
     }

@@ -28,7 +28,7 @@ partial class ContactSetSearchFunc
             static failure => failure.MapFailureCode(MapFailureCode))
         .MapSuccess(
             static @out => new ContactSetSearchOut(
-                @out.Value.Select(MapDataverseSearchItem).ToArray()));
+                @out.Value.Select(MapDataverseSearchItem).ToFlatArray()));
 
     private static ContactItemSearchOut MapDataverseSearchItem(DataverseSearchItem item)
         =>

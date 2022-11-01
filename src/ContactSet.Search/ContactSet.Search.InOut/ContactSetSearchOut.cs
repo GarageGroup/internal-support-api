@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -6,9 +5,9 @@ namespace GGroupp.Internal.Support;
 
 public sealed record class ContactSetSearchOut
 {
-    public ContactSetSearchOut([AllowNull] IReadOnlyCollection<ContactItemSearchOut> contacts)
+    public ContactSetSearchOut([AllowNull] FlatArray<ContactItemSearchOut> contacts)
         =>
-        Contacts = contacts ?? Array.Empty<ContactItemSearchOut>();
+        Contacts = contacts ?? FlatArray.Empty<ContactItemSearchOut>();
 
-    public IReadOnlyCollection<ContactItemSearchOut> Contacts { get; }
+    public FlatArray<ContactItemSearchOut> Contacts { get; }
 }

@@ -26,7 +26,7 @@ partial class CustomerSetSearchFunc
             static failure => failure.MapFailureCode(MapFailureCode))
         .MapSuccess(
             static @out => new CustomerSetSearchOut(
-                @out.Value.Select(MapCustomerItemSearchOut).ToArray()));
+                @out.Value.Select(MapCustomerItemSearchOut).ToFlatArray()));
 
     private static CustomerItemSearchOut MapCustomerItemSearchOut(DataverseSearchItem item)
         =>
