@@ -1,6 +1,6 @@
 ﻿using GGroupp.Infra;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace GGroupp.Internal.Support;
 
@@ -8,11 +8,11 @@ using ICustomerSetSearchFunc = IAsyncValueFunc<CustomerSetSearchIn, Result<Custo
 
 internal sealed partial class CustomerSetSearchFunc : ICustomerSetSearchFunc
 {
-    private static readonly ReadOnlyCollection<string> entities;
+    private static readonly FlatArray<string> entities;
 
     static CustomerSetSearchFunc()
         =>
-        entities = new(new[] { "account" });
+        entities = new("account");
 
     private readonly IDataverseSearchSupplier dataverseSearchSupplier;
 

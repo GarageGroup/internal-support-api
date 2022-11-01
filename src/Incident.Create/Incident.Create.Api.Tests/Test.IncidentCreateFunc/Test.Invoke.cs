@@ -1,5 +1,4 @@
-﻿using DeepEqual.Syntax;
-using GGroupp.Infra;
+﻿using GGroupp.Infra;
 using Moq;
 using System;
 using System.Threading;
@@ -45,7 +44,7 @@ partial class IncidentCreateFuncTest
         const string description = "Some description";
 
         var dataverseOut = new DataverseEntityCreateOut<IncidentJsonCreateOut>(default);
-        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut, IsMatchDataverseInput);
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
 
@@ -62,14 +61,7 @@ partial class IncidentCreateFuncTest
         var token = new CancellationToken(false);
         _ = await func.InvokeAsync(input, token);
 
-        mockDataverseApiClient.Verify(
-            c => c.CreateEntityAsync<IncidentJsonCreateIn, IncidentJsonCreateOut>(
-                It.IsAny<DataverseEntityCreateIn<IncidentJsonCreateIn>>(), token),
-            Times.Once);
-
-        void IsMatchDataverseInput(DataverseEntityCreateIn<IncidentJsonCreateIn> actual)
-        {
-            var expected = new DataverseEntityCreateIn<IncidentJsonCreateIn>(
+        var expected = new DataverseEntityCreateIn<IncidentJsonCreateIn>(
                 entityPluralName: "incidents",
                 selectFields: new[] { "incidentid", "title" },
                 entityData: new(
@@ -82,8 +74,8 @@ partial class IncidentCreateFuncTest
                     priorityCode: expectedPriorityCode,
                     caseOriginCode: null));
 
-            actual.ShouldDeepEqual(expected);
-        }
+        mockDataverseApiClient.Verify(
+            c => c.CreateEntityAsync<IncidentJsonCreateIn, IncidentJsonCreateOut>(expected, token), Times.Once);
     }
 
     [Fact]

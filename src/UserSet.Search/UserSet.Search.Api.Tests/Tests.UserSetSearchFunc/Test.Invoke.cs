@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using DeepEqual.Syntax;
 using GGroupp.Infra;
 using Moq;
 using Xunit;
@@ -35,7 +35,7 @@ partial class UserSetSearchFuncTest
     public async Task InvokeAsync_CancellationTokenIsNotCanceled_ExpectCallDataVerseApiClientOnce(string? searchString, int? top)
     {
         var dataverseOut = new DataverseSearchOut(17, new[] { SomeDataverseSearchItem });
-        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut, IsMatchDataverseInput);
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut);
 
         var input = new UserSetSearchIn(searchString, top);
         var token = new CancellationToken(canceled: false);
@@ -43,18 +43,13 @@ partial class UserSetSearchFuncTest
         var func = CreateFunc(mockDataverseApiClient.Object);
         _ = await func.InvokeAsync(input, token);
 
-        mockDataverseApiClient.Verify(c => c.SearchAsync(It.IsAny<DataverseSearchIn>(), token), Times.Once);
-
-        void IsMatchDataverseInput(DataverseSearchIn actual)
+        var expected = new DataverseSearchIn($"*{searchString}*")
         {
-            var expected = new DataverseSearchIn($"*{searchString}*")
-            {
-                Entities = new[] { "systemuser" },
-                Top = top
-            };
+            Entities = new[] { "systemuser" },
+            Top = top
+        };
 
-            actual.ShouldDeepEqual(expected);
-        }
+        mockDataverseApiClient.Verify(c => c.SearchAsync(expected, token), Times.Once);
     }
 
     [Theory]
@@ -63,6 +58,7 @@ partial class UserSetSearchFuncTest
     [InlineData(DataverseFailureCode.SearchableEntityNotFound, UserSetSearchFailureCode.NotAllowed)]
     [InlineData(DataverseFailureCode.PicklistValueOutOfRange, UserSetSearchFailureCode.Unknown)]
     [InlineData(DataverseFailureCode.RecordNotFound, UserSetSearchFailureCode.Unknown)]
+    [InlineData(DataverseFailureCode.Unauthorized, UserSetSearchFailureCode.Unknown)]
     [InlineData(DataverseFailureCode.Unknown, UserSetSearchFailureCode.Unknown)]
     public async Task InvokeAsync_DataverseSearchResultIsFailure_ExpectFailure(
         DataverseFailureCode sourceFailureCode, UserSetSearchFailureCode expectedFailureCode)
@@ -95,7 +91,7 @@ partial class UserSetSearchFuncTest
                 ["fullName"] = new(JsonSerializer.SerializeToElement("Some Name")),
                 ["name"] = new(JsonSerializer.SerializeToElement("Some value")),
                 ["some"] = new(JsonSerializer.SerializeToElement(15))
-            });
+            }.ToFlatArray());
 
         var secondFullName = "Second Name";
 
@@ -106,7 +102,7 @@ partial class UserSetSearchFuncTest
             extensionData: new Dictionary<string, DataverseSearchJsonValue>
             {
                 ["fullname"] = new(JsonSerializer.SerializeToElement(secondFullName))
-            });
+            }.ToFlatArray());
 
         var thirdItem = new DataverseSearchItem(
             searchScore: -200,
@@ -120,17 +116,15 @@ partial class UserSetSearchFuncTest
         var func = CreateFunc(mockDataverseApiClient.Object);
 
         var input = new UserSetSearchIn("Some text", 7);
-        var actualResult = await func.InvokeAsync(input, CancellationToken.None);
+        var actual = await func.InvokeAsync(input, CancellationToken.None);
 
-        Assert.True(actualResult.IsSuccess);
-
-        var actual = actualResult.SuccessOrThrow().Users;
-        var expected = new UserItemSearchOut[]
-        {
-            new(firstItem.ObjectId, firstFullName),
-            new(secondItem.ObjectId, secondFullName),
-            new(thirdItem.ObjectId, string.Empty)
-        };
+        var expected = new UserSetSearchOut(
+            users: new UserItemSearchOut[]
+            {
+                new(firstItem.ObjectId, firstFullName),
+                new(secondItem.ObjectId, secondFullName),
+                new(thirdItem.ObjectId, string.Empty)
+            });
 
         Assert.Equal(expected, actual);
     }

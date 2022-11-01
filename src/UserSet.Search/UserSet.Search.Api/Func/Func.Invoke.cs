@@ -26,7 +26,7 @@ partial class UserSetSearchFunc
             static failure => failure.MapFailureCode(MapFailureCode))
         .MapSuccess(
             static success => new UserSetSearchOut(
-                success.Value.Select(MapUserItemSearchOut).ToArray()));
+                success.Value.Select(MapUserItemSearchOut).ToFlatArray()));
 
     private static UserItemSearchOut MapUserItemSearchOut(DataverseSearchItem item)
         =>

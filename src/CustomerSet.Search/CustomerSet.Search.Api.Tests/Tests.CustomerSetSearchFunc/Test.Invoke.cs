@@ -1,8 +1,8 @@
-﻿using DeepEqual.Syntax;
-using GGroupp.Infra;
+﻿using GGroupp.Infra;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,7 +34,7 @@ partial class CustomerSetSearchFuncTest
     public async Task InvokeAsync_CancellationTokenIsNotCanceled_ExpectCallDataVerseApiClientOnce(string? searchString)
     {
         var dataverseOut = new DataverseSearchOut(17, new[] { SomeDataverseSearchItem });
-        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut, IsMatchDataverseInput);
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut);
 
         var input = new CustomerSetSearchIn(searchString);
         var token = new CancellationToken(canceled: false);
@@ -42,16 +42,12 @@ partial class CustomerSetSearchFuncTest
         var func = CreateFunc(mockDataverseApiClient.Object);
         _ = await func.InvokeAsync(input, token);
 
-        mockDataverseApiClient.Verify(c => c.SearchAsync(It.IsAny<DataverseSearchIn>(), token), Times.Once);
-
-        void IsMatchDataverseInput(DataverseSearchIn actual)
+        var expected = new DataverseSearchIn($"*{searchString}*")
         {
-            var expected = new DataverseSearchIn($"*{searchString}*")
-            {
-                Entities = new[] { "account" }
-            };
-            actual.ShouldDeepEqual(expected);
-        }
+            Entities = new[] { "account" }
+        };
+
+        mockDataverseApiClient.Verify(c => c.SearchAsync(expected, token), Times.Once);
     }
 
     [Theory]
@@ -60,6 +56,7 @@ partial class CustomerSetSearchFuncTest
     [InlineData(DataverseFailureCode.SearchableEntityNotFound, CustomerSetSearchFailureCode.NotAllowed)]
     [InlineData(DataverseFailureCode.PicklistValueOutOfRange, CustomerSetSearchFailureCode.Unknown)]
     [InlineData(DataverseFailureCode.RecordNotFound, CustomerSetSearchFailureCode.Unknown)]
+    [InlineData(DataverseFailureCode.Unauthorized, CustomerSetSearchFailureCode.Unknown)]
     [InlineData(DataverseFailureCode.Unknown, CustomerSetSearchFailureCode.Unknown)]
     public async Task InvokeAsync_DataverseSearchResultIsFailure_ExpectFailure(
         DataverseFailureCode sourceFailureCode, CustomerSetSearchFailureCode expectedFailureCode)
@@ -93,7 +90,7 @@ partial class CustomerSetSearchFuncTest
             extensionData: new Dictionary<string, DataverseSearchJsonValue>
             {
                 ["name"] = new(jsonElement)
-            });
+            }.ToFlatArray());
 
         var searchResult = new DataverseSearchOut(-1, new[] { searchItem });
         var mockDataverseApiClient = CreateMockDataverseApiClient(searchResult);
@@ -101,15 +98,13 @@ partial class CustomerSetSearchFuncTest
         var func = CreateFunc(mockDataverseApiClient.Object);
 
         var input = new CustomerSetSearchIn(searchText);
-        var actualResult = await func.InvokeAsync(input, CancellationToken.None);
+        var actual = await func.InvokeAsync(input, CancellationToken.None);
 
-        Assert.True(actualResult.IsSuccess);
-
-        var actual = actualResult.SuccessOrThrow().Customers;
-        var expected = new CustomerItemSearchOut[]
-        {
-            new(accountId, title)
-        };
+        var expected = new CustomerSetSearchOut(
+            customers: new CustomerItemSearchOut[]
+            {
+                new(accountId, title)
+            });
 
         Assert.Equal(expected, actual);
     }
@@ -132,15 +127,13 @@ partial class CustomerSetSearchFuncTest
         var func = CreateFunc(mockDataverseApiClient.Object);
 
         var input = new CustomerSetSearchIn(searchText, 3);
-        var actualResult = await func.InvokeAsync(input, CancellationToken.None);
+        var actual = await func.InvokeAsync(input, CancellationToken.None);
 
-        Assert.True(actualResult.IsSuccess);
-
-        var actual = actualResult.SuccessOrThrow().Customers;
-        var expected = new CustomerItemSearchOut[]
-        {
-            new(accountId, string.Empty)
-        };
+        var expected = new CustomerSetSearchOut(
+            customers: new CustomerItemSearchOut[]
+            {
+                new(accountId, string.Empty)
+            });
 
         Assert.Equal(expected, actual);
     }
@@ -154,9 +147,10 @@ partial class CustomerSetSearchFuncTest
         var func = CreateFunc(mockDataverseApiClient.Object);
 
         var input = new CustomerSetSearchIn("Some Search text", 5);
-        var actualResult = await func.InvokeAsync(input, default);
 
-        Assert.True(actualResult.IsSuccess);
-        Assert.Empty(actualResult.SuccessOrThrow().Customers);
+        var actual = await func.InvokeAsync(input, default);
+        var expected = new CustomerSetSearchOut(default);
+
+        Assert.Equal(expected, actual);
     }
 }

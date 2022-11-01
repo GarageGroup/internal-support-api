@@ -1,6 +1,6 @@
 ﻿using GGroupp.Infra;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace GGroupp.Internal.Support;
 
@@ -16,11 +16,11 @@ internal sealed partial class IncidentCreateFunc : IIncidentCreateFunc
         return new(apiClient, apiClient);
     }
 
-    private static readonly ReadOnlyCollection<string> selectedFields;
+    private static readonly FlatArray<string> selectedFields;
 
     static IncidentCreateFunc()
         =>
-        selectedFields = new(new[] { ApiNames.IncidentId, ApiNames.Title });
+        selectedFields = new(ApiNames.IncidentId, ApiNames.Title);
 
     private readonly IDataverseEntityCreateSupplier entityCreateSupplier;
 

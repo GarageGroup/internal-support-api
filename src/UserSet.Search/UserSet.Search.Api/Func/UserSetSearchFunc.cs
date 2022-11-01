@@ -1,5 +1,5 @@
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using GGroupp.Infra;
 
 namespace GGroupp.Internal.Support;
@@ -13,11 +13,11 @@ internal sealed partial class UserSetSearchFunc : IUserSetSearchFunc
         new(
             dataverseSearchSupplier ?? throw new ArgumentNullException(nameof(dataverseSearchSupplier)));
 
-    private static readonly ReadOnlyCollection<string> entities;
+    private static readonly FlatArray<string> entities;
 
     static UserSetSearchFunc()
         =>
-        entities = new(new[] { "systemuser" });
+        entities = new("systemuser");
 
     private readonly IDataverseSearchSupplier dataverseSearchSupplier;
 

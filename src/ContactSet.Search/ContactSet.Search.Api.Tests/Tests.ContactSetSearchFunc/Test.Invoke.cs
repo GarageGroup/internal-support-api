@@ -1,8 +1,8 @@
-﻿using DeepEqual.Syntax;
-using GGroupp.Infra;
+﻿using GGroupp.Infra;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,7 +35,7 @@ partial class ContactSetSearchFuncTest
         string searchString, int? top)
     {
         var dataverseOut = new DataverseSearchOut(15, new[] { SomeDataverseSearchItem });
-        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut, IsMatchDataverseInput);
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut);
 
         const string customerId = "2a5d892f-1400-ec11-94ef-000d3a4a099f";
         var input = new ContactSetSearchIn(
@@ -48,46 +48,39 @@ partial class ContactSetSearchFuncTest
         var func = CreateFunc(mockDataverseApiClient.Object);
         _ = await func.InvokeAsync(input, token);
 
-        mockDataverseApiClient.Verify(c => c.SearchAsync(It.IsAny<DataverseSearchIn>(), token), Times.Once);
-
-        void IsMatchDataverseInput(DataverseSearchIn actual)
+        var expected = new DataverseSearchIn($"*{searchString}*")
         {
-            var expected = new DataverseSearchIn($"*{searchString}*")
-            { 
-                Entities = new[] { "contact" }, 
-                Filter = $"parentcustomerid eq '{customerId}'",
-                Top = top
-            };
-            actual.ShouldDeepEqual(expected);
-        }
+            Entities = new[] { "contact" },
+            Filter = $"parentcustomerid eq '{customerId}'",
+            Top = top
+        };
+
+        mockDataverseApiClient.Verify(c => c.SearchAsync(expected, token), Times.Once);
     }
 
     [Fact]
     public async Task InvokeAsync_CancellationTokenIsNotCanceledAndInputIsDefault_ExpectCallDataVerseApiClientOnce()
     {
         var dataverseOut = new DataverseSearchOut(1, new[] { SomeDataverseSearchItem });
-        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut, IsMatchDataverseInput);
+        var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut);
 
         var token = new CancellationToken(false);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
         _ = await func.InvokeAsync(default, token);
 
-        mockDataverseApiClient.Verify(c => c.SearchAsync(It.IsAny<DataverseSearchIn>(), token), Times.Once);
-
-        static void IsMatchDataverseInput(DataverseSearchIn actual)
+        var expected = new DataverseSearchIn($"**")
         {
-            var expected = new DataverseSearchIn($"**")
-            {
-                Entities = new[] { "contact" },
-                Filter = $"parentcustomerid eq '00000000-0000-0000-0000-000000000000'"
-            };
-            actual.ShouldDeepEqual(expected);
-        }
+            Entities = new[] { "contact" },
+            Filter = $"parentcustomerid eq '00000000-0000-0000-0000-000000000000'"
+        };
+
+        mockDataverseApiClient.Verify(c => c.SearchAsync(expected, token), Times.Once);
     }
 
     [Theory]
     [InlineData(DataverseFailureCode.Unknown, ContactSetSearchFailureCode.Unknown)]
+    [InlineData(DataverseFailureCode.Unauthorized, ContactSetSearchFailureCode.Unknown)]
     [InlineData(DataverseFailureCode.PicklistValueOutOfRange, ContactSetSearchFailureCode.Unknown)]
     [InlineData(DataverseFailureCode.PrivilegeDenied, ContactSetSearchFailureCode.Unknown)]
     [InlineData(DataverseFailureCode.RecordNotFound, ContactSetSearchFailureCode.Unknown)]
@@ -129,7 +122,7 @@ partial class ContactSetSearchFuncTest
             {
                 ["fullName"] = new(JsonSerializer.SerializeToElement("Some value")),
                 ["fullname"] = new(JsonSerializer.SerializeToElement(secondFullName))
-            });
+            }.ToFlatArray());
 
         var dataverseOut = new DataverseSearchOut(
             totalRecordCount: 0, 
@@ -138,16 +131,15 @@ partial class ContactSetSearchFuncTest
         var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut);
         var func = CreateFunc(mockDataverseApiClient.Object);
 
-        var actualResult = await func.InvokeAsync(SomeInput, default);
+        var actual = await func.InvokeAsync(SomeInput, default);
 
-        Assert.True(actualResult.IsSuccess);
-        var actual = actualResult.SuccessOrThrow().Contacts;
+        var expected = new ContactSetSearchOut(
+            contacts: new ContactItemSearchOut[]
+            {
+                new(firstContactId, string.Empty),
+                new(secondContactId, secondFullName)
+            });
 
-        var expected = new ContactItemSearchOut[]
-        {
-            new(firstContactId, string.Empty),
-            new(secondContactId, secondFullName)
-        };
         Assert.Equal(expected, actual);
     }
 
@@ -158,9 +150,10 @@ partial class ContactSetSearchFuncTest
         var mockDataverseApiClient = CreateMockDataverseApiClient(dataverseOut);
 
         var func = CreateFunc(mockDataverseApiClient.Object);
-        var actualResult = await func.InvokeAsync(SomeInput, CancellationToken.None);
 
-        Assert.True(actualResult.IsSuccess);
-        Assert.Empty(actualResult.SuccessOrThrow().Contacts);
+        var actual = await func.InvokeAsync(SomeInput, CancellationToken.None);
+        var expected = new ContactSetSearchOut(null);
+
+        Assert.Equal(expected, actual);
     }
 }
