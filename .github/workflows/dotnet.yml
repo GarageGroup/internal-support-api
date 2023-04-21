@@ -96,13 +96,13 @@ jobs:
     - name: Pack Api.csproj
       run: dotnet pack ./src/*/*/Api.csproj --no-build -o ~/nuget  -c Release
 
-    # Api.Tests.csproj
+    # Api.Test.csproj
 
-    - name: Restore Api.Tests.csproj
-      run: dotnet restore ./src/*/*/Api.Tests.csproj
+    - name: Restore Api.Test.csproj
+      run: dotnet restore ./src/*/*/Api.Test.csproj
 
-    - name: Test Api.Tests.csproj
-      run: dotnet test ./src/*/*/Api.Tests.csproj --no-restore  -c Release
+    - name: Test Api.Test.csproj
+      run: dotnet test ./src/*/*/Api.Test.csproj --no-restore  -c Release
 
     # Push
 
