@@ -7,7 +7,7 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>GGroupp.Internal.Support</RootNamespace>
-    <AssemblyName>GGroupp.Internal.Support.Contract.CustomerSet.Search</AssemblyName>
+    <AssemblyName>GGroupp.Internal.Support.Api.Contract.CustomerSet.Search</AssemblyName>
     <Version>1.0.0</Version>
   </PropertyGroup>
 
