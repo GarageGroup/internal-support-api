@@ -7,15 +7,15 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>GGroupp.Internal.Support</RootNamespace>
-    <AssemblyName>GGroupp.Internal.Support.Contract</AssemblyName>
+    <AssemblyName>GGroupp.Internal.Support.Api.Contract</AssemblyName>
     <Version>1.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GGroupp.Internal.Support.Contract.ContactSet.Search" Version="1.0.0" />
-    <PackageReference Include="GGroupp.Internal.Support.Contract.CustomerSet.Search" Version="1.0.0" />
-    <PackageReference Include="GGroupp.Internal.Support.Contract.Incident.Create" Version="1.0.0" />
-    <PackageReference Include="GGroupp.Internal.Support.Contract.UserSet.Search" Version="1.0.0" />
+    <PackageReference Include="GGroupp.Internal.Support.Api.Contract.ContactSet.Search" Version="1.0.0" />
+    <PackageReference Include="GGroupp.Internal.Support.Api.Contract.CustomerSet.Search" Version="1.0.0" />
+    <PackageReference Include="GGroupp.Internal.Support.Api.Contract.Incident.Create" Version="1.0.0" />
+    <PackageReference Include="GGroupp.Internal.Support.Api.Contract.UserSet.Search" Version="1.0.0" />
   </ItemGroup>
 
 </Project>
