@@ -30,60 +30,60 @@ jobs:
         -p ${{ secrets.GG_NUGET_SOURCE_USER_PASSWORD }}
         --store-password-in-clear-text
 
-    # Contract.ContactSet.Search.csproj
+    # Api.Contract.ContactSet.Search.csproj
 
-    - name: Restore Contract.ContactSet.Search.csproj
-      run: dotnet restore ./src/*/*/Contract.ContactSet.Search.csproj
+    - name: Restore Api.Contract.ContactSet.Search.csproj
+      run: dotnet restore ./src/*/*/Api.Contract.ContactSet.Search.csproj
 
-    - name: Build Contract.ContactSet.Search.csproj
-      run: dotnet build ./src/*/*/Contract.ContactSet.Search.csproj --no-restore  -c Release
+    - name: Build Api.Contract.ContactSet.Search.csproj
+      run: dotnet build ./src/*/*/Api.Contract.ContactSet.Search.csproj --no-restore  -c Release
 
-    - name: Pack Contract.ContactSet.Search.csproj
-      run: dotnet pack ./src/*/*/Contract.ContactSet.Search.csproj --no-build -o ~/nuget  -c Release
+    - name: Pack Api.Contract.ContactSet.Search.csproj
+      run: dotnet pack ./src/*/*/Api.Contract.ContactSet.Search.csproj --no-build -o ~/nuget  -c Release
 
-    # Contract.CustomerSet.Search.csproj
+    # Api.Contract.CustomerSet.Search.csproj
 
-    - name: Restore Contract.CustomerSet.Search.csproj
-      run: dotnet restore ./src/*/*/Contract.CustomerSet.Search.csproj
+    - name: Restore Api.Contract.CustomerSet.Search.csproj
+      run: dotnet restore ./src/*/*/Api.Contract.CustomerSet.Search.csproj
 
-    - name: Build Contract.CustomerSet.Search.csproj
-      run: dotnet build ./src/*/*/Contract.CustomerSet.Search.csproj --no-restore  -c Release
+    - name: Build Api.Contract.CustomerSet.Search.csproj
+      run: dotnet build ./src/*/*/Api.Contract.CustomerSet.Search.csproj --no-restore  -c Release
 
-    - name: Pack Contract.CustomerSet.Search.csproj
-      run: dotnet pack ./src/*/*/Contract.CustomerSet.Search.csproj --no-build -o ~/nuget  -c Release
+    - name: Pack Api.Contract.CustomerSet.Search.csproj
+      run: dotnet pack ./src/*/*/Api.Contract.CustomerSet.Search.csproj --no-build -o ~/nuget  -c Release
 
-    # Contract.UserSet.Search.csproj
+    # Api.Contract.UserSet.Search.csproj
 
-    - name: Restore Contract.UserSet.Search.csproj
-      run: dotnet restore ./src/*/*/Contract.UserSet.Search.csproj
+    - name: Restore Api.Contract.UserSet.Search.csproj
+      run: dotnet restore ./src/*/*/Api.Contract.UserSet.Search.csproj
 
-    - name: Build Contract.UserSet.Search.csproj
-      run: dotnet build ./src/*/*/Contract.UserSet.Search.csproj --no-restore  -c Release
+    - name: Build Api.Contract.UserSet.Search.csproj
+      run: dotnet build ./src/*/*/Api.Contract.UserSet.Search.csproj --no-restore  -c Release
 
-    - name: Pack Contract.UserSet.Search.csproj
-      run: dotnet pack ./src/*/*/Contract.UserSet.Search.csproj --no-build -o ~/nuget  -c Release
+    - name: Pack Api.Contract.UserSet.Search.csproj
+      run: dotnet pack ./src/*/*/Api.Contract.UserSet.Search.csproj --no-build -o ~/nuget  -c Release
 
-    # Contract.Incident.Create.csproj
+    # Api.Contract.Incident.Create.csproj
 
-    - name: Restore Contract.Incident.Create.csproj
-      run: dotnet restore ./src/*/*/Contract.Incident.Create.csproj
+    - name: Restore Api.Contract.Incident.Create.csproj
+      run: dotnet restore ./src/*/*/Api.Contract.Incident.Create.csproj
 
-    - name: Build Contract.Incident.Create.csproj
-      run: dotnet build ./src/*/*/Contract.Incident.Create.csproj --no-restore  -c Release
+    - name: Build Api.Contract.Incident.Create.csproj
+      run: dotnet build ./src/*/*/Api.Contract.Incident.Create.csproj --no-restore  -c Release
 
-    - name: Pack Contract.Incident.Create.csproj
-      run: dotnet pack ./src/*/*/Contract.Incident.Create.csproj --no-build -o ~/nuget  -c Release
+    - name: Pack Api.Contract.Incident.Create.csproj
+      run: dotnet pack ./src/*/*/Api.Contract.Incident.Create.csproj --no-build -o ~/nuget  -c Release
 
-    # Contract.csproj
+    # Api.Contract.csproj
 
-    - name: Restore Contract.csproj
-      run: dotnet restore ./src/*/*/Contract.csproj
+    - name: Restore Api.Contract.csproj
+      run: dotnet restore ./src/*/*/Api.Contract.csproj
 
-    - name: Build Contract.csproj
-      run: dotnet build ./src/*/*/Contract.csproj --no-restore  -c Release
+    - name: Build Api.Contract.csproj
+      run: dotnet build ./src/*/*/Api.Contract.csproj --no-restore  -c Release
 
-    - name: Pack Contract.csproj
-      run: dotnet pack ./src/*/*/Contract.csproj --no-build -o ~/nuget  -c Release
+    - name: Pack Api.Contract.csproj
+      run: dotnet pack ./src/*/*/Api.Contract.csproj --no-build -o ~/nuget  -c Release
 
     # Api.csproj
 
