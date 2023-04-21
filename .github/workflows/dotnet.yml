@@ -30,125 +30,68 @@ jobs:
         -p ${{ secrets.GG_NUGET_SOURCE_USER_PASSWORD }}
         --store-password-in-clear-text
 
-    # CustomerSet.Search.InOut.csproj
+    # Contract.ContactSet.Search.csproj
 
-    - name: Restore CustomerSet.Search.InOut.csproj
-      run: dotnet restore ./src/*/*/CustomerSet.Search.InOut.csproj
+    - name: Restore Contract.ContactSet.Search.csproj
+      run: dotnet restore ./src/*/*/Contract.ContactSet.Search.csproj
 
-    - name: Build CustomerSet.Search.InOut.csproj
-      run: dotnet build ./src/*/*/CustomerSet.Search.InOut.csproj --no-restore  -c Release
+    - name: Build Contract.ContactSet.Search.csproj
+      run: dotnet build ./src/*/*/Contract.ContactSet.Search.csproj --no-restore  -c Release
 
-    - name: Pack CustomerSet.Search.InOut.csproj
-      run: dotnet pack ./src/*/*/CustomerSet.Search.InOut.csproj --no-build -o ~/nuget  -c Release
+    - name: Pack Contract.ContactSet.Search.csproj
+      run: dotnet pack ./src/*/*/Contract.ContactSet.Search.csproj --no-build -o ~/nuget  -c Release
 
-    # CustomerSet.Search.Api.csproj
+    # Contract.CustomerSet.Search.csproj
 
-    - name: Restore CustomerSet.Search.Api.csproj
-      run: dotnet restore ./src/*/*/CustomerSet.Search.Api.csproj
+    - name: Restore Contract.CustomerSet.Search.csproj
+      run: dotnet restore ./src/*/*/Contract.CustomerSet.Search.csproj
 
-    - name: Build CustomerSet.Search.Api.csproj
-      run: dotnet build ./src/*/*/CustomerSet.Search.Api.csproj --no-restore  -c Release
+    - name: Build Contract.CustomerSet.Search.csproj
+      run: dotnet build ./src/*/*/Contract.CustomerSet.Search.csproj --no-restore  -c Release
 
-    - name: Pack CustomerSet.Search.Api.csproj
-      run: dotnet pack ./src/*/*/CustomerSet.Search.Api.csproj --no-build -o ~/nuget  -c Release
+    - name: Pack Contract.CustomerSet.Search.csproj
+      run: dotnet pack ./src/*/*/Contract.CustomerSet.Search.csproj --no-build -o ~/nuget  -c Release
 
-    # CustomerSet.Search.Api.Tests.csproj
+    # Contract.UserSet.Search.csproj
 
-    - name: Restore CustomerSet.Search.Api.Tests.csproj
-      run: dotnet restore ./src/*/*/CustomerSet.Search.Api.Tests.csproj
+    - name: Restore Contract.UserSet.Search.csproj
+      run: dotnet restore ./src/*/*/Contract.UserSet.Search.csproj
 
-    - name: Test CustomerSet.Search.Api.Tests.csproj
-      run: dotnet test ./src/*/*/CustomerSet.Search.Api.Tests.csproj --no-restore  -c Release
+    - name: Build Contract.UserSet.Search.csproj
+      run: dotnet build ./src/*/*/Contract.UserSet.Search.csproj --no-restore  -c Release
 
-    # ContactSet.Search.InOut.csproj
+    - name: Pack Contract.UserSet.Search.csproj
+      run: dotnet pack ./src/*/*/Contract.UserSet.Search.csproj --no-build -o ~/nuget  -c Release
 
-    - name: Restore ContactSet.Search.InOut.csproj
-      run: dotnet restore ./src/*/*/ContactSet.Search.InOut.csproj
+    # Contract.Incident.Create.csproj
 
-    - name: Build ContactSet.Search.InOut.csproj
-      run: dotnet build ./src/*/*/ContactSet.Search.InOut.csproj --no-restore  -c Release
+    - name: Restore Contract.Incident.Create.csproj
+      run: dotnet restore ./src/*/*/Contract.Incident.Create.csproj
 
-    - name: Pack ContactSet.Search.InOut.csproj
-      run: dotnet pack ./src/*/*/ContactSet.Search.InOut.csproj --no-build -o ~/nuget  -c Release
+    - name: Build Contract.Incident.Create.csproj
+      run: dotnet build ./src/*/*/Contract.Incident.Create.csproj --no-restore  -c Release
 
-     # ContactSet.Search.Api.csproj
+    - name: Pack Contract.Incident.Create.csproj
+      run: dotnet pack ./src/*/*/Contract.Incident.Create.csproj --no-build -o ~/nuget  -c Release
 
-    - name: Restore ContactSet.Search.Api.csproj
-      run: dotnet restore ./src/*/*/ContactSet.Search.Api.csproj
+    # Api.csproj
 
-    - name: Build ContactSet.Search.Api.csproj
-      run: dotnet build ./src/*/*/ContactSet.Search.Api.csproj --no-restore  -c Release
+    - name: Restore Api.csproj
+      run: dotnet restore ./src/*/*/Api.csproj
 
-    - name: Pack ContactSet.Search.Api.csproj
-      run: dotnet pack ./src/*/*/ContactSet.Search.Api.csproj --no-build -o ~/nuget  -c Release
+    - name: Build Api.csproj
+      run: dotnet build ./src/*/*/Api.csproj --no-restore  -c Release
 
-    # ContactSet.Search.Api.Tests.csproj
+    - name: Pack Api.csproj
+      run: dotnet pack ./src/*/*/Api.csproj --no-build -o ~/nuget  -c Release
 
-    - name: Restore ContactSet.Search.Api.Tests.csproj
-      run: dotnet restore ./src/*/*/ContactSet.Search.Api.Tests.csproj
+    # Api.Tests.csproj
 
-    - name: Test ContactSet.Search.Api.Tests.csproj
-      run: dotnet test ./src/*/*/ContactSet.Search.Api.Tests.csproj --no-restore  -c Release
+    - name: Restore Api.Tests.csproj
+      run: dotnet restore ./src/*/*/Api.Tests.csproj
 
-    # UserSet.Search.InOut.csproj
-
-    - name: Restore UserSet.Search.InOut.csproj
-      run: dotnet restore ./src/*/*/UserSet.Search.InOut.csproj
-
-    - name: Build UserSet.Search.InOut.csproj
-      run: dotnet build ./src/*/*/UserSet.Search.InOut.csproj --no-restore  -c Release
-
-    - name: Pack UserSet.Search.InOut.csproj
-      run: dotnet pack ./src/*/*/UserSet.Search.InOut.csproj --no-build -o ~/nuget  -c Release
-
-     # UserSet.Search.Api.csproj
-
-    - name: Restore UserSet.Search.Api.csproj
-      run: dotnet restore ./src/*/*/UserSet.Search.Api.csproj
-
-    - name: Build UserSet.Search.Api.csproj
-      run: dotnet build ./src/*/*/UserSet.Search.Api.csproj --no-restore  -c Release
-
-    - name: Pack UserSet.Search.Api.csproj
-      run: dotnet pack ./src/*/*/UserSet.Search.Api.csproj --no-build -o ~/nuget  -c Release
-
-    # UserSet.Search.Api.Tests.csproj
-
-    - name: Restore UserSet.Search.Api.Tests.csproj
-      run: dotnet restore ./src/*/*/UserSet.Search.Api.Tests.csproj
-
-    - name: Test UserSet.Search.Api.Tests.csproj
-      run: dotnet test ./src/*/*/UserSet.Search.Api.Tests.csproj --no-restore  -c Release
-
-    # Incident.Create.InOut.csproj
-
-    - name: Restore Incident.Create.InOut.csproj
-      run: dotnet restore ./src/*/*/Incident.Create.InOut.csproj
-
-    - name: Build Incident.Create.InOut.csproj
-      run: dotnet build ./src/*/*/Incident.Create.InOut.csproj --no-restore  -c Release
-
-    - name: Pack Incident.Create.InOut.csproj
-      run: dotnet pack ./src/*/*/Incident.Create.InOut.csproj --no-build -o ~/nuget  -c Release
-
-    # Incident.Create.Api.csproj
-
-    - name: Restore Incident.Create.Api.csproj
-      run: dotnet restore ./src/*/*/Incident.Create.Api.csproj
-
-    - name: Build Incident.Create.Api.csproj
-      run: dotnet build ./src/*/*/Incident.Create.Api.csproj --no-restore  -c Release
-
-    - name: Pack Incident.Create.Api.csproj
-      run: dotnet pack ./src/*/*/Incident.Create.Api.csproj --no-build -o ~/nuget  -c Release
-
-    # Incident.Create.Api.Tests.csproj
-
-    - name: Restore Incident.Create.Api.Tests.csproj
-      run: dotnet restore ./src/*/*/Incident.Create.Api.Tests.csproj
-
-    - name: Test Incident.Create.Api.Tests.csproj
-      run: dotnet test ./src/*/*/Incident.Create.Api.Tests.csproj --no-restore  -c Release
+    - name: Test Api.Tests.csproj
+      run: dotnet test ./src/*/*/Api.Tests.csproj --no-restore  -c Release
 
     # Push
 
