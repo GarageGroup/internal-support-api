@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RootNamespace>GGroupp.Internal.Support</RootNamespace>
+    <AssemblyName>GGroupp.Internal.Support.Api</AssemblyName>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EarlyFuncPack.Core.AsyncPipeline" Version="0.2.0" />
+    <PackageReference Include="GGroupp.Core.Collections.FlatArray.Extensions" Version="1.8.0" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions" Version="3.9.0" />
+    <PackageReference Include="GGroupp.Internal.Support.Contract" Version="1.0.0" />
+    <PackageReference Include="PrimeFuncPack.Core.Optional" Version="2.1.0" />
+    <PackageReference Include="PrimeFuncPack.Dependency.Core" Version="2.0.2" />
+    <PackageReference Include="PrimeFuncPack.Primitives.Strings" Version="2.0.2" />
+  </ItemGroup>
+
+</Project>
