@@ -74,6 +74,17 @@ jobs:
     - name: Pack Contract.Incident.Create.csproj
       run: dotnet pack ./src/*/*/Contract.Incident.Create.csproj --no-build -o ~/nuget  -c Release
 
+    # Contract.csproj
+
+    - name: Restore Contract.csproj
+      run: dotnet restore ./src/*/*/Contract.csproj
+
+    - name: Build Contract.csproj
+      run: dotnet build ./src/*/*/Contract.csproj --no-restore  -c Release
+
+    - name: Pack Contract.csproj
+      run: dotnet pack ./src/*/*/Contract.csproj --no-build -o ~/nuget  -c Release
+
     # Api.csproj
 
     - name: Restore Api.csproj
