@@ -1,4 +1,4 @@
-namespace GGroupp.Internal.Support;
+namespace GarageGroup.Internal.Support;
 
 public enum IncidentPriorityCode
 {

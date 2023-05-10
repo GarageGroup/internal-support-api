@@ -1,7 +1,7 @@
 ﻿using System;
 using GGroupp.Infra;
 
-namespace GGroupp.Internal.Support;
+namespace GarageGroup.Internal.Support;
 
 internal sealed partial class SupportApi : ISupportApi
 {

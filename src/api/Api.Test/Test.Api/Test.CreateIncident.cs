@@ -5,7 +5,7 @@ using GGroupp.Infra;
 using Moq;
 using Xunit;
 
-namespace GGroupp.Internal.Support.Api.Test;
+namespace GarageGroup.Internal.Support.Api.Test;
 
 partial class SupportApiTest
 {

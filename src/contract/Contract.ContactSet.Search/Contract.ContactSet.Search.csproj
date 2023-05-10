@@ -6,8 +6,8 @@
     <Nullable>enable</Nullable>
     <InvariantGlobalization>true</InvariantGlobalization>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <RootNamespace>GGroupp.Internal.Support</RootNamespace>
-    <AssemblyName>GGroupp.Internal.Support.Api.Contract.ContactSet.Search</AssemblyName>
+    <RootNamespace>GarageGroup.Internal.Support</RootNamespace>
+    <AssemblyName>GarageGroup.Internal.Support.Api.Contract.ContactSet.Search</AssemblyName>
     <Version>1.0.0</Version>
   </PropertyGroup>
 

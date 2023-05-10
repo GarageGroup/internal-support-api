@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace GGroupp.Internal.Support;
+namespace GarageGroup.Internal.Support;
 
 public sealed record class UserItemSearchOut
 {

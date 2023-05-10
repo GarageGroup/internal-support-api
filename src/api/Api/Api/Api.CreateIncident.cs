@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using GGroupp.Infra;
 
-namespace GGroupp.Internal.Support;
+namespace GarageGroup.Internal.Support;
 
 partial class SupportApi
 {
