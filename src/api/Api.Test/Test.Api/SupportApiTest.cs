@@ -5,7 +5,7 @@ using System.Threading;
 using GGroupp.Infra;
 using Moq;
 
-namespace GGroupp.Internal.Support.Api.Test;
+namespace GarageGroup.Internal.Support.Api.Test;
 
 public static partial class SupportApiTest
 {

@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using GGroupp.Infra;
 
-namespace GGroupp.Internal.Support.Api.Test;
+namespace GarageGroup.Internal.Support.Api.Test;
 
 internal sealed class StubDataverseApiClient : IDataverseApiClient
 {

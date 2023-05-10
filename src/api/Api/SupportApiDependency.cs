@@ -3,9 +3,9 @@ using System.Runtime.CompilerServices;
 using GGroupp.Infra;
 using PrimeFuncPack;
 
-[assembly: InternalsVisibleTo("GGroupp.Internal.Support.Api.Test")]
+[assembly: InternalsVisibleTo("GarageGroup.Internal.Support.Api.Test")]
 
-namespace GGroupp.Internal.Support;
+namespace GarageGroup.Internal.Support;
 
 public static class SupportApiDependency
 {
