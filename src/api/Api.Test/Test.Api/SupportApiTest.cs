@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading;
-using GGroupp.Infra;
+using GarageGroup.Infra;
 using Moq;
 
 namespace GarageGroup.Internal.Support.Api.Test;

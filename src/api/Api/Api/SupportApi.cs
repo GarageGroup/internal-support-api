@@ -1,5 +1,5 @@
 ﻿using System;
-using GGroupp.Infra;
+using GarageGroup.Infra;
 
 namespace GarageGroup.Internal.Support;
 
