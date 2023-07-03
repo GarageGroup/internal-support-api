@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using GGroupp.Infra;
+using GarageGroup.Infra;
 using PrimeFuncPack;
 
 [assembly: InternalsVisibleTo("GarageGroup.Internal.Support.Api.Test")]

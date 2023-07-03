@@ -2,8 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GGroupp;
-using GGroupp.Infra;
+using GarageGroup.Infra;
 
 namespace GarageGroup.Internal.Support;
 
